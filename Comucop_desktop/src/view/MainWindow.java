@@ -71,8 +71,12 @@ public class MainWindow extends javax.swing.JFrame {
         superBody = new javax.swing.JPanel();
         painelChats = new javax.swing.JPanel();
         managerTab = new javax.swing.JTabbedPane();
-        tabRec = new javax.swing.JPanel();
         tabCont = new javax.swing.JPanel();
+        tabRec = new javax.swing.JPanel();
+        titleChat = new javax.swing.JPanel();
+        bodyChat = new javax.swing.JPanel();
+        cxTextMsg = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         mainBar = new javax.swing.JMenuBar();
         menuNovo = new javax.swing.JMenu();
         cadFunc = new javax.swing.JMenuItem();
@@ -82,8 +86,9 @@ public class MainWindow extends javax.swing.JFrame {
         colDep = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(51, 51, 255));
-        setResizable(false);
+        setTitle("Comucop 1.0");
+        setBackground(new java.awt.Color(0, 0, 102));
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         censoredFrame.setBackground(new java.awt.Color(51, 51, 51));
@@ -157,7 +162,6 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
-        superBody.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         superBody.setForeground(new java.awt.Color(255, 255, 255));
         superBody.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -166,18 +170,7 @@ public class MainWindow extends javax.swing.JFrame {
         managerTab.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         managerTab.setToolTipText("");
 
-        javax.swing.GroupLayout tabRecLayout = new javax.swing.GroupLayout(tabRec);
-        tabRec.setLayout(tabRecLayout);
-        tabRecLayout.setHorizontalGroup(
-            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
-        );
-        tabRecLayout.setVerticalGroup(
-            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-        );
-
-        managerTab.addTab("Recentes", tabRec);
+        tabCont.setBackground(new java.awt.Color(204, 204, 204));
 
         javax.swing.GroupLayout tabContLayout = new javax.swing.GroupLayout(tabCont);
         tabCont.setLayout(tabContLayout);
@@ -187,10 +180,25 @@ public class MainWindow extends javax.swing.JFrame {
         );
         tabContLayout.setVerticalGroup(
             tabContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGap(0, 374, Short.MAX_VALUE)
         );
 
         managerTab.addTab("Contantos", tabCont);
+
+        tabRec.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout tabRecLayout = new javax.swing.GroupLayout(tabRec);
+        tabRec.setLayout(tabRecLayout);
+        tabRecLayout.setHorizontalGroup(
+            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 225, Short.MAX_VALUE)
+        );
+        tabRecLayout.setVerticalGroup(
+            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 374, Short.MAX_VALUE)
+        );
+
+        managerTab.addTab("Recentes", tabRec);
 
         javax.swing.GroupLayout painelChatsLayout = new javax.swing.GroupLayout(painelChats);
         painelChats.setLayout(painelChatsLayout);
@@ -200,14 +208,52 @@ public class MainWindow extends javax.swing.JFrame {
         );
         painelChatsLayout.setVerticalGroup(
             painelChatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(managerTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelChatsLayout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(managerTab, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         superBody.add(painelChats, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 420));
 
+        titleChat.setBackground(new java.awt.Color(0, 0, 153));
+
+        javax.swing.GroupLayout titleChatLayout = new javax.swing.GroupLayout(titleChat);
+        titleChat.setLayout(titleChatLayout);
+        titleChatLayout.setHorizontalGroup(
+            titleChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 590, Short.MAX_VALUE)
+        );
+        titleChatLayout.setVerticalGroup(
+            titleChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        superBody.add(titleChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 590, 40));
+
+        bodyChat.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout bodyChatLayout = new javax.swing.GroupLayout(bodyChat);
+        bodyChat.setLayout(bodyChatLayout);
+        bodyChatLayout.setHorizontalGroup(
+            bodyChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 590, Short.MAX_VALUE)
+        );
+        bodyChatLayout.setVerticalGroup(
+            bodyChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 310, Short.MAX_VALUE)
+        );
+
+        superBody.add(bodyChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 590, 310));
+
+        cxTextMsg.setViewportView(jTextPane1);
+
+        superBody.add(cxTextMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 540, 70));
+
         getContentPane().add(superBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
         mainBar.setBackground(new java.awt.Color(0, 0, 102));
+        mainBar.setBorder(null);
+        mainBar.setAlignmentX(0.0F);
 
         menuNovo.setBackground(new java.awt.Color(0, 0, 102));
         menuNovo.setForeground(new java.awt.Color(255, 255, 255));
@@ -257,17 +303,20 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel bodyChat;
     private javax.swing.JMenuItem cadDep;
     private javax.swing.JMenuItem cadFunc;
     private javax.swing.JPanel censoredFrame;
     private javax.swing.JMenuItem colDep;
     private javax.swing.JMenuItem colFunc;
+    private javax.swing.JScrollPane cxTextMsg;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JMenuBar mainBar;
     private javax.swing.JTabbedPane managerTab;
     private javax.swing.JMenu menuCons;
@@ -276,5 +325,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel superBody;
     private javax.swing.JPanel tabCont;
     private javax.swing.JPanel tabRec;
+    private javax.swing.JPanel titleChat;
     // End of variables declaration//GEN-END:variables
 }
