@@ -48,6 +48,8 @@ public class MainWindow extends javax.swing.JFrame {
             t.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
           }
         });
+        
+        this.mainBar.setVisible(false);
     }
 
     /**
@@ -67,16 +69,20 @@ public class MainWindow extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jPasswordField1 = new javax.swing.JPasswordField();
         superBody = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        menuColumn = new javax.swing.JPanel();
-        userLog = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        painelChats = new javax.swing.JPanel();
+        managerTab = new javax.swing.JTabbedPane();
+        tabRec = new javax.swing.JPanel();
+        tabCont = new javax.swing.JPanel();
+        mainBar = new javax.swing.JMenuBar();
+        menuNovo = new javax.swing.JMenu();
+        cadFunc = new javax.swing.JMenuItem();
+        cadDep = new javax.swing.JMenuItem();
+        menuCons = new javax.swing.JMenu();
+        colFunc = new javax.swing.JMenuItem();
+        colDep = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 255));
-        setUndecorated(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -152,113 +158,123 @@ public class MainWindow extends javax.swing.JFrame {
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
         superBody.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        superBody.setForeground(new java.awt.Color(51, 51, 255));
+        superBody.setForeground(new java.awt.Color(255, 255, 255));
         superBody.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("X");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        superBody.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 0, -1, -1));
+        painelChats.setBackground(new java.awt.Color(0, 0, 153));
 
-        menuColumn.setBackground(new java.awt.Color(0, 0, 51));
+        managerTab.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        managerTab.setToolTipText("");
 
-        javax.swing.GroupLayout menuColumnLayout = new javax.swing.GroupLayout(menuColumn);
-        menuColumn.setLayout(menuColumnLayout);
-        menuColumnLayout.setHorizontalGroup(
-            menuColumnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+        javax.swing.GroupLayout tabRecLayout = new javax.swing.GroupLayout(tabRec);
+        tabRec.setLayout(tabRecLayout);
+        tabRecLayout.setHorizontalGroup(
+            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 225, Short.MAX_VALUE)
         );
-        menuColumnLayout.setVerticalGroup(
-            menuColumnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 430, Short.MAX_VALUE)
+        tabRecLayout.setVerticalGroup(
+            tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 394, Short.MAX_VALUE)
         );
 
-        superBody.add(menuColumn, new org.netbeans.lib.awtextra.AbsoluteConstraints(-8, -8, 250, 430));
+        managerTab.addTab("Recentes", tabRec);
 
-        userLog.setBackground(new java.awt.Color(0, 0, 102));
-        userLog.setAlignmentX(0.0F);
-        userLog.setAlignmentY(0.0F);
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 2, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Administrador");
-
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI Light", 3, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Rodrigo Maia");
-
-        javax.swing.GroupLayout userLogLayout = new javax.swing.GroupLayout(userLog);
-        userLog.setLayout(userLogLayout);
-        userLogLayout.setHorizontalGroup(
-            userLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userLogLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(userLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(358, Short.MAX_VALUE))
+        javax.swing.GroupLayout tabContLayout = new javax.swing.GroupLayout(tabCont);
+        tabCont.setLayout(tabContLayout);
+        tabContLayout.setHorizontalGroup(
+            tabContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 225, Short.MAX_VALUE)
         );
-        userLogLayout.setVerticalGroup(
-            userLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userLogLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        tabContLayout.setVerticalGroup(
+            tabContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 394, Short.MAX_VALUE)
         );
 
-        superBody.add(userLog, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 590, 80));
+        managerTab.addTab("Contantos", tabCont);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 580, Short.MAX_VALUE)
+        javax.swing.GroupLayout painelChatsLayout = new javax.swing.GroupLayout(painelChats);
+        painelChats.setLayout(painelChatsLayout);
+        painelChatsLayout.setHorizontalGroup(
+            painelChatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(managerTab)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
+        painelChatsLayout.setVerticalGroup(
+            painelChatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(managerTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
         );
 
-        superBody.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 580, 310));
+        superBody.add(painelChats, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 420));
 
         getContentPane().add(superBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
+
+        mainBar.setBackground(new java.awt.Color(0, 0, 102));
+
+        menuNovo.setBackground(new java.awt.Color(0, 0, 102));
+        menuNovo.setForeground(new java.awt.Color(255, 255, 255));
+        menuNovo.setText("Novo");
+
+        cadFunc.setText("Funcionário");
+        menuNovo.add(cadFunc);
+
+        cadDep.setText("Departamento");
+        cadDep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadDepActionPerformed(evt);
+            }
+        });
+        menuNovo.add(cadDep);
+
+        mainBar.add(menuNovo);
+
+        menuCons.setBackground(new java.awt.Color(0, 0, 102));
+        menuCons.setForeground(new java.awt.Color(255, 255, 255));
+        menuCons.setText("Consultar");
+
+        colFunc.setText("Funcionário");
+        menuCons.add(colFunc);
+
+        colDep.setText("Departamento");
+        menuCons.add(colDep);
+
+        mainBar.add(menuCons);
+
+        setJMenuBar(mainBar);
+        mainBar.getAccessibleContext().setAccessibleName("");
+        mainBar.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         this.censoredFrame.setVisible(false);
+        this.mainBar.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cadDepActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem cadDep;
+    private javax.swing.JMenuItem cadFunc;
     private javax.swing.JPanel censoredFrame;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JMenuItem colDep;
+    private javax.swing.JMenuItem colFunc;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JPanel menuColumn;
+    private javax.swing.JMenuBar mainBar;
+    private javax.swing.JTabbedPane managerTab;
+    private javax.swing.JMenu menuCons;
+    private javax.swing.JMenu menuNovo;
+    private javax.swing.JPanel painelChats;
     private javax.swing.JPanel superBody;
-    private javax.swing.JPanel userLog;
+    private javax.swing.JPanel tabCont;
+    private javax.swing.JPanel tabRec;
     // End of variables declaration//GEN-END:variables
 }
