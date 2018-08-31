@@ -77,6 +77,7 @@ public class MainWindow extends javax.swing.JFrame {
         bodyChat = new javax.swing.JPanel();
         cxTextMsg = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        ButtonEnviar = new javax.swing.JButton();
         mainBar = new javax.swing.JMenuBar();
         menuNovo = new javax.swing.JMenu();
         cadFunc = new javax.swing.JMenuItem();
@@ -159,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         censoredFrame.add(jPanel1);
 
-        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
+        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 420));
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
         superBody.setForeground(new java.awt.Color(255, 255, 255));
@@ -245,9 +246,14 @@ public class MainWindow extends javax.swing.JFrame {
 
         superBody.add(bodyChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 590, 310));
 
+        jTextPane1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         cxTextMsg.setViewportView(jTextPane1);
 
-        superBody.add(cxTextMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 540, 70));
+        superBody.add(cxTextMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 510, 70));
+
+        ButtonEnviar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        ButtonEnviar.setText("Enviar");
+        superBody.add(ButtonEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, -1, -1));
 
         getContentPane().add(superBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
@@ -303,6 +309,7 @@ public class MainWindow extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonEnviar;
     private javax.swing.JPanel bodyChat;
     private javax.swing.JMenuItem cadDep;
     private javax.swing.JMenuItem cadFunc;
