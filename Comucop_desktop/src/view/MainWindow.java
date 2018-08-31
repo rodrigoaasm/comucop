@@ -160,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         censoredFrame.add(jPanel1);
 
-        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 420));
+        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
         superBody.setForeground(new java.awt.Color(255, 255, 255));
@@ -286,6 +286,11 @@ public class MainWindow extends javax.swing.JFrame {
         menuCons.add(colFunc);
 
         colDep.setText("Departamento");
+        colDep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colDepActionPerformed(evt);
+            }
+        });
         menuCons.add(colDep);
 
         mainBar.add(menuCons);
@@ -305,7 +310,14 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
         // TODO add your handling code here:
+        ctrApp.getCtrDep().AbreJanela(1);
     }//GEN-LAST:event_cadDepActionPerformed
+
+    private void colDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colDepActionPerformed
+
+        ctrApp.getCtrDep().AbreJanela(3);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_colDepActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
