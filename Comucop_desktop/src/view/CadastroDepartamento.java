@@ -2,6 +2,7 @@ package view;
 
 import controller.ControllerDep;
 import javax.swing.JOptionPane;
+import model.Departamento;
 
 /**
  *
@@ -10,12 +11,21 @@ import javax.swing.JOptionPane;
 public class CadastroDepartamento extends javax.swing.JFrame {
 
     private ControllerDep ctrDep;
+    private Integer index;
 
-    public CadastroDepartamento(ControllerDep pCtr) {
+    public CadastroDepartamento(ControllerDep pCtr, Integer pOpc) {
         initComponents();
         ctrDep = pCtr;
+        index = pOpc;
     }
 
+    public void AlterarCadastro(Departamento dp){
+        ButtonCadDep.setText("Alterar");
+        TextFieldNomeDep.setText(dp.getNome());
+        TextFieldSiglaDep.setText(dp.getSigla());
+        TextAreaDes.setText(dp.getDescricao());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,23 +154,49 @@ public class CadastroDepartamento extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonCancDepActionPerformed
 
     private void ButtonCadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCadDepActionPerformed
+        if(index == -1){
+            if (TextFieldNomeDep.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Campo de Nome Vazio, por favor preencha-o", "ERRO",
+                        JOptionPane.ERROR_MESSAGE);
 
-        if (TextFieldNomeDep.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Campo de Nome Vazio, por favor preencha-o", "ERRO",
-                    JOptionPane.ERROR_MESSAGE);
+            } else if (TextFieldSiglaDep.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Campo de Sigla Vazio, por favor preencha-o", "ERRO",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                ctrDep.CadastraDepartamento(TextFieldNomeDep.getText(),
+                        TextFieldSiglaDep.getText(),
+                        TextAreaDes.getText());
+                JOptionPane.showMessageDialog(this,
+                        "Cadastro Realizado com Sucesso!", "Cadastro Realizado",
+                        JOptionPane.INFORMATION_MESSAGE);
+                TextAreaDes.setText("");
+                TextFieldNomeDep.setText("");
+                TextFieldSiglaDep.setText("");
+            }
+        }
+        else{
+            if (TextFieldNomeDep.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Campo de Nome Vazio, por favor preencha-o", "ERRO",
+                        JOptionPane.ERROR_MESSAGE);
 
-        } else if (TextFieldSiglaDep.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Campo de Sigla Vazio, por favor preencha-o", "ERRO",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            ctrDep.CadastraDepartamento(TextFieldNomeDep.getText(),
-                    TextFieldSiglaDep.getText(),
-                    TextAreaDes.getText());
-            JOptionPane.showMessageDialog(this,
-                    "Cadastro Realizado com Sucesso!", "Cadastro Realizado",
-                    JOptionPane.INFORMATION_MESSAGE);
+            } else if (TextFieldSiglaDep.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Campo de Sigla Vazio, por favor preencha-o", "ERRO",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                ctrDep.AlterarDepartamento(TextFieldNomeDep.getText(),
+                        TextFieldSiglaDep.getText(),
+                        TextAreaDes.getText());
+                JOptionPane.showMessageDialog(this,
+                        "Alteração Realizada com Sucesso!", "Alteração Realizada",
+                        JOptionPane.INFORMATION_MESSAGE);
+                ctrDep.AdicionaDadosTabela();
+                this.dispose();
+            }
+            
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonCadDepActionPerformed

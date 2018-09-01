@@ -1,4 +1,3 @@
-
 package view;
 
 import controller.ControllerDep;
@@ -11,12 +10,11 @@ import tools.MyTableModel;
 public class ConsultarDepartamento extends javax.swing.JFrame {
 
     private ControllerDep ctrDep;
-    
+
     public ConsultarDepartamento(ControllerDep pCtr) {
         initComponents();
         ctrDep = pCtr;
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -36,6 +34,7 @@ public class ConsultarDepartamento extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 0, 102));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        TableDep.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         TableDep.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -72,7 +71,7 @@ public class ConsultarDepartamento extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 102));
@@ -88,9 +87,19 @@ public class ConsultarDepartamento extends javax.swing.JFrame {
 
         ButtonRemover.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonRemover.setText("Remover");
+        ButtonRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonRemoverActionPerformed(evt);
+            }
+        });
 
         ButtonAlterar1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonAlterar1.setText("Alterar");
+        ButtonAlterar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonAlterar1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -126,8 +135,7 @@ public class ConsultarDepartamento extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1))
@@ -137,10 +145,28 @@ public class ConsultarDepartamento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ButtonFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonFecharActionPerformed
-        
+
         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonFecharActionPerformed
+
+    private void ButtonAlterar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAlterar1ActionPerformed
+        if (TableDep.getSelectedRow() >= 0) {
+            int index = TableDep.getSelectedRow();
+            ctrDep.setIndex(index);
+            ctrDep.AbreJanela(2);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonAlterar1ActionPerformed
+
+    private void ButtonRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoverActionPerformed
+        if (TableDep.getSelectedRow() >= 0) {
+            int index = TableDep.getSelectedRow();
+            ctrDep.setIndex(index);
+            ctrDep.RemoverDepartamento();
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonRemoverActionPerformed
 
     public void carregaTabela(MyTableModel pTableDep) {
         TableDep.setModel(pTableDep);
