@@ -5,6 +5,8 @@
  */
 package controller;
 
+import java.net.Socket;
+import java.util.ArrayList;
 import view.MainWindow;
 
 /**
@@ -13,13 +15,23 @@ import view.MainWindow;
  */
 public class Controller {
     private MainWindow mWin;
+    
+    private ArrayList<Socket> clients;
 
     public Controller() {        
         this.mWin = new MainWindow(this);
         mWin.setVisible(true);
+        
+        clients = new ArrayList<Socket>();
     }  
     
     public  static void main (String args[]){
        Controller c = new Controller();
     }
+
+    public ArrayList<Socket> getClients() {
+        return clients;
+    }
+    
+    
 }
