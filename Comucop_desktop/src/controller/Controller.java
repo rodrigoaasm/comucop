@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.net.Socket;
 import view.MainWindow;
 
 /**
@@ -12,9 +13,15 @@ import view.MainWindow;
  * @author root
  */
 public class Controller {
+    
+    //Controllers 
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
+    
+    //Sockets de conexão TCP
+    private Socket server;
+    private Socket broker;
 
     public Controller() {        
         this.mWin = new MainWindow(this);
@@ -34,4 +41,13 @@ public class Controller {
     public  static void main (String args[]){
        Controller c = new Controller();
     }
+
+    public Socket getSocketServer() {
+        return server;
+    }
+
+    public Socket getSocketBroker() {
+        return broker;
+    }     
+    
 }
