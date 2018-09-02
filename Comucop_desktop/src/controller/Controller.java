@@ -5,7 +5,13 @@
  */
 package controller;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import view.MainWindow;
 
 /**
@@ -18,6 +24,7 @@ public class Controller {
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
+    private ManagerSend mSend;
     
     //Sockets de conexão TCP
     private Socket server;
@@ -28,7 +35,18 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
+        
+        try {
+            mSend = new ManagerSend(this, InetAddress.getByName("127.0.0.1"));
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }  
+    
+    public void tryEstablishCon() throws IOException {        
+        server = mSend.establishCon();
+        mSend.sendJSON("Rodrigo");
+    }
     
     public ControllerDep getCtrDep() {
         return ctrDep;

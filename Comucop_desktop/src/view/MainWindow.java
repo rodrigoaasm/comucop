@@ -10,7 +10,11 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,6 +54,10 @@ public class MainWindow extends javax.swing.JFrame {
         });
         
         this.mainBar.setVisible(false);
+    }
+    
+    public void callMessage(String msg,String title,int typeMsg){
+       
     }
 
     /**
@@ -308,9 +316,14 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        this.censoredFrame.setVisible(false);
-        this.mainBar.setVisible(true);
+         try {
+             ctrApp.tryEstablishCon();
+             this.censoredFrame.setVisible(false);
+             this.mainBar.setVisible(true);        
+         } catch (IOException ex) {
+             JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro!",JOptionPane.ERROR_MESSAGE);
+         }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
