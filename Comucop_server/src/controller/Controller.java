@@ -5,8 +5,11 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import view.MainWindow;
 
 /**
@@ -23,6 +26,11 @@ public class Controller {
         mWin.setVisible(true);
         
         clients = new ArrayList<Socket>();
+        try {
+            new ManagerReceiver(this).run();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }  
     
     public  static void main (String args[]){
@@ -32,6 +40,8 @@ public class Controller {
     public ArrayList<Socket> getClients() {
         return clients;
     }
+    
+    
     
     
 }
