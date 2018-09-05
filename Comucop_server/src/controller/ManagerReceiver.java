@@ -5,13 +5,17 @@
  */
 package controller;
 
+import cripth.MyRSAKey;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.ClientConRecord;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -44,9 +48,10 @@ public class ManagerReceiver extends Thread {
                     client.close();                
                 }else {
                     System.out.println("Conexão de login");
-                    ctrServer.getClients().add(client);
+                    ClientConRecord clientConRec = new ClientConRecord(client,15,MyRSAKey.newInstance());//Instaciando registro de conexão
+                    ctrServer.getClients().add(clientConRec);//Guardando registro de conexão
+                    ctrServer.getmSend().first(clientConRec);
                 }
-
             } catch (IOException ex) {
                 Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }  
@@ -57,9 +62,9 @@ public class ManagerReceiver extends Thread {
         
         String addr  = new String(client.getInetAddress().getAddress());        
         
-        for(Socket c : ctrServer.getClients()){          
-            System.out.println(addr + "==" + new String(c.getInetAddress().getAddress() ));
-            if(addr.contains(new String(c.getInetAddress().getAddress()))){
+        for(ClientConRecord c : ctrServer.getClients()){          
+            System.out.println(addr + "==" + new String(c.getSockClient().getInetAddress().getAddress() ));
+            if(addr.contains(new String(c.getSockClient().getInetAddress().getAddress()))){
                 return true;
             } 
         }

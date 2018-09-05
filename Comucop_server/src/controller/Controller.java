@@ -5,11 +5,13 @@
  */
 package controller;
 
+import cripth.MyRSAKey;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.ClientConRecord;
 import view.MainWindow;
 
 /**
@@ -19,13 +21,16 @@ import view.MainWindow;
 public class Controller {
     private MainWindow mWin;
     
-    private ArrayList<Socket> clients;
+    private ArrayList<ClientConRecord> clientsConRec;
+    private ManagerSend mSend;
+ 
 
     public Controller() {        
         this.mWin = new MainWindow(this);
         mWin.setVisible(true);
         
-        clients = new ArrayList<Socket>();
+        clientsConRec = new ArrayList<ClientConRecord>();
+        mSend = new ManagerSend(this);
         try {
             new ManagerReceiver(this).run();
         } catch (IOException ex) {
@@ -37,8 +42,16 @@ public class Controller {
        Controller c = new Controller();
     }
 
-    public ArrayList<Socket> getClients() {
-        return clients;
+    public ArrayList<ClientConRecord> getClients() {
+        return clientsConRec;
+    }
+
+    public ManagerSend getmSend(){ 
+        return mSend;
+    }
+
+    public void setmSend(ManagerSend mSend) {
+        this.mSend = mSend;
     }
     
     
