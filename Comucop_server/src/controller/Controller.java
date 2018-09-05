@@ -21,8 +21,9 @@ import view.MainWindow;
 public class Controller {
     private MainWindow mWin;
     
-    private ArrayList<ClientConRecord> clientsConRec;
+    private volatile ArrayList<ClientConRecord> clientsConRec;
     private ManagerSend mSend;
+    private ManagerReceiver mReceiver;
  
 
     public Controller() {        
@@ -32,7 +33,8 @@ public class Controller {
         clientsConRec = new ArrayList<ClientConRecord>();
         mSend = new ManagerSend(this);
         try {
-            new ManagerReceiver(this).run();
+            mReceiver = new ManagerReceiver(this);
+            mReceiver.start();
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,9 +52,11 @@ public class Controller {
         return mSend;
     }
 
-    public void setmSend(ManagerSend mSend) {
-        this.mSend = mSend;
+    public ManagerReceiver getmReceiver() {
+        return mReceiver;
     }
+    
+    
     
     
     
