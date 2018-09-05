@@ -5,10 +5,14 @@
  */
 package controller;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -24,9 +28,31 @@ public class ManagerSend {
         this.ipServer = ipServer;
     }
     
-    public Socket establishCon() throws IOException{
-        Socket serverPer = new Socket(ipServer, 4848);
-        return serverPer;
+    public void establishCon(){
+       
+        Runnable threadCon = new Runnable() {
+            @Override
+            public void run() {
+                try {  
+                    Socket serverPer = new Socket(ipServer, 4848);
+                    if(serverPer.isConnected()){
+                        DataInputStream dIStr = new DataInputStream(serverPer.getInputStream());
+                        dIStr.readUTF();
+                        JSONObject jsonReq = new JSONObject();
+                        jsonReq.put("type","login");
+                        jsonReq.put("login","rodrigoasmaia@gmail.com");
+                        jsonReq.put("password","qweasd123");
+                        DataOutputStream dOStr = new DataOutputStream(serverPer.getOutputStream());
+                        dOStr.writeUTF(jsonReq.toJSONString());
+                        dOStr.flush();                        
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(ManagerSend.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+        new Thread(threadCon).start();
+
     }  
 
     public void sendJSON(String json) throws IOException{

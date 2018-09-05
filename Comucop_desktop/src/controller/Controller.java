@@ -43,9 +43,12 @@ public class Controller {
         }
     }  
     
+    public void feedbackLogin(){
+        
+    }
+    
     public void tryEstablishCon() throws IOException {        
-        server = mSend.establishCon();
-        mSend.sendJSON("Rodrigo");
+        mSend.establishCon();
     }
     
     public ControllerDep getCtrDep() {

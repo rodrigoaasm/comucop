@@ -56,10 +56,14 @@ public class MainWindow extends javax.swing.JFrame {
         this.mainBar.setVisible(false);
     }
     
+    void loginOk(){
+        this.censoredFrame.setVisible(false);
+        this.mainBar.setVisible(true);       
+    }    
+    
     public void callMessage(String msg,String title,int typeMsg){
        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -316,13 +320,13 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         try {
-             ctrApp.tryEstablishCon();
-             this.censoredFrame.setVisible(false);
-             this.mainBar.setVisible(true);        
+        this.censoredFrame.setVisible(false);
+        this.mainBar.setVisible(true);   
+        /* try {
+             ctrApp.tryEstablishCon();              
          } catch (IOException ex) {
              JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro!",JOptionPane.ERROR_MESSAGE);
-         }
+         }*/
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
