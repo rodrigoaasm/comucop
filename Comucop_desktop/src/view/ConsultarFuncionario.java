@@ -4,10 +4,6 @@ package view;
 import controller.*;
 import tools.*;
 
-/**
- *
- * @author Kevin
- */
 public class ConsultarFuncionario extends javax.swing.JFrame {
 
     private ControllerFuncionario ctrFunc;

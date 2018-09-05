@@ -300,6 +300,11 @@ public class MainWindow extends javax.swing.JFrame {
         menuCons.setText("Consultar");
 
         colFunc.setText("Funcionário");
+        colFunc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colFuncActionPerformed(evt);
+            }
+        });
         menuCons.add(colFunc);
 
         colDep.setText("Departamento");
@@ -345,6 +350,11 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         ctrApp.getCtrFunc().AbreJanela(1);
     }//GEN-LAST:event_cadFuncActionPerformed
+
+    private void colFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colFuncActionPerformed
+        // TODO add your handling code here:
+        ctrApp.getCtrFunc().AbreJanela(2);
+    }//GEN-LAST:event_colFuncActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

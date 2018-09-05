@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -7,6 +9,8 @@ import javax.swing.JFrame;
 import model.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import tools.*;
 import view.*;
 
@@ -24,6 +28,7 @@ public class ControllerFuncionario {
 
         ctrMain = pCtrPrincipal;
         listFuncs = new ArrayList<>();
+        LeituraJson();
 
     }
 
@@ -35,6 +40,7 @@ public class ControllerFuncionario {
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else if (pCodJan == 2) {
             consFunc = new ConsultarFuncionario(this);
+            AdicionaDadosTabela();
             consFunc.setVisible(true);
             consFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else if (pCodJan == 3) {
@@ -47,7 +53,7 @@ public class ControllerFuncionario {
         listFuncs.add(new Funcionario(nome, sobrenome, cpf, departamento, perfil, login, senha));
         this.AdicionaJson();
     }
-    
+
     private void AdicionaJson() {
         JSONObject obj = new JSONObject();
 
@@ -73,6 +79,36 @@ public class ControllerFuncionario {
             file.close();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void LeituraJson() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("funcionarios.json"));
+            JSONObject jsonObj = (JSONObject) obj;
+
+            JSONArray funcs = (JSONArray) jsonObj.get("Funcionarios");
+            Iterator<JSONObject> ite = funcs.iterator();
+            while (ite.hasNext()) {
+                JSONObject objDep = (JSONObject) ite.next();
+                String nome = (String) objDep.get("Nome");
+                String sobrenome = (String) objDep.get("Sobrenome");
+                String cpf = (String) objDep.get("CPF");
+                String departamento = (String) objDep.get("Departamento");
+                String perfil = (String) objDep.get("Perfil");
+                String login = (String) objDep.get("Login");
+                String senha = (String) objDep.get("Senha");
+
+                Funcionario f = new Funcionario(nome, sobrenome, cpf, departamento, perfil, login, senha);
+                listFuncs.add(f);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }
