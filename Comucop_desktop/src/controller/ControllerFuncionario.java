@@ -22,6 +22,7 @@ public class ControllerFuncionario {
     private CadastroFuncionario cadFunc;
     private ConsultarFuncionario consFunc;
     private MyTableModel tabelaCons;
+    private Integer index;
 
     //Metodo construtor
     public ControllerFuncionario(Controller pCtrPrincipal) {
@@ -39,18 +40,33 @@ public class ControllerFuncionario {
             cadFunc.setVisible(true);
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else if (pCodJan == 2) {
+            cadFunc = new CadastroFuncionario(this, 2);
+            cadFunc.alteraFuncionario(listFuncs.get(index));
+            cadFunc.setVisible(true);
+            cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } else if (pCodJan == 3) {
             consFunc = new ConsultarFuncionario(this);
             AdicionaDadosTabela();
             consFunc.setVisible(true);
             consFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        } else if (pCodJan == 3) {
-
         }
     }
 
     public void cadastraFuncionario(String nome, String sobrenome, String cpf, String departamento,
             String perfil, String login, String senha) {
         listFuncs.add(new Funcionario(nome, sobrenome, cpf, departamento, perfil, login, senha));
+        this.AdicionaJson();
+    }
+
+    public void removerFuncinario(Integer index) {
+        listFuncs.remove(listFuncs.get(index));
+        AdicionaDadosTabela();
+        this.AdicionaJson();
+    }
+
+    public void alteraFuncionario(String nome, String sobrenome, String cpf, String departamento,
+            String perfil, String login, String senha) {
+        listFuncs.set(index, new Funcionario(nome, sobrenome, cpf, departamento, perfil, login, senha));
         this.AdicionaJson();
     }
 
@@ -127,6 +143,10 @@ public class ControllerFuncionario {
             });
         }
 
+    }
+
+    public void setIndex(Integer pIndex) {
+        index = pIndex;
     }
 
 }

@@ -1,12 +1,9 @@
 package view;
 
 import controller.*;
+import model.*;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Kevin
- */
 public class CadastroFuncionario extends javax.swing.JFrame {
 
     private ControllerFuncionario ctrFunc;
@@ -42,7 +39,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        labelSenha = new javax.swing.JLabel();
         textLogin = new javax.swing.JTextField();
         textSenha = new javax.swing.JPasswordField();
 
@@ -114,10 +111,10 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Login:");
 
-        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Senha:");
+        labelSenha.setBackground(new java.awt.Color(255, 255, 255));
+        labelSenha.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        labelSenha.setForeground(new java.awt.Color(255, 255, 255));
+        labelSenha.setText("Senha:");
 
         textLogin.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
@@ -133,7 +130,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -145,7 +142,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
+                .addComponent(labelSenha)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -236,6 +233,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
 
     private void ButtonCadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCadDepActionPerformed
 
+        if (cOpc == 1) {
             if (textCPF.getText().isEmpty() == true) {
                 JOptionPane.showMessageDialog(null, "Erro CPF", "O CPF informado não é válido.\n"
                         + "Por favor digite um CPF válido.", JOptionPane.ERROR_MESSAGE);
@@ -256,13 +254,53 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro Senha", "O campo senha deve ser preenchido.\n"
                         + "Por favor digite uma senha.", JOptionPane.ERROR_MESSAGE);
             }
-            ctrFunc.cadastraFuncionario(textNome.getText(), textSobrenome.getText(), textCPF.getText(), 
-                    comboSetor.getSelectedItem().toString(), comboPerfil.getSelectedItem().toString(), 
+            ctrFunc.cadastraFuncionario(textNome.getText(), textSobrenome.getText(), textCPF.getText(),
+                    comboSetor.getSelectedItem().toString(), comboPerfil.getSelectedItem().toString(),
                     textLogin.getText(), textSenha.getText());
+            this.dispose();
+
+        } else {
+            if (textCPF.getText().isEmpty() == true) {
+                JOptionPane.showMessageDialog(null, "Erro CPF", "O CPF informado não é válido.\n"
+                        + "Por favor digite um CPF válido.", JOptionPane.ERROR_MESSAGE);
+            }
+            if (textNome.getText().isEmpty() == true) {
+                JOptionPane.showMessageDialog(null, "Erro Nome", "O campo nome deve ser preenchido.\n"
+                        + "Por favor digite um nome.", JOptionPane.ERROR_MESSAGE);
+            }
+            if (textSobrenome.getText().isEmpty() == true) {
+                JOptionPane.showMessageDialog(null, "Erro Sobrenome", "O campo sobrenome deve ser preenchido.\n"
+                        + "Por favor digite um sobrenome.", JOptionPane.ERROR_MESSAGE);
+            }
+            if (textLogin.getText().isEmpty() == true) {
+                JOptionPane.showMessageDialog(null, "Erro Login", "O campo login deve ser preenchido.\n"
+                        + "Por favor digite um login.", JOptionPane.ERROR_MESSAGE);
+            }
+            if (textSenha.getText().isEmpty() == true) {
+                JOptionPane.showMessageDialog(null, "Erro Senha", "O campo senha deve ser preenchido.\n"
+                        + "Por favor digite uma senha.", JOptionPane.ERROR_MESSAGE);
+            }
+            ctrFunc.alteraFuncionario(textNome.getText(), textSobrenome.getText(), textCPF.getText(),
+                    comboSetor.getSelectedItem().toString(), comboPerfil.getSelectedItem().toString(),
+                    textLogin.getText(), textSenha.getText());
+            ctrFunc.AdicionaDadosTabela();
+            this.dispose();
+        }
 
 
     }//GEN-LAST:event_ButtonCadDepActionPerformed
 
+    public void alteraFuncionario(Funcionario f) {
+        textNome.setText(f.getNome());
+        textNome.setEditable(false);
+        textSobrenome.setText(f.getSobrenome());
+        textSobrenome.setEditable(false);
+        textCPF.setText(f.getCpf());
+        textCPF.setEditable(false);
+        textLogin.setText(f.getLogin());
+        labelSenha.setText("Nova senha");
+        ButtonCadDep.setText("Alterar");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonCadDep;
@@ -275,9 +313,9 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel labelSenha;
     private javax.swing.JFormattedTextField textCPF;
     private javax.swing.JTextField textLogin;
     private javax.swing.JTextField textNome;

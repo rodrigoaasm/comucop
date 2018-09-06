@@ -1,4 +1,3 @@
-
 package view;
 
 import controller.*;
@@ -7,12 +6,11 @@ import tools.*;
 public class ConsultarFuncionario extends javax.swing.JFrame {
 
     private ControllerFuncionario ctrFunc;
-    
+
     public ConsultarFuncionario(ControllerFuncionario pCtr) {
         initComponents();
         ctrFunc = pCtr;
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -84,9 +82,19 @@ public class ConsultarFuncionario extends javax.swing.JFrame {
 
         ButtonRemover.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonRemover.setText("Remover");
+        ButtonRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonRemoverActionPerformed(evt);
+            }
+        });
 
         ButtonAlterar1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonAlterar1.setText("Alterar");
+        ButtonAlterar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonAlterar1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -133,10 +141,27 @@ public class ConsultarFuncionario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ButtonFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonFecharActionPerformed
-        
+
         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonFecharActionPerformed
+
+    private void ButtonAlterar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAlterar1ActionPerformed
+        // TODO add your handling code here:
+        if (TableFunc.getSelectedRow() >= 0) {
+            int index = TableFunc.getSelectedRow();
+            ctrFunc.setIndex(index);
+            ctrFunc.AbreJanela(2);
+        }
+    }//GEN-LAST:event_ButtonAlterar1ActionPerformed
+
+    private void ButtonRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonRemoverActionPerformed
+        // TODO add your handling code here:
+        if (TableFunc.getSelectedRow() >= 0) {
+            int index = TableFunc.getSelectedRow();
+            ctrFunc.removerFuncinario(index);
+        }
+    }//GEN-LAST:event_ButtonRemoverActionPerformed
 
     public void carregaTabela(MyTableModel pTableFunc) {
         TableFunc.setModel(pTableFunc);

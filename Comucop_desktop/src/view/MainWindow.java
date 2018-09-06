@@ -353,7 +353,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void colFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colFuncActionPerformed
         // TODO add your handling code here:
-        ctrApp.getCtrFunc().AbreJanela(2);
+        ctrApp.getCtrFunc().AbreJanela(3);
     }//GEN-LAST:event_colFuncActionPerformed
 
 
