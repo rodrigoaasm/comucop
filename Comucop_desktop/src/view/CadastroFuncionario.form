@@ -71,8 +71,8 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace pref="87" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="ButtonCadDep" pref="168" max="32767" attributes="0"/>
-                              <Component id="ButtonCancDep" max="32767" attributes="0"/>
+                              <Component id="ButtonCadDep" pref="170" max="32767" attributes="0"/>
+                              <Component id="ButtonCancDep" pref="170" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                       </Group>
@@ -112,12 +112,12 @@
                           <Component id="comboSetor" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="ButtonCadDep" min="-2" pref="66" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="ButtonCancDep" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="ButtonCadDep" min="-2" pref="45" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="ButtonCancDep" min="-2" pref="45" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="33" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -208,12 +208,7 @@
               <Font name="Dialog" size="14" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Setor 1"/>
-                <StringItem index="1" value="Setor 2"/>
-                <StringItem index="2" value="Setor 3"/>
-                <StringItem index="3" value="Setor 4"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -287,12 +282,10 @@
                           <Component id="textSenha" alignment="1" max="32767" attributes="0"/>
                           <Component id="textLogin" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel6" min="-2" pref="49" max="-2" attributes="0"/>
-                                  <Component id="labelSenha" alignment="0" min="-2" pref="49" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jLabel6" min="-2" pref="49" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="218" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="labelSenha" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>

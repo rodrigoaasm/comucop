@@ -36,11 +36,11 @@ public class ControllerFuncionario {
     //Metodo que abrirá a janela desejada
     public void AbreJanela(int pCodJan) {
         if (pCodJan == 1) {
-            cadFunc = new CadastroFuncionario(this, 1);
+            cadFunc = new CadastroFuncionario(this, 1,ctrMain);
             cadFunc.setVisible(true);
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else if (pCodJan == 2) {
-            cadFunc = new CadastroFuncionario(this, 2);
+            cadFunc = new CadastroFuncionario(this, 2,ctrMain);
             cadFunc.alteraFuncionario(listFuncs.get(index));
             cadFunc.setVisible(true);
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

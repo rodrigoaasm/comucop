@@ -147,4 +147,10 @@ public class ControllerDep {
         this.index = index;
     }
 
+    public ArrayList<Departamento> getListaDeps() {
+        return listaDeps;
+    }
+    
+    
+
 }

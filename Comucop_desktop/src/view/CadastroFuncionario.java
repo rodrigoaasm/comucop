@@ -1,18 +1,22 @@
 package view;
 
 import controller.*;
+import java.util.ArrayList;
 import model.*;
 import javax.swing.JOptionPane;
 
 public class CadastroFuncionario extends javax.swing.JFrame {
 
     private ControllerFuncionario ctrFunc;
+    private Controller ctrPrincipal;
     private Integer cOpc;
 
-    public CadastroFuncionario(ControllerFuncionario pCtr, Integer pOpc) {
+    public CadastroFuncionario(ControllerFuncionario pCtrFuncionario, Integer pOpc, Controller pCtrPrincipal) {
         initComponents();
-        ctrFunc = pCtr;
+        ctrFunc = pCtrFuncionario;
+        ctrPrincipal = pCtrPrincipal;
         cOpc = pOpc;
+        populaComboBox();
     }
 
     /**
@@ -85,7 +89,6 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel4.setText("CPF:");
 
         comboSetor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboSetor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Setor 1", "Setor 2", "Setor 3", "Setor 4" }));
 
         comboPerfil.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         comboPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Funcionário", "Gerente" }));
@@ -128,10 +131,9 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                     .addComponent(textSenha, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(textLogin)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 218, Short.MAX_VALUE))
+                    .addComponent(labelSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -173,8 +175,8 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ButtonCadDep, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                            .addComponent(ButtonCancDep, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(ButtonCadDep, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                            .addComponent(ButtonCancDep, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                         .addGap(70, 70, 70))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -206,10 +208,10 @@ public class CadastroFuncionario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(ButtonCadDep, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonCancDep, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(ButtonCadDep, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ButtonCancDep, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -298,8 +300,16 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         textCPF.setText(f.getCpf());
         textCPF.setEditable(false);
         textLogin.setText(f.getLogin());
-        labelSenha.setText("Nova senha");
+        textSenha.setText(f.getSenha());
         ButtonCadDep.setText("Alterar");
+    }
+    
+    public void populaComboBox(){
+        comboSetor.removeAllItems();
+        ArrayList<Departamento> listDep = ctrPrincipal.getCtrDep().getListaDeps();
+        for(Departamento p: listDep){
+            comboSetor.addItem(p.getNome());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
