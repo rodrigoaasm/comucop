@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.json.simple.JSONObject;
 import view.MainWindow;
 
 /**
@@ -25,10 +26,10 @@ public class Controller {
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
     private ManagerSend mSend;
+    private ManagerReceiver mRec;
     
     //Sockets de conexão TCP
     private Socket server;
-    private Socket broker;
 
     public Controller() {        
         this.mWin = new MainWindow(this);
@@ -38,6 +39,7 @@ public class Controller {
         ctrDep.LeituraJson();
         ctrFunc.LeituraJson();
         
+        
         try {
             mSend = new ManagerSend(this, InetAddress.getByName("127.0.0.1"));
         } catch (UnknownHostException ex) {
@@ -45,12 +47,31 @@ public class Controller {
         }
     }  
     
-    public void feedbackLogin(){
-        
+    void startReceiver() {
+        if(mRec != null){ //Garanti a exclusão e a parada do gerenciador de recebimento
+            mRec.interrupt();
+            mRec = null;
+        }
+        mRec = new ManagerReceiver(this);
+        mRec.start();
     }
     
-    public void tryEstablishCon() throws IOException {        
-        mSend.establishCon();
+    public void feedbackLogin(JSONObject jsonResp){
+        
+        int getSt = Integer.parseInt((String)jsonResp.get("status"));
+        System.out.println(jsonResp.get("status"));
+        if(getSt == 1){
+            mWin.loginOk();
+            mWin.callMessage("Seja bem-vindo "+jsonResp.get("nome")+" "+jsonResp.get("sobrenome")+"!"
+                    ,"Login efetuado com sucesso", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            mWin.callMessage("Login e senha não correspondem a um usuário da aplicação! "
+                    ,"Falha Login", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void tryEstablishCon(String user,String password) throws IOException {        
+        mSend.establishCon(user,password);
     }
     
     public ControllerDep getCtrDep() {
@@ -68,9 +89,19 @@ public class Controller {
     public Socket getSocketServer() {
         return server;
     }
+    
+    public void setSocketServer(Socket s){
+        if(server != null){
+            try {            
+                server.close();//Garanti que o socket antigo esteja realmente fechado
+            } catch (IOException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        server = s;
+    }
 
-    public Socket getSocketBroker() {
-        return broker;
-    }     
+   
+ 
     
 }

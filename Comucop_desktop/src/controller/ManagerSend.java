@@ -18,8 +18,7 @@ import org.json.simple.JSONObject;
  *
  * @author root
  */
-public class ManagerSend {
-    
+public class ManagerSend {    
     private Controller ctrApp;
     private InetAddress ipServer;     
     
@@ -28,23 +27,25 @@ public class ManagerSend {
         this.ipServer = ipServer;
     }
     
-    public void establishCon(){
-       
+    public void establishCon(String user,String password){       
         Runnable threadCon = new Runnable() {
             @Override
             public void run() {
                 try {  
                     Socket serverPer = new Socket(ipServer, 4848);
+                    ctrApp.setSocketServer(serverPer);
                     if(serverPer.isConnected()){
                         DataInputStream dIStr = new DataInputStream(serverPer.getInputStream());
                         dIStr.readUTF();
                         JSONObject jsonReq = new JSONObject();
                         jsonReq.put("type","login");
-                        jsonReq.put("login","rodrigoasmaia@gmail.com");
-                        jsonReq.put("password","qweasd123");
+                        jsonReq.put("login",user);
+                        jsonReq.put("password",password);
                         DataOutputStream dOStr = new DataOutputStream(serverPer.getOutputStream());
                         dOStr.writeUTF(jsonReq.toJSONString());
-                        dOStr.flush();                        
+                        ctrApp.startReceiver();
+                        dOStr.flush(); 
+                        
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(ManagerSend.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,7 +70,6 @@ public class ManagerSend {
                 serverNonPer.close();        
         }else{
              System.err.println("Restabelecer !");
-          //  establishCon();
         }
     }
 }
