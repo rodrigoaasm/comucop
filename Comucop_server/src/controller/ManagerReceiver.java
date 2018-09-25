@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ClientConRecord;
+import model.ElemQueue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -94,8 +95,8 @@ public class ManagerReceiver extends Thread {
                                        
                     JSONParser parser = new JSONParser();//Instaciando o conversor JSON
                     JSONObject jsonReq = (JSONObject) parser.parse(inputStream.readUTF());//Lendo Json de requisição do cliente 
-                    if(jsonReq.remove("type", "login")){
-                        System.out.println((String)jsonReq.get("login")+(String)jsonReq.get("password"));
+                    if(jsonReq.containsKey("type")){
+                        ctrServer.addQueueDB(new ElemQueue(clientConRec,jsonReq));
                     }      
                 } catch (IOException ex) {
                     Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);

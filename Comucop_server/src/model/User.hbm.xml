@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/09/2018 14:00:12 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.User" table="user" catalog="comucop" optimistic-lock="version">
+        <id name="usCod" type="java.lang.Integer">
+            <column name="us_cod" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="funcionario" class="model.Funcionario" fetch="select">
+            <column name="func_cod" not-null="true" />
+        </many-to-one>
+        <property name="usLogin" type="string">
+            <column name="us_login" length="20" unique="true" />
+        </property>
+        <property name="usPassword" type="string">
+            <column name="us_password" length="32" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

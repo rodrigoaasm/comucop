@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/09/2018 14:00:12 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Departamento" table="departamento" catalog="comucop" optimistic-lock="version">
+        <id name="depCod" type="java.lang.Integer">
+            <column name="dep_cod" />
+            <generator class="identity" />
+        </id>
+        <property name="depNome" type="string">
+            <column name="dep_nome" length="50" not-null="true" />
+        </property>
+        <property name="depSigla" type="string">
+            <column name="dep_sigla" length="5" not-null="true" />
+        </property>
+        <property name="depDesc" type="string">
+            <column name="dep_desc" length="200" />
+        </property>
+        <set name="funcionarios" table="funcionario" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="dep_cod" not-null="true" />
+            </key>
+            <one-to-many class="model.Funcionario" />
+        </set>
+    </class>
+</hibernate-mapping>
