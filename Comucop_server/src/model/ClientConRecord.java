@@ -17,19 +17,42 @@ public class ClientConRecord {
     
     private Socket sockClient;
     private PublicKey publicKeyClient;
-    private double certifCliente;
     private MyRSAKey aKeysServer;
+    private String client;
+    private Integer clientCod;
 
-    public ClientConRecord(Socket sockClient, double CertifCliente, MyRSAKey keysServer) {
+    public ClientConRecord(Socket sockClient, MyRSAKey keysServer) {
         this.sockClient = sockClient;
-        this.certifCliente = CertifCliente;
+
         aKeysServer = keysServer;
     }
-    
-    public static  void generateCertifCliente(){
-        
+
+    public MyRSAKey getaKeysServer() {
+        return aKeysServer;
     }
- 
+
+    public void setaKeysServer(MyRSAKey aKeysServer) {
+        this.aKeysServer = aKeysServer;
+    }
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public Integer getClientCod() {
+        return clientCod;
+    }
+
+    public void setClientCod(Integer client_cod) {
+        this.clientCod = client_cod;
+    }
+
+    
+
     public Socket getSockClient() {
         return sockClient;
     }
@@ -50,14 +73,6 @@ public class ClientConRecord {
 
     public void setPublicKeyClient(PublicKey publicKeyClient) {
         this.publicKeyClient = publicKeyClient;
-    }
-
-    public double getCertifCliente() {
-        return certifCliente;
-    }
-
-    public void setCertifCliente(double CertifCliente) {
-        this.certifCliente = CertifCliente;
     }
 
     public MyRSAKey getKeysServer() {
