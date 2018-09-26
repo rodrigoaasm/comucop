@@ -44,6 +44,9 @@ public class ManagerReceiver extends Thread{
                     }else if(type.compareTo("req-depart")==0){//Operação requisição de departamentos
                         System.out.println(jsonResp.toJSONString());
                         ctrApp.getCtrDep().LeituraJson(jsonResp);
+                    }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos
+                        System.out.println(jsonResp.toJSONString());
+                       // ctrApp.getCtrDep().LeituraJson(jsonResp);
                     }
                 }
             } catch (IOException ex) {

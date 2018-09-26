@@ -54,8 +54,7 @@ public class Controller {
         mRec.start();
     }
     
-    public void feedbackLogin(JSONObject jsonResp){
-        
+    public void feedbackLogin(JSONObject jsonResp){        
         int getSt = Integer.parseInt((String)jsonResp.get("status"));
         System.out.println(jsonResp.get("status"));
         if(getSt == 1){            
@@ -75,7 +74,19 @@ public class Controller {
         try {
             mSend.sendJSON(jsonreq.toJSONString());
         } catch (IOException ex) {
-            mWin.callMessage("Erro ao montar requesição de departamentos!",
+            mWin.callMessage("Erro ao montar requisição de departamentos!",
+                    "Erro de montagem",JOptionPane.ERROR_MESSAGE );
+        }
+    }
+    
+    public void expToContacts() {
+        JSONObject jsonreq = new JSONObject();
+        jsonreq.put("type","exp-to-contacts");
+        jsonreq.put("id-depart", "1");
+         try {
+            mSend.sendJSON(jsonreq.toJSONString());
+        } catch (IOException ex) {
+            mWin.callMessage("Erro ao montar requisição de contantos!",
                     "Erro de montagem",JOptionPane.ERROR_MESSAGE );
         }
     }
@@ -110,6 +121,8 @@ public class Controller {
         }
         server = s;
     }
+
+
 
  
 

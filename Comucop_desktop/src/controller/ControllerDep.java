@@ -1,13 +1,10 @@
 package controller;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import model.Departamento;
 import tools.MyTableModel;
@@ -15,8 +12,7 @@ import view.CadastroDepartamento;
 import view.ConsultarDepartamento;
 
 import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 
 public class ControllerDep {
 
@@ -105,7 +101,6 @@ public class ControllerDep {
 
     //Metodo responsavel por passar o Json para o array
     public void LeituraJson(JSONObject jsonObj) {
-
         JSONArray deps = (JSONArray) jsonObj.get("Departamentos");
         Iterator<JSONObject> ite = deps.iterator();
         while (ite.hasNext()) {
@@ -134,7 +129,6 @@ public class ControllerDep {
                 p.getNome()
             });
         }
-
     }
 
     public void setIndex(Integer index) {

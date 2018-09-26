@@ -265,6 +265,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         ButtonEnviar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonEnviar.setText("Enviar");
+        ButtonEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonEnviarActionPerformed(evt);
+            }
+        });
         superBody.add(ButtonEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, -1, -1));
 
         getContentPane().add(superBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
@@ -354,6 +359,11 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         ctrApp.getCtrFunc().AbreJanela(3);
     }//GEN-LAST:event_colFuncActionPerformed
+
+    private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
+        // TODO add your handling code here:
+        ctrApp.expToContacts();
+    }//GEN-LAST:event_ButtonEnviarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
