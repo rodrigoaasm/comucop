@@ -36,9 +36,7 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        ctrDep.LeituraJson();
-        ctrFunc.LeituraJson();
-        
+        ctrFunc.LeituraJson();        
         
         try {
             mSend = new ManagerSend(this, InetAddress.getByName("127.0.0.1"));
@@ -60,13 +58,25 @@ public class Controller {
         
         int getSt = Integer.parseInt((String)jsonResp.get("status"));
         System.out.println(jsonResp.get("status"));
-        if(getSt == 1){
+        if(getSt == 1){            
+            this.reqDepart();
             mWin.loginOk();
             mWin.callMessage("Seja bem-vindo "+jsonResp.get("nome")+" "+jsonResp.get("sobrenome")+"!"
                     ,"Login efetuado com sucesso", JOptionPane.INFORMATION_MESSAGE);
         }else{
             mWin.callMessage("Login e senha não correspondem a um usuário da aplicação! "
                     ,"Falha Login", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void reqDepart() {
+        JSONObject jsonreq = new JSONObject();
+        jsonreq.put("type","req-depart");
+        try {
+            mSend.sendJSON(jsonreq.toJSONString());
+        } catch (IOException ex) {
+            mWin.callMessage("Erro ao montar requesição de departamentos!",
+                    "Erro de montagem",JOptionPane.ERROR_MESSAGE );
         }
     }
     
@@ -100,6 +110,8 @@ public class Controller {
         }
         server = s;
     }
+
+ 
 
    
  

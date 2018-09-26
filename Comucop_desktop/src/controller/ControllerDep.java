@@ -30,7 +30,7 @@ public class ControllerDep {
     public ControllerDep(Controller pCtr) {
         ctrMain = pCtr;
         listaDeps = new ArrayList<>();
-        LeituraJson();
+       
     }
 
     //Metodo que abrirá a janela desejada
@@ -100,7 +100,7 @@ public class ControllerDep {
         }
     }
     
-    public void LeituraJson() {
+    public void LeituraJson(JSONObject jsonResp) {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader("departamento.json"));

@@ -58,8 +58,7 @@ public class ManagerSend {
 
     public void sendJSON(String json) throws IOException{
         Socket serverPer  = ctrApp.getSocketServer();        
-        System.err.println("Tentado enviar");
-        
+                
         if(serverPer.isConnected()){
                 System.err.println("Conexão existe!");
                 Socket serverNonPer = new Socket(ipServer, 4848);
@@ -69,7 +68,7 @@ public class ManagerSend {
                 out.close();
                 serverNonPer.close();        
         }else{
-             System.err.println("Restabelecer !");
+            System.err.println("Restabelecer !");
         }
     }
 }

@@ -26,22 +26,35 @@ public class ManagerReceiver extends Thread{
     
     @Override
     public void run(){
-        if(ctrApp.getSocketServer().isConnected()){
-            DataInputStream dIStr = null;  
+        DataInputStream dIStr = null;          
+        
+        if(ctrApp.getSocketServer().isConnected()){//Verifica se a conexão ainda existe           
             JSONObject jsonResp= null;
             try {
-                dIStr = new DataInputStream(ctrApp.getSocketServer().getInputStream());                
+                //Preparando stream de entrada e conversor json de resposta
+                dIStr = new DataInputStream(ctrApp.getSocketServer().getInputStream());          
                 JSONParser parser = new JSONParser();//Instaciando o conversor JSON
-                jsonResp = (JSONObject) parser.parse(dIStr.readUTF());//Lendo Json de resposta do servidor 
+                while(ctrApp.getSocketServer().isConnected()){//Enquanto a conexão estiver viva, a escuta-a
+                    //Lendo Json de resposta do servidor 
+                    jsonResp = (JSONObject) parser.parse(dIStr.readUTF());
+                    //Analisa de qual operação é a resposta
+                    String type = (String)jsonResp.get("type");
+                    if(type.compareTo("login")==0){//Operação de login
+                        ctrApp.feedbackLogin(jsonResp);
+                    }else if(type.compareTo("req-depart")==0){//Operação requisição de departamentos
+                        System.out.println(jsonResp.toJSONString());
+                        ctrApp.getCtrDep().LeituraJson(jsonResp);
+                    }
+                }
             } catch (IOException ex) {
                 Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
-            }   
-                       
-            ctrApp.feedbackLogin(jsonResp);
-        }
+            }       
+        }        
+        
     }
+
     
     
 }
