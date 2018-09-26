@@ -7,15 +7,18 @@ package controller;
 
 
 import hibernate.HibernateUtil;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import model.ClientConRecord;
 import model.Departamento;
 import model.ElemQueue;
+import model.Funcionario;
 import model.User;
 import model.dao.GeneralDAO;
 import model.dao.UserDAO;
+import net.sf.ehcache.transaction.DeadLockException;
 import org.hibernate.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,6 +52,8 @@ public class ManagerDB extends Thread{
                     this.login(eq,jsonReq);
                 }else if(jsonReq.remove("type","req-depart")){
                     this.reqDepart(eq.getClient());
+                }else if(jsonReq.remove("type","exp-to-contacts")){
+                    this.expToContacts(eq,jsonReq);
                 }
             }
         }
@@ -57,7 +62,7 @@ public class ManagerDB extends Thread{
     public void login(ElemQueue eq,JSONObject jsonReq){//Operação de login
         JSONObject resp = new JSONObject();
         //Faz a pesquisa do usuário
-        List l = (List)UserDAO.auth(sessDb,User.class,(String)jsonReq.get("login"),(String)jsonReq.get("password"));
+        List l = (List)UserDAO.auth(sessDb,(String)jsonReq.get("login"),(String)jsonReq.get("password"));
         if(!l.isEmpty()){//Se encontrar algum usuario valido retorna as informações do usuario com a resposta de confirmação
             User us = (User) l.get(0); 
             //Controi o JSON de resposta
@@ -69,7 +74,7 @@ public class ManagerDB extends Thread{
             
             ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia JSON
             eq.getClient().setClient(us.getUsLogin());//Carregando informações do usuário no registro de conexão
-            eq.getClient().setClientCod(us.getUsCod());
+            eq.getClient().setClientCod(us.getFuncionario().getFuncCod());
             ctrServ.getClients().add(eq.getClient());//adiciona conexão com o cliente
         }else{// se não retorna o erro
             resp.put("type","login");
@@ -97,8 +102,34 @@ public class ManagerDB extends Thread{
         resp.put("Departamentos", lista);//finaliza construção do json
         resp.put("type","req-depart");
         
-        System.out.println("Enviado departamentos");
+       
         ctrServ.getmSend().sendJSON(client, resp);//Envia json
         
+    }
+
+    private void expToContacts(ElemQueue eq, JSONObject jsonReq) {
+        JSONObject resp = new JSONObject();
+        //Recebe do banco todos os departamentos
+        String s = (String)jsonReq.get("id-depart");//recuperando codigo
+        Departamento dep = (Departamento)GeneralDAO.load(sessDb,
+                Departamento.class, 
+                Integer.parseInt(s)); //Recuperando id e convertendo para int
+        Iterator iFunc = dep.getFuncionarios().iterator();
+        
+        JSONArray lista = new JSONArray();//Instaciando sub-array json  
+        while(iFunc.hasNext()){//Lendo os funcionários do departamento
+            Funcionario f = (Funcionario) iFunc.next();
+            //Preechendo json d eum funcionario
+            JSONObject jsonDep = new JSONObject();
+            jsonDep.put("Codigo", f.getFuncCod());
+            jsonDep.put("Nome", f.getFuncNome());
+            jsonDep.put("Sobrenome", f.getFuncSobrenome());
+            jsonDep.put("Perfil", f.getFuncPerfil());
+            lista.add(jsonDep);//Adicionando funcionário ao array
+        }
+        resp.put("Contantos", lista);//finaliza construção do json
+        resp.put("type","exp-to-contacts");
+        
+        ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
     }
 }
