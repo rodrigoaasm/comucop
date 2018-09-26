@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import model.Departamento;
 import tools.MyTableModel;
@@ -74,6 +76,7 @@ public class ControllerDep {
         this.AdicionaJson();
     }
 
+    //Metodo que adicionaa os dados do array de departamentos no json
     private void AdicionaJson() {
         JSONObject obj = new JSONObject();
 
@@ -99,34 +102,25 @@ public class ControllerDep {
             e.printStackTrace();
         }
     }
-    
-    public void LeituraJson(JSONObject jsonResp) {
-        JSONParser parser = new JSONParser();
-        try {
-            Object obj = parser.parse(new FileReader("departamento.json"));
-            JSONObject jsonObj = (JSONObject) obj;
 
-            JSONArray deps = (JSONArray) jsonObj.get("Departamentos");
-            Iterator<JSONObject> ite = deps.iterator();
-            while (ite.hasNext()) {
-                JSONObject objDep = (JSONObject) ite.next();
-                String nome = (String) objDep.get("Nome");
-                String sigla = (String) objDep.get("Sigla");
-                String decricao = (String) objDep.get("Descrição");
-                String tipo = (String) objDep.get("Tipo");
+    //Metodo responsavel por passar o Json para o array
+    public void LeituraJson(JSONObject jsonObj) {
 
-                Departamento dp = new Departamento(
-                        nome, sigla, decricao, tipo
-                );
-                listaDeps.add(dp);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        JSONArray deps = (JSONArray) jsonObj.get("Departamentos");
+        Iterator<JSONObject> ite = deps.iterator();
+        while (ite.hasNext()) {
+            JSONObject objDep = (JSONObject) ite.next();
+            String nome = (String) objDep.get("Nome");
+            String sigla = (String) objDep.get("Sigla");
+            String decricao = (String) objDep.get("Descrição");
+            String tipo = (String) objDep.get("Tipo");
+
+            Departamento dp = new Departamento(
+                    nome, sigla, decricao, tipo
+            );
+            listaDeps.add(dp);
         }
+
     }
 
     //Metodo que adicionara dados na tabela, para sua visualização
@@ -150,7 +144,5 @@ public class ControllerDep {
     public ArrayList<Departamento> getListaDeps() {
         return listaDeps;
     }
-    
-    
 
 }

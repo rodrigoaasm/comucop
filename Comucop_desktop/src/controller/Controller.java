@@ -36,8 +36,8 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        ctrFunc.LeituraJson();        
-        
+        ctrFunc.LeituraJson();
+
         try {
             mSend = new ManagerSend(this, InetAddress.getByName("127.0.0.1"));
         } catch (UnknownHostException ex) {
