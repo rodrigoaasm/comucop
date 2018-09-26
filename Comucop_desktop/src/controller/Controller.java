@@ -36,7 +36,6 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        ctrDep.LeituraJson();
         ctrFunc.LeituraJson();
         
         
