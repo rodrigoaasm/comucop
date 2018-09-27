@@ -79,7 +79,7 @@ public class MainWindow extends javax.swing.JFrame {
         //Ira passar por todos os departamentos criando combobox, X é responsavel pela posição horizontal
         for (Departamento dp : listaDeps) {
             JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
-            combo.setBounds(0, x, 200, 35);
+            combo.setSize(210, 50);
             //Adiciona um mouse listener para cada um dos combobox
             combo.addMouseListener(new MouseListener() {
                 @Override
@@ -121,8 +121,7 @@ public class MainWindow extends javax.swing.JFrame {
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
             });
-            tabCont.add(combo);
-            x += 36;
+            panelCont.add(combo);          
         }
         tabCont.updateUI();
     }
@@ -136,6 +135,7 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel5 = new javax.swing.JPanel();
         censoredFrame = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cxTxtLogin = new javax.swing.JTextField();
@@ -147,7 +147,11 @@ public class MainWindow extends javax.swing.JFrame {
         painelChats = new javax.swing.JPanel();
         managerTab = new javax.swing.JTabbedPane();
         tabCont = new javax.swing.JPanel();
+        scrolPaneCont = new javax.swing.JScrollPane();
+        panelCont = new javax.swing.JPanel();
         tabRec = new javax.swing.JPanel();
+        scrollPaneRec = new javax.swing.JScrollPane();
+        panelRec = new javax.swing.JPanel();
         titleChat = new javax.swing.JPanel();
         bodyChat = new javax.swing.JPanel();
         cxTextMsg = new javax.swing.JScrollPane();
@@ -160,6 +164,17 @@ public class MainWindow extends javax.swing.JFrame {
         menuCons = new javax.swing.JMenu();
         colFunc = new javax.swing.JMenuItem();
         colDep = new javax.swing.JMenuItem();
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Comucop 1.0");
@@ -248,30 +263,39 @@ public class MainWindow extends javax.swing.JFrame {
 
         tabCont.setBackground(new java.awt.Color(204, 204, 204));
 
+        scrolPaneCont.setMaximumSize(new java.awt.Dimension(225, 372));
+        scrolPaneCont.setMinimumSize(new java.awt.Dimension(225, 372));
+
+        panelCont.setLayout(new javax.swing.BoxLayout(panelCont, javax.swing.BoxLayout.Y_AXIS));
+        scrolPaneCont.setViewportView(panelCont);
+
         javax.swing.GroupLayout tabContLayout = new javax.swing.GroupLayout(tabCont);
         tabCont.setLayout(tabContLayout);
         tabContLayout.setHorizontalGroup(
             tabContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addComponent(scrolPaneCont, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
         );
         tabContLayout.setVerticalGroup(
             tabContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 374, Short.MAX_VALUE)
+            .addComponent(scrolPaneCont, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
         );
 
         managerTab.addTab("Contantos", tabCont);
 
         tabRec.setBackground(new java.awt.Color(204, 204, 204));
 
+        panelRec.setLayout(new javax.swing.BoxLayout(panelRec, javax.swing.BoxLayout.Y_AXIS));
+        scrollPaneRec.setViewportView(panelRec);
+
         javax.swing.GroupLayout tabRecLayout = new javax.swing.GroupLayout(tabRec);
         tabRec.setLayout(tabRecLayout);
         tabRecLayout.setHorizontalGroup(
             tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addComponent(scrollPaneRec, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
         );
         tabRecLayout.setVerticalGroup(
             tabRecLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 374, Short.MAX_VALUE)
+            .addComponent(scrollPaneRec, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
         );
 
         managerTab.addTab("Recentes", tabRec);
@@ -443,12 +467,17 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JMenuBar mainBar;
     private javax.swing.JTabbedPane managerTab;
     private javax.swing.JMenu menuCons;
     private javax.swing.JMenu menuNovo;
     private javax.swing.JPanel painelChats;
+    private javax.swing.JPanel panelCont;
+    private javax.swing.JPanel panelRec;
+    private javax.swing.JScrollPane scrolPaneCont;
+    private javax.swing.JScrollPane scrollPaneRec;
     private javax.swing.JPanel superBody;
     private javax.swing.JPanel tabCont;
     private javax.swing.JPanel tabRec;
