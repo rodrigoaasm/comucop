@@ -98,7 +98,7 @@ public class ControllerFuncionario {
         }
     }
 
-    public void LeituraJson(JSONObject jsonObj) {
+    public void LeituraJson(JSONObject jsonObj, Integer dp) {
 
         JSONArray funcs = (JSONArray) jsonObj.get("Contatos");
         Iterator<JSONObject> ite = funcs.iterator();
@@ -108,8 +108,7 @@ public class ControllerFuncionario {
             String nome = (String) objDep.get("Nome");
             String sobrenome = (String) objDep.get("Sobrenome");
             String perfil = (String) objDep.get("Perfil");
-            System.out.println(nome+sobrenome+perfil);
-            Funcionario f = new Funcionario(nome, sobrenome, "", "", perfil, "", "");
+            Funcionario f = new Funcionario(nome, sobrenome, "", ""+dp, perfil, "", "");
             listFuncs.add(f);
         }
 

@@ -47,7 +47,7 @@ public class ManagerReceiver extends Thread{
                         ctrApp.getmWin().addDeps();
                     }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos
                         System.out.println(jsonResp.toJSONString());
-                        ctrApp.getCtrFunc().LeituraJson(jsonResp);
+                        ctrApp.getCtrFunc().LeituraJson(jsonResp, ctrApp.getDpReq());
                     }
                 }
             } catch (IOException ex) {

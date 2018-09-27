@@ -27,6 +27,7 @@ public class Controller {
     private ControllerFuncionario ctrFunc;
     private ManagerSend mSend;
     private ManagerReceiver mRec;
+    private Integer dpReq;
     
     //Sockets de conexão TCP
     private Socket server;
@@ -123,6 +124,14 @@ public class Controller {
 
     public MainWindow getmWin() {
         return mWin;
+    }
+
+    public Integer getDpReq() {
+        return dpReq;
+    }
+
+    public void setDpReq(Integer dpReq) {
+        this.dpReq = dpReq;
     }
 
 

@@ -71,12 +71,16 @@ public class MainWindow extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, msg, title, typeMsg);
     }
 
+    //Adiciona departamentos
     public void addDeps() {
+        //Recebe a lista de departamentos
         ArrayList<Departamento> listaDeps = ctrApp.getCtrDep().getListaDeps();
         int x = 0;
+        //Ira passar por todos os departamentos criando combobox, X é responsavel pela posição horizontal
         for (Departamento dp : listaDeps) {
             JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
             combo.setBounds(0, x, 200, 35);
+            //Adiciona um mouse listener para cada um dos combobox
             combo.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -91,16 +95,21 @@ public class MainWindow extends javax.swing.JFrame {
                 public void mouseReleased(MouseEvent e) {
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
-
+                
+                //Quando o mouse passar por cima do combo ele solicitará para o servidor os funcinarios que estao la
                 @Override
                 public void mouseEntered(MouseEvent e) {
+                    //Se o combobox so tiver um membro que é o seu proprio nome adiconara os contatos
                     if (combo.getItemCount() == 1) {
-                        ctrApp.expToContacts("" + dp.getCodigo());
-                        System.out.println(dp.getCodigo());
+                        //Atribui no controle o departamento que foi solicitado as requisicoes
+                        ctrApp.setDpReq(dp.getCodigo());
+                        ctrApp.expToContacts(""+dp.getCodigo());
                         ArrayList<Funcionario> funcs = ctrApp.getCtrFunc().getListFuncs();
+                        //Apos receber os contatos adiciona eles no combobox
                         for (Funcionario f : funcs) {
-                            combo.addItem(f.getNome() + " " + f.getSobrenome());
-
+                            if (f.getDepartamento().equals(String.valueOf(dp.getCodigo()))) {
+                                combo.addItem(f.getNome() + " " + f.getSobrenome());
+                            }
                         }
                     }
                 }
