@@ -127,7 +127,7 @@ public class ManagerDB extends Thread{
             jsonDep.put("Perfil", f.getFuncPerfil());
             lista.add(jsonDep);//Adicionando funcionário ao array
         }
-        resp.put("Contantos", lista);//finaliza construção do json
+        resp.put("Contatos", lista);//finaliza construção do json
         resp.put("type","exp-to-contacts");
         
         ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
