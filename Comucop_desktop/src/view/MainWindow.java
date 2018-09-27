@@ -104,6 +104,7 @@ public class MainWindow extends javax.swing.JFrame {
                         //Atribui no controle o departamento que foi solicitado as requisicoes
                         ctrApp.setDpReq(dp.getCodigo());
                         ctrApp.expToContacts(""+dp.getCodigo());
+                        
                         ArrayList<Funcionario> funcs = ctrApp.getCtrFunc().getListFuncs();
                         //Apos receber os contatos adiciona eles no combobox
                         for (Funcionario f : funcs) {
@@ -112,6 +113,7 @@ public class MainWindow extends javax.swing.JFrame {
                             }
                         }
                     }
+                    tabCont.updateUI();
                 }
 
                 @Override
