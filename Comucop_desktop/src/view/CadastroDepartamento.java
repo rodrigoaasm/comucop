@@ -12,6 +12,7 @@ public class CadastroDepartamento extends javax.swing.JFrame {
 
     private ControllerDep ctrDep;
     private Integer index;
+    private Integer codigo;
 
     public CadastroDepartamento(ControllerDep pCtr, Integer pOpc) {
         initComponents();
@@ -21,6 +22,7 @@ public class CadastroDepartamento extends javax.swing.JFrame {
 
     public void AlterarCadastro(Departamento dp){
         ButtonCadDep.setText("Alterar");
+        codigo = dp.getCodigo();
         TextFieldNomeDep.setText(dp.getNome());
         TextFieldSiglaDep.setText(dp.getSigla());
         TextAreaDes.setText(dp.getDescricao());
@@ -187,7 +189,7 @@ public class CadastroDepartamento extends javax.swing.JFrame {
                         "Campo de Sigla Vazio, por favor preencha-o", "ERRO",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                ctrDep.AlterarDepartamento(TextFieldNomeDep.getText(),
+                ctrDep.AlterarDepartamento(codigo, TextFieldNomeDep.getText(),
                         TextFieldSiglaDep.getText(),
                         TextAreaDes.getText());
                 JOptionPane.showMessageDialog(this,

@@ -3,13 +3,15 @@ package model;
 
 
 public class Departamento {
-
+    
+    private Integer codigo;
     private String nome;
     private String sigla;
     private String descricao;
     private String tipo;
 
-    public Departamento(String nome, String sigla, String descricao, String tipo) {
+    public Departamento(Integer codigo, String nome, String sigla, String descricao, String tipo) {
+        this.codigo = codigo;
         this.nome = nome;
         this.sigla = sigla;
         this.descricao = descricao;
@@ -46,6 +48,14 @@ public class Departamento {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
     
     

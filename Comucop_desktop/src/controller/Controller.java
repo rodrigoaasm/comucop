@@ -36,8 +36,7 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        ctrFunc.LeituraJson();
-
+        
         try {
             mSend = new ManagerSend(this, InetAddress.getByName("127.0.0.1"));
         } catch (UnknownHostException ex) {
@@ -79,10 +78,10 @@ public class Controller {
         }
     }
     
-    public void expToContacts() {
+    public void expToContacts(String codDep) {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type","exp-to-contacts");
-        jsonreq.put("id-depart", "1");
+        jsonreq.put("id-depart", codDep);
          try {
             mSend.sendJSON(jsonreq.toJSONString());
         } catch (IOException ex) {
@@ -120,6 +119,10 @@ public class Controller {
             }
         }
         server = s;
+    }
+
+    public MainWindow getmWin() {
+        return mWin;
     }
 
 

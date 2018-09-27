@@ -9,12 +9,17 @@ import controller.Controller;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import model.Departamento;
+import model.Funcionario;
 
 /**
  *
@@ -22,48 +27,95 @@ import javax.swing.JOptionPane;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-     private static Point point = new Point(); 
-     private JFrame t = this;
-     private Controller ctrApp;
+    private static Point point = new Point();
+    private JFrame t = this;
+    private Controller ctrApp;
+
     /**
      * Creates new form MainWindow
      */
     public MainWindow(Controller actrApp) {
         initComponents();
         initComponentsExtra();
-        
+
         this.ctrApp = actrApp;
     }
-    
-    public void initComponentsExtra(){
-        
-        this.addMouseListener(new MouseAdapter() {         
+
+    public void initComponentsExtra() {
+
+        this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-              point.x = e.getX();
-              point.y = e.getY();
+                point.x = e.getX();
+                point.y = e.getY();
             }
         });
-        
+
         this.addMouseMotionListener(new MouseMotionAdapter() {
-          @Override
-          public void mouseDragged(MouseEvent e) {
-            Point p = t.getLocation();
-            t.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
-          }
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                Point p = t.getLocation();
+                t.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+            }
         });
-        
+
         this.mainBar.setVisible(false);
     }
-    
-    public void loginOk(){
+
+    public void loginOk() {
         this.censoredFrame.setVisible(false);
-        this.mainBar.setVisible(true);       
-    }    
-    
-    public void callMessage(String msg,String title,int typeMsg){
-       JOptionPane.showMessageDialog(this, msg,title,typeMsg);
+        this.mainBar.setVisible(true);
     }
+
+    public void callMessage(String msg, String title, int typeMsg) {
+        JOptionPane.showMessageDialog(this, msg, title, typeMsg);
+    }
+
+    public void addDeps() {
+        ArrayList<Departamento> listaDeps = ctrApp.getCtrDep().getListaDeps();
+        int x = 0;
+        for (Departamento dp : listaDeps) {
+            JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
+            combo.setBounds(0, x, 200, 35);
+            combo.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    if (combo.getItemCount() == 1) {
+                        ctrApp.expToContacts("" + dp.getCodigo());
+                        System.out.println(dp.getCodigo());
+                        ArrayList<Funcionario> funcs = ctrApp.getCtrFunc().getListFuncs();
+                        for (Funcionario f : funcs) {
+                            combo.addItem(f.getNome() + " " + f.getSobrenome());
+
+                        }
+                    }
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+            });
+            tabCont.add(combo);
+            x += 36;
+        }
+        tabCont.updateUI();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -331,12 +383,12 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-         try {
-            ctrApp.tryEstablishCon(cxTxtLogin.getText(),cxPassword.getText());              
-         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this,ex.getMessage(),"Erro!",JOptionPane.ERROR_MESSAGE);
-         }
-        
+        try {
+            ctrApp.tryEstablishCon(cxTxtLogin.getText(), cxPassword.getText());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
@@ -362,7 +414,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
         // TODO add your handling code here:
-        ctrApp.expToContacts();
     }//GEN-LAST:event_ButtonEnviarActionPerformed
 
 

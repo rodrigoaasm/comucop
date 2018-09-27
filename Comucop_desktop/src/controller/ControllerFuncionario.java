@@ -29,18 +29,17 @@ public class ControllerFuncionario {
 
         ctrMain = pCtrPrincipal;
         listFuncs = new ArrayList<>();
-        LeituraJson();
 
     }
 
     //Metodo que abrirá a janela desejada
     public void AbreJanela(int pCodJan) {
         if (pCodJan == 1) {
-            cadFunc = new CadastroFuncionario(this, 1,ctrMain);
+            cadFunc = new CadastroFuncionario(this, 1, ctrMain);
             cadFunc.setVisible(true);
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         } else if (pCodJan == 2) {
-            cadFunc = new CadastroFuncionario(this, 2,ctrMain);
+            cadFunc = new CadastroFuncionario(this, 2, ctrMain);
             cadFunc.alteraFuncionario(listFuncs.get(index));
             cadFunc.setVisible(true);
             cadFunc.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -99,34 +98,21 @@ public class ControllerFuncionario {
         }
     }
 
-    public void LeituraJson() {
-        JSONParser parser = new JSONParser();
-        try {
-            Object obj = parser.parse(new FileReader("funcionarios.json"));
-            JSONObject jsonObj = (JSONObject) obj;
+    public void LeituraJson(JSONObject jsonObj) {
 
-            JSONArray funcs = (JSONArray) jsonObj.get("Funcionarios");
-            Iterator<JSONObject> ite = funcs.iterator();
-            while (ite.hasNext()) {
-                JSONObject objDep = (JSONObject) ite.next();
-                String nome = (String) objDep.get("Nome");
-                String sobrenome = (String) objDep.get("Sobrenome");
-                String cpf = (String) objDep.get("CPF");
-                String departamento = (String) objDep.get("Departamento");
-                String perfil = (String) objDep.get("Perfil");
-                String login = (String) objDep.get("Login");
-                String senha = (String) objDep.get("Senha");
-
-                Funcionario f = new Funcionario(nome, sobrenome, cpf, departamento, perfil, login, senha);
-                listFuncs.add(f);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        JSONArray funcs = (JSONArray) jsonObj.get("Contatos");
+        Iterator<JSONObject> ite = funcs.iterator();
+        while (ite.hasNext()) {
+            JSONObject objDep = (JSONObject) ite.next();
+            Long codigo = (Long) objDep.get("Codigo");
+            String nome = (String) objDep.get("Nome");
+            String sobrenome = (String) objDep.get("Sobrenome");
+            String perfil = (String) objDep.get("Perfil");
+            System.out.println(nome+sobrenome+perfil);
+            Funcionario f = new Funcionario(nome, sobrenome, "", "", perfil, "", "");
+            listFuncs.add(f);
         }
+
     }
 
     //Metodo que adicionara dados na tabela, para sua visualização
@@ -147,6 +133,10 @@ public class ControllerFuncionario {
 
     public void setIndex(Integer pIndex) {
         index = pIndex;
+    }
+
+    public ArrayList<Funcionario> getListFuncs() {
+        return listFuncs;
     }
 
 }

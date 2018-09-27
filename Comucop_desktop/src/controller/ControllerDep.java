@@ -1,6 +1,5 @@
 package controller;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +12,10 @@ import view.ConsultarDepartamento;
 
 import org.json.simple.*;
 
-
 public class ControllerDep {
 
     //Declaração de variáveis auxiliares
+    private static int count = 0;
     private Controller ctrMain;
     private ArrayList<Departamento> listaDeps;
     private CadastroDepartamento depCad;
@@ -28,7 +27,7 @@ public class ControllerDep {
     public ControllerDep(Controller pCtr) {
         ctrMain = pCtr;
         listaDeps = new ArrayList<>();
-       
+
     }
 
     //Metodo que abrirá a janela desejada
@@ -55,13 +54,13 @@ public class ControllerDep {
 
     //Metodo de Cadastro no Array de Departamentos
     public void CadastraDepartamento(String pNome, String pSigla, String pDescricao) {
-        listaDeps.add(new Departamento(pNome, pSigla, pDescricao, "cadastro"));
+        listaDeps.add(new Departamento(++count, pNome, pSigla, pDescricao, "cadastro"));
         this.AdicionaJson();
     }
 
     //Metodo responsável por alterar dados
-    public void AlterarDepartamento(String pNome, String pSigla, String pDescricao) {
-        listaDeps.set(index, new Departamento(pNome, pSigla, pDescricao, "cadastro"));
+    public void AlterarDepartamento(Integer codigo, String pNome, String pSigla, String pDescricao) {
+        listaDeps.set(index, new Departamento(codigo, pNome, pSigla, pDescricao, "cadastro"));
         this.AdicionaJson();
     }
 
@@ -79,6 +78,7 @@ public class ControllerDep {
         JSONArray lista = new JSONArray();
         for (Departamento dp : listaDeps) {
             JSONObject deps = new JSONObject();
+            deps.put("Codigo", dp.getCodigo());
             deps.put("Nome", dp.getNome());
             deps.put("Sigla", dp.getSigla());
             deps.put("Descrição", dp.getDescricao());
@@ -105,13 +105,19 @@ public class ControllerDep {
         Iterator<JSONObject> ite = deps.iterator();
         while (ite.hasNext()) {
             JSONObject objDep = (JSONObject) ite.next();
+            Long codigo = (Long) objDep.get("Codigo");
             String nome = (String) objDep.get("Nome");
             String sigla = (String) objDep.get("Sigla");
             String decricao = (String) objDep.get("Descrição");
             String tipo = (String) objDep.get("Tipo");
-
+            Integer cod = 1;
+            try {
+                cod = Integer.valueOf(codigo.toString());
+            } catch (Exception e) {
+                System.out.println("Capacidade do Integer estourou.");
+            }
             Departamento dp = new Departamento(
-                    nome, sigla, decricao, tipo
+                    cod, nome, sigla, decricao, tipo
             );
             listaDeps.add(dp);
         }
