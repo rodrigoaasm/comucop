@@ -18,9 +18,9 @@ public class ManagerMsg extends Thread{
     public ManagerMsg(Controller pController) {
 
         objCtrPrincipal = pController;
-        mongo = new Mongo("localhost", 27017);
-        db = mongo.getDB("comucop");
-        table = db.getCollection("mesages");
+       // mongo = new Mongo("localhost", 27017);
+       // db = mongo.getDB("comucop");
+       // table = db.getCollection("mesages");
 
     }
     

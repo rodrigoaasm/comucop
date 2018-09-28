@@ -68,6 +68,7 @@ public class ManagerDB extends Thread{
             //Controi o JSON de resposta
             resp.put("type","login");
             resp.put("status","1");
+            resp.put("codigo", ""+us.getFuncionario().getFuncCod());
             resp.put("nome",us.getFuncionario().getFuncNome());
             resp.put("sobrenome",us.getFuncionario().getFuncSobrenome());
             resp.put("perfil",us.getFuncionario().getFuncPerfil());
