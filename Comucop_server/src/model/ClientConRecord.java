@@ -51,8 +51,6 @@ public class ClientConRecord {
         this.clientCod = client_cod;
     }
 
-    
-
     public Socket getSockClient() {
         return sockClient;
     }

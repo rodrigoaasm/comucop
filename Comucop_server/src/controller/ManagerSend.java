@@ -63,8 +63,7 @@ public class ManagerSend {
        Runnable simpleSendingThread;//Instanciando thread de envio de primeiro contato
         simpleSendingThread = new Runnable() {
             @Override
-            public void run(){              
-                
+            public void run(){  
                 DataOutputStream outputStream = null;
                 try {
                     outputStream = new DataOutputStream(clientConRec.getSockClient().getOutputStream()); //recebendo stream de saída
@@ -74,8 +73,7 @@ public class ManagerSend {
                     if(json.remove("type","login") && json.remove("status","0")){//Se este json representar uma falha na autenticação fecha a conexão
                         System.out.println("fecha conexão");
                         clientConRec.getSockClient().close();
-                    }
-                    
+                    }                
                     
                 } catch (IOException ex) {
                     Logger.getLogger(ManagerSend.class.getName()).log(Level.SEVERE, null, ex);

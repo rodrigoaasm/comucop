@@ -112,6 +112,7 @@ public class ManagerDB extends Thread{
         JSONObject resp = new JSONObject();
         //Recebe do banco todos os departamentos
         String s = (String)jsonReq.get("id-depart");//recuperando codigo
+        System.out.println(s);
         Departamento dep = (Departamento)GeneralDAO.load(sessDb,
                 Departamento.class, 
                 Integer.parseInt(s)); //Recuperando id e convertendo para int
@@ -122,6 +123,7 @@ public class ManagerDB extends Thread{
             Funcionario f = (Funcionario) iFunc.next();
             //Preechendo json d eum funcionario
             JSONObject jsonDep = new JSONObject();
+            jsonDep.put("id-depart",s);
             jsonDep.put("Codigo", f.getFuncCod());
             jsonDep.put("Nome", f.getFuncNome());
             jsonDep.put("Sobrenome", f.getFuncSobrenome());

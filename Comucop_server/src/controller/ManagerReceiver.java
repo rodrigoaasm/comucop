@@ -48,13 +48,17 @@ public class ManagerReceiver extends Thread {
                 client = sockServ.accept();//Aceitando conexão TCP de cliente
 
                 if((clientConRec = this.isEstablishedConWithClient(client)) != null){//Se o cliente já possui uma conexão persistente
-                    if(clientConRec.getSockClient().isClosed())
-                        System.out.println("controller.ManagerReceiver.run() --> tá fechaodo socket");
-                    scan = new DataInputStream(client.getInputStream());//Então lé a requisição JSON
-                    JSONObject jsonreq = (JSONObject) jsonParser.parse(scan.readUTF());
-                    routerWork(clientConRec, jsonreq);//Redirenciona ao serviço certo
-                    scan.close();//E fecha conexão não persistente
-                    client.close();                
+                    if(clientConRec.isSocketConnected()){//A conexão ainda existe
+                        System.out.println("controller.ManagerReceiver.run()--> o Cliente está conectado");
+                        scan = new DataInputStream(client.getInputStream());//Então lé a requisição JSON
+                        JSONObject jsonreq = (JSONObject) jsonParser.parse(scan.readUTF());
+                        routerWork(clientConRec, jsonreq);//Redirenciona ao serviço certo
+                        scan.close();
+                        client.close(); 
+                    }else{//Tentando relogin
+                        clientConRec = new ClientConRecord(client,MyRSAKey.newInstance());//Instaciando registro de conexão                    
+                        ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
+                    }
                 }else {//Se o cliente não possui uma conexão persistente inicia a autenticação
                     clientConRec = new ClientConRecord(client,MyRSAKey.newInstance());//Instaciando registro de conexão                    
                     ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
@@ -67,18 +71,24 @@ public class ManagerReceiver extends Thread {
         }
     }
     
-    public void routerWork(ClientConRecord clientConRec,JSONObject jsonreq){
+    public void routerWork(ClientConRecord clientConRec,JSONObject jsonreq) throws IOException{
+                
         String type = (String)jsonreq.get("type");//Analisa o tipo da operação
         if(type.compareTo("req-depart") == 0 || type.compareTo("exp-to-contacts") == 0){//Operação de resgate de json
-            ctrServer.addQueueDB(new ElemQueue(clientConRec, jsonreq));
-        }else if(type.compareTo("mensage") == 0){
-            ctrServer.addQueueMesage(new ElemQueue(clientConRec, jsonreq));
+            ctrServer.addQueueDB(new ElemQueue(clientConRec, jsonreq));//Coloca na fila do Gerenciador de banco de dados
+        }else if(type.compareTo("mensagem") == 0){//Operação de envio de mensagem
+            ctrServer.addQueueMesage(new ElemQueue(clientConRec, jsonreq));//Coloca na fila do Gerenciador de mensagem
+        }else if(type.compareTo("logout")==0){//O cliente está tentando efetuar novamente o login          
+            ctrServer.getClients().remove(clientConRec);//Removendo antigo registro de conexão da lista de clientes
+            clientConRec.getSockClient().close();//Fecha conexão    
+            clientConRec = null;//excluir registro de cliente
+            System.out.println("controller.ManagerReceiver.routerWork() --> cliente fechou a conexão");
         }
     }
     
     public ClientConRecord isEstablishedConWithClient(Socket client){
         
-        String addr  = new String(client.getInetAddress().getAddress());        
+        String addr  = new String(client.getInetAddress().getAddress());       
         
         for(ClientConRecord c : ctrServer.getClients()){                
             if(addr.contains(new String(c.getSockClient().getInetAddress().getAddress()))){
