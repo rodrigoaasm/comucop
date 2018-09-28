@@ -7,6 +7,11 @@ package view;
 
 import controller.Controller;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import model.Contato;
 
 /**
  *
@@ -17,25 +22,53 @@ public class CellDepart extends javax.swing.JPanel {
     private javax.swing.JPanel parent;
     private Controller ctrApp;
     private int codigoDep;
+    private JScrollPane scrollCont;
+    private JPanel panelCont;
+   // private ArrayList<CellContact> cellContacts;
     
     /**
      * Creates new form CellDepart
      */
-    public CellDepart(Controller ctrApp,String nomeDep,String siglaDep, int codigoDep) {
+    public CellDepart(Controller ctrApp,String nomeDep,
+            String siglaDep, int codigoDep) {
         initComponents();
         
+        this.ctrApp = ctrApp;
         this.parent = parent;
+        this.codigoDep = codigoDep;
         labelNome.setText(nomeDep);
         labelSigla.setText(siglaDep);        
         this.setVisible(true);
     }
 
     //Metodo responsavel pela atualização da celula de funcionarios
-    public void expContacts(){
+    public void expContacts(ArrayList<Contato> listContacts){
         this.setPreferredSize(new Dimension(210,300));
         this.setMaximumSize(new Dimension(210,300));
         this.setMinimumSize(new Dimension(210,300));
-        this.setSize(new Dimension(210, 300));        
+        this.setSize(new Dimension(210, 300));      
+        
+        
+        panelCont = new JPanel();//Gerar painel de contatos
+        panelCont.setLayout(new BoxLayout(panelCont, BoxLayout.Y_AXIS));         
+        panelCont.setPreferredSize(new Dimension(210,250));
+        panelCont.setMaximumSize(new Dimension(210,250));
+        panelCont.setMinimumSize(new Dimension(210,250));
+        panelCont.setSize(210,250);
+        
+       /* cellContacts = new ArrayList<CellContact> ();
+        for(Contato c : listContacts){
+            CellContact cc = new CellContact(ctrApp,c.getNome(),
+                    c.getSobrenome(),c.getPerfil(),c.getCodigo());
+            cellContacts.add(cc);
+            panelCont.add(cc);
+        }      */  
+        
+        scrollCont = new JScrollPane(panelCont);
+        scrollCont.setSize(210, 250); 
+
+        this.add(scrollCont);
+        this.updateUI();
     }
     
     /**
@@ -47,8 +80,9 @@ public class CellDepart extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        labelNome = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        labelNome = new javax.swing.JLabel();
         labelSigla = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(102, 102, 255));
@@ -57,9 +91,11 @@ public class CellDepart extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(210, 50));
         setPreferredSize(new java.awt.Dimension(210, 50));
         setRequestFocusEnabled(false);
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        labelNome.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
-        labelNome.setText("Nome Departamento");
+        jPanel1.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel1.setOpaque(false);
+        jPanel1.setPreferredSize(new java.awt.Dimension(208, 50));
 
         jButton1.setText("^");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -68,43 +104,52 @@ public class CellDepart extends javax.swing.JPanel {
             }
         });
 
+        labelNome.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
+        labelNome.setText("Nome Departamento");
+
         labelSigla.setText("sigla");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(labelSigla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelSigla, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(labelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelSigla, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(labelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(labelSigla)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        add(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
+
     //Botão para fazer a requisição dos dados
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-       ctrApp.expToContacts(""+codigoDep);
+        ctrApp.expToContacts("" + codigoDep);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelNome;
     private javax.swing.JLabel labelSigla;
     // End of variables declaration//GEN-END:variables

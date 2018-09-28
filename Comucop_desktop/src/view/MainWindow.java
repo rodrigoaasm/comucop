@@ -15,9 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import model.Contato;
 import model.Departamento;
-import model.Funcionario;
+
 
 /**
  *
@@ -82,9 +79,12 @@ public class MainWindow extends javax.swing.JFrame {
     public void addDeps() {
         //Recebe a lista de departamentos
         ArrayList<Departamento> listaDeps = ctrApp.getCtrDep().getListaDeps();
-        int x = 0;
+       
+       // int x = 0;
         //Ira passar por todos os departamentos criando combobox, X é responsavel pela posição horizontal
         for (Departamento dp : listaDeps) {
+            /*panelCont.add(new CellDepart(ctrApp,dp.getNome(),dp.getSigla(),dp.getCodigo()));
+        }*/
             JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
             combo.setSize(210, 50);
             //Adiciona um mouse listener para cada um dos combobox
@@ -116,11 +116,9 @@ public class MainWindow extends javax.swing.JFrame {
                         //Apos receber os contatos adiciona eles no combobox
                         for (Contato f : funcs) {
                             combo.addItem(f.getCodigo()+ "-"+ f.getNome() + " " + f.getSobrenome());
-
                         }
                     }
-                    tabCont.updateUI();
-                }
+                    tabCont.updateUI();                }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
@@ -138,6 +136,7 @@ public class MainWindow extends javax.swing.JFrame {
                         ButtonEnviar.setVisible(true);
                     }
                 }
+
             });
             panelCont.add(combo);
         }
@@ -200,6 +199,14 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Comucop 1.0");
         setBackground(new java.awt.Color(0, 0, 102));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         censoredFrame.setBackground(new java.awt.Color(51, 51, 51));
@@ -474,7 +481,18 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
         // TODO add your handling code here:
+        ctrApp.sendMsg();
     }//GEN-LAST:event_ButtonEnviarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        ctrApp.finishCon();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        ctrApp.finishCon();
+    }//GEN-LAST:event_formWindowClosing
 
     public JTextArea getTextArea() {
         return TextArea;

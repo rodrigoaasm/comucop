@@ -82,28 +82,35 @@ public class Controller {
     private void reqDepart() {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "req-depart");
-        try {
-            mSend.sendJSON(jsonreq.toJSONString());
-        } catch (IOException ex) {
-            mWin.callMessage("Erro ao montar requisição de departamentos!",
-                    "Erro de montagem", JOptionPane.ERROR_MESSAGE);
-        }
+        mSend.sendJSON(jsonreq.toJSONString());
+
     }
 
     public void expToContacts(String codDep) {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "exp-to-contacts");
         jsonreq.put("id-depart", codDep);
-        try {
-            mSend.sendJSON(jsonreq.toJSONString());
-        } catch (IOException ex) {
-            mWin.callMessage("Erro ao montar requisição de contantos!",
-                    "Erro de montagem", JOptionPane.ERROR_MESSAGE);
-        }
+        mSend.sendJSON(jsonreq.toJSONString());
     }
 
     public void tryEstablishCon(String user, String password) throws IOException {
         mSend.establishCon(user, password);
+    }
+    
+    public void finishCon() {
+        try {
+            mSend.finishCon();
+        } catch (IOException ex) {
+            mWin.callMessage("Erro ao fechar a conexão com servidor!",
+                    "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+        
+    public void sendMsg() {
+        JSONObject jsonMsg = new JSONObject();
+        jsonMsg.put("type", "mensagem"); 
+        mSend.sendJSON(jsonMsg.toJSONString());
     }
 
     public ControllerDep getCtrDep() {
@@ -170,6 +177,16 @@ public class Controller {
     public ArrayList<Contato> getListaConts() {
         return listaConts;
     }
-    
+
+
+    void conBroke() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void selectContact(int funcCod) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
     
 }

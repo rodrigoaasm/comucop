@@ -51,13 +51,15 @@ public class ManagerReceiver extends Thread{
                         ctrApp.LeituraJson(jsonResp, ctrApp.getDpReq());
                     }
                 }
+                ctrApp.conBroke();//Notificando quebra na conexão
             } catch (IOException ex) {
                 Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }       
-        }        
-        
+        }else{
+            ctrApp.conBroke();//notificando quebra na conexão
+        }     
     }
 
     
