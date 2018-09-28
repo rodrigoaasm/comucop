@@ -71,6 +71,8 @@ public class ManagerReceiver extends Thread {
         String type = (String)jsonreq.get("type");//Analisa o tipo da operação
         if(type.compareTo("req-depart") == 0 || type.compareTo("exp-to-contacts") == 0){//Operação de resgate de json
             ctrServer.addQueueDB(new ElemQueue(clientConRec, jsonreq));
+        }else if(type.compareTo("mensage") == 0){
+            ctrServer.addQueueMesage(new ElemQueue(clientConRec, jsonreq));
         }
     }
     
