@@ -7,6 +7,8 @@ package view;
 
 import controller.Controller;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,9 +17,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import model.Contato;
 import model.Departamento;
 import model.Funcionario;
 
@@ -37,7 +43,8 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow(Controller actrApp) {
         initComponents();
         initComponentsExtra();
-
+        TextArea.setVisible(false);
+        ButtonEnviar.setVisible(false);
         this.ctrApp = actrApp;
     }
 
@@ -95,7 +102,7 @@ public class MainWindow extends javax.swing.JFrame {
                 public void mouseReleased(MouseEvent e) {
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
-                
+
                 //Quando o mouse passar por cima do combo ele solicitará para o servidor os funcinarios que estao la
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -103,14 +110,13 @@ public class MainWindow extends javax.swing.JFrame {
                     if (combo.getItemCount() == 1) {
                         //Atribui no controle o departamento que foi solicitado as requisicoes
                         ctrApp.setDpReq(dp.getCodigo());
-                        ctrApp.expToContacts(""+dp.getCodigo());
-                        
-                        ArrayList<Funcionario> funcs = ctrApp.getCtrFunc().getListFuncs();
+                        ctrApp.expToContacts("" + dp.getCodigo());
+
+                        ArrayList<Contato> funcs = ctrApp.getListaConts();
                         //Apos receber os contatos adiciona eles no combobox
-                        for (Funcionario f : funcs) {
-                            if (f.getDepartamento().equals(String.valueOf(dp.getCodigo()))) {
-                                combo.addItem(f.getNome() + " " + f.getSobrenome());
-                            }
+                        for (Contato f : funcs) {
+                            combo.addItem(f.getCodigo()+ "-"+ f.getNome() + " " + f.getSobrenome());
+
                         }
                     }
                     tabCont.updateUI();
@@ -121,7 +127,19 @@ public class MainWindow extends javax.swing.JFrame {
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
             });
-            panelCont.add(combo);          
+
+            combo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (combo.getSelectedIndex() > 0) {
+                        combo.getSelectedItem();
+                        TextArea.setVisible(true);
+                        TextArea.setEditable(false);
+                        ButtonEnviar.setVisible(true);
+                    }
+                }
+            });
+            panelCont.add(combo);
         }
         tabCont.updateUI();
     }
@@ -154,6 +172,8 @@ public class MainWindow extends javax.swing.JFrame {
         panelRec = new javax.swing.JPanel();
         titleChat = new javax.swing.JPanel();
         bodyChat = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TextArea = new javax.swing.JTextArea();
         cxTextMsg = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         ButtonEnviar = new javax.swing.JButton();
@@ -250,7 +270,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         censoredFrame.add(jPanel1);
 
-        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
+        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 420));
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
         superBody.setForeground(new java.awt.Color(255, 255, 255));
@@ -332,15 +352,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         bodyChat.setBackground(new java.awt.Color(204, 204, 204));
 
+        TextArea.setColumns(20);
+        TextArea.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        TextArea.setRows(5);
+        jScrollPane1.setViewportView(TextArea);
+
         javax.swing.GroupLayout bodyChatLayout = new javax.swing.GroupLayout(bodyChat);
         bodyChat.setLayout(bodyChatLayout);
         bodyChatLayout.setHorizontalGroup(
             bodyChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
         );
         bodyChatLayout.setVerticalGroup(
             bodyChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
         );
 
         superBody.add(bodyChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 590, 310));
@@ -451,9 +476,27 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonEnviarActionPerformed
 
+    public JTextArea getTextArea() {
+        return TextArea;
+    }
 
+    public void setTextArea(JTextArea TextArea) {
+        this.TextArea = TextArea;
+    }
+
+    public JButton getButtonEnviar() {
+        return ButtonEnviar;
+    }
+
+    public void setButtonEnviar(JButton ButtonEnviar) {
+        this.ButtonEnviar = ButtonEnviar;
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonEnviar;
+    private javax.swing.JTextArea TextArea;
     private javax.swing.JPanel bodyChat;
     private javax.swing.JMenuItem cadDep;
     private javax.swing.JMenuItem cadFunc;
@@ -468,6 +511,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JMenuBar mainBar;
     private javax.swing.JTabbedPane managerTab;
