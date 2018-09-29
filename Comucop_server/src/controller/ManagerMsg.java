@@ -30,7 +30,7 @@ public class ManagerMsg extends Thread{
             if(queueManMesage.isEmpty() == false){
                 ElemQueue eq = queueManMesage.poll();//recuperando elemento
                 JSONObject rec = eq.getJsonReq();
-                System.out.println("controller.ManagerMsg.run() --> " + (String)rec.get("type"));
+                System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
             }else{
                 try {
                     Thread.sleep(23);

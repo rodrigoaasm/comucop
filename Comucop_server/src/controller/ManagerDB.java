@@ -122,8 +122,7 @@ public class ManagerDB extends Thread{
         while(iFunc.hasNext()){//Lendo os funcionários do departamento
             Funcionario f = (Funcionario) iFunc.next();
             //Preechendo json d eum funcionario
-            JSONObject jsonDep = new JSONObject();
-            jsonDep.put("id-depart",s);
+            JSONObject jsonDep = new JSONObject();            
             jsonDep.put("Codigo", f.getFuncCod());
             jsonDep.put("Nome", f.getFuncNome());
             jsonDep.put("Sobrenome", f.getFuncSobrenome());
@@ -132,6 +131,7 @@ public class ManagerDB extends Thread{
         }
         resp.put("Contatos", lista);//finaliza construção do json
         resp.put("type","exp-to-contacts");
+        resp.put("id-depart",s);
         
         ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
     }
