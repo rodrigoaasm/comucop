@@ -24,7 +24,7 @@ public class CellDepart extends javax.swing.JPanel {
     private int codigoDep;
     private JScrollPane scrollCont;
     private JPanel panelCont;
-   // private ArrayList<CellContact> cellContacts;
+    private ArrayList<CellContact> cellContacts;
     
     /**
      * Creates new form CellDepart
@@ -56,13 +56,14 @@ public class CellDepart extends javax.swing.JPanel {
         panelCont.setMinimumSize(new Dimension(210,250));
         panelCont.setSize(210,250);
         
-       /* cellContacts = new ArrayList<CellContact> ();
+        cellContacts = new ArrayList<CellContact> ();
         for(Contato c : listContacts){
+            System.out.println(c.getNome());
             CellContact cc = new CellContact(ctrApp,c.getNome(),
                     c.getSobrenome(),c.getPerfil(),c.getCodigo());
             cellContacts.add(cc);
             panelCont.add(cc);
-        }      */  
+        }      
         
         scrollCont = new JScrollPane(panelCont);
         scrollCont.setSize(210, 250); 
@@ -70,6 +71,11 @@ public class CellDepart extends javax.swing.JPanel {
         this.add(scrollCont);
         this.updateUI();
     }
+
+    public int getCodigoDep() {
+        return codigoDep;
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.

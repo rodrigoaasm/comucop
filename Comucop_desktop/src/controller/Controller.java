@@ -9,13 +9,17 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Chat;
 import model.Contato;
 import model.Funcionario;
+import model.Mensagem;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import view.MainWindow;
@@ -32,9 +36,10 @@ public class Controller {
     private ControllerFuncionario ctrFunc;
     private ManagerSend mSend;
     private ManagerReceiver mRec;
-    private Integer dpReq;
     private Contato cliente;
     private ArrayList<Contato> listaConts;
+    private ArrayList<Chat> listChats;
+    private Chat selectionChat;
 
     //Sockets de conexão TCP
     private Socket server;
@@ -51,6 +56,7 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         listaConts = new ArrayList<>();
+        listChats = new ArrayList<>();
     }
 
     void startReceiver() {
@@ -107,10 +113,28 @@ public class Controller {
     }
     
         
-    public void sendMsg() {
-        JSONObject jsonMsg = new JSONObject();
-        jsonMsg.put("type", "mensagem"); 
-        mSend.sendJSON(jsonMsg.toJSONString());
+    public void sendMsg(String textMsg) {
+        JSONObject jsonMsg = new JSONObject();        
+        
+        Date d = new Date();//Pegando hora da mensagem
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy");
+        
+        JSONObject rem = new JSONObject();//Contruido json com as informações do remetente        
+        rem.put("codigo",cliente.getCodigo());
+        rem.put("nome",cliente.getNome());
+        rem.put("sobrenome",cliente.getSobrenome());
+        rem.put("perfil",cliente.getPerfil());
+        
+        jsonMsg.put("rem",rem.toJSONString());//Contruindo json da mensagem
+        jsonMsg.put("dest",selectionChat.getDestinatario().getCodigo());        
+        jsonMsg.put("time",format.format(d));
+        jsonMsg.put("cont",textMsg);                
+        jsonMsg.put("type", "mensagem");
+        
+        selectionChat.addMsg(new Mensagem(cliente,
+                 selectionChat.getDestinatario(), textMsg, d));//Guardando a mensagem 
+
+        mSend.sendJSON(jsonMsg.toJSONString());//Enviando
     }
 
     public ControllerDep getCtrDep() {
@@ -144,16 +168,17 @@ public class Controller {
         return mWin;
     }
 
-    public Integer getDpReq() {
-        return dpReq;
+    
+    void toExpCellDepartsReq(JSONObject jsonResp) {
+        leituraJson(jsonResp);
+        System.out.println("controller.Controller.toExpCellDepartsReq() -->" + jsonResp.get("id-depart"));
+        int depart = Integer.parseInt((String)jsonResp.get("id-depart"));
+        mWin.expCellDeparts(depart,listaConts);
     }
 
-    public void setDpReq(Integer dpReq) {
-        this.dpReq = dpReq;
-    }
 
-    public void LeituraJson(JSONObject jsonObj, Integer dp) {
-
+    public void leituraJson(JSONObject jsonObj) {
+        
         JSONArray funcs = (JSONArray) jsonObj.get("Contatos");
         Iterator<JSONObject> ite = funcs.iterator();
         while (ite.hasNext()) {
@@ -184,8 +209,25 @@ public class Controller {
     }
 
     public void selectContact(int funcCod) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        for(Chat c : listChats){//Verifica se o chat com esse destinatário já existe
+            if(c.getDestinatario().getCodigo()==funcCod){
+                selectionChat = c;//Se existir marac como chat selecionado
+                mWin.openTextUI();
+                return;
+            }
+        }
+        for(Contato cont :listaConts){//Se não existir cria o chat para conversa
+             if(funcCod == cont.getCodigo()){
+                selectionChat = new Chat(cliente,cont);
+                listChats.add(selectionChat);                
+                mWin.openTextUI();
+             }
+         }
+        
+        
     }
+
 
 
     

@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import model.Chat;
 import model.Contato;
 import model.Departamento;
 
@@ -33,6 +34,8 @@ public class MainWindow extends javax.swing.JFrame {
     private static Point point = new Point();
     private JFrame t = this;
     private Controller ctrApp;
+    private ArrayList<CellDepart> listDeparts;
+    
 
     /**
      * Creates new form MainWindow
@@ -82,9 +85,12 @@ public class MainWindow extends javax.swing.JFrame {
        
        // int x = 0;
         //Ira passar por todos os departamentos criando combobox, X é responsavel pela posição horizontal
+        listDeparts = new ArrayList<CellDepart>();
         for (Departamento dp : listaDeps) {
-            /*panelCont.add(new CellDepart(ctrApp,dp.getNome(),dp.getSigla(),dp.getCodigo()));
-        }*/
+            CellDepart cellDep = new CellDepart(ctrApp,dp.getNome(),dp.getSigla(),dp.getCodigo());
+            listDeparts.add(cellDep);
+            panelCont.add(cellDep);
+        }/*
             JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
             combo.setSize(210, 50);
             //Adiciona um mouse listener para cada um dos combobox
@@ -139,8 +145,17 @@ public class MainWindow extends javax.swing.JFrame {
 
             });
             panelCont.add(combo);
-        }
+        }*/
         tabCont.updateUI();
+    }
+    
+    public void expCellDeparts(int depart,ArrayList<Contato> listCont) {
+        for(CellDepart cd : listDeparts){
+            if(cd.getCodigoDep()==depart){
+                cd.expContacts(listCont);
+                break;
+            }
+        }
     }
 
     /**
@@ -173,8 +188,8 @@ public class MainWindow extends javax.swing.JFrame {
         bodyChat = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextArea = new javax.swing.JTextArea();
-        cxTextMsg = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        scrollTextMsg = new javax.swing.JScrollPane();
+        cxTextMsg = new javax.swing.JTextPane();
         ButtonEnviar = new javax.swing.JButton();
         mainBar = new javax.swing.JMenuBar();
         menuNovo = new javax.swing.JMenu();
@@ -377,10 +392,10 @@ public class MainWindow extends javax.swing.JFrame {
 
         superBody.add(bodyChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 590, 310));
 
-        jTextPane1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        cxTextMsg.setViewportView(jTextPane1);
+        cxTextMsg.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        scrollTextMsg.setViewportView(cxTextMsg);
 
-        superBody.add(cxTextMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 510, 70));
+        superBody.add(scrollTextMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 510, 70));
 
         ButtonEnviar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         ButtonEnviar.setText("Enviar");
@@ -458,6 +473,13 @@ public class MainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void openTextUI() {
+        TextArea.setVisible(true);
+        TextArea.setEditable(false);
+        ButtonEnviar.setVisible(true);
+    }
+
+    
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
         // TODO add your handling code here:
         ctrApp.getCtrDep().AbreJanela(1);
@@ -481,7 +503,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
         // TODO add your handling code here:
-        ctrApp.sendMsg();
+        if(!cxTextMsg.getText().isEmpty()){
+            ctrApp.sendMsg(cxTextMsg.getText());
+        }
     }//GEN-LAST:event_ButtonEnviarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -501,14 +525,6 @@ public class MainWindow extends javax.swing.JFrame {
     public void setTextArea(JTextArea TextArea) {
         this.TextArea = TextArea;
     }
-
-    public JButton getButtonEnviar() {
-        return ButtonEnviar;
-    }
-
-    public void setButtonEnviar(JButton ButtonEnviar) {
-        this.ButtonEnviar = ButtonEnviar;
-    }
     
     
     
@@ -522,7 +538,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem colDep;
     private javax.swing.JMenuItem colFunc;
     private javax.swing.JPasswordField cxPassword;
-    private javax.swing.JScrollPane cxTextMsg;
+    private javax.swing.JTextPane cxTextMsg;
     private javax.swing.JTextField cxTxtLogin;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel3;
@@ -530,7 +546,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JMenuBar mainBar;
     private javax.swing.JTabbedPane managerTab;
     private javax.swing.JMenu menuCons;
@@ -540,9 +555,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel panelRec;
     private javax.swing.JScrollPane scrolPaneCont;
     private javax.swing.JScrollPane scrollPaneRec;
+    private javax.swing.JScrollPane scrollTextMsg;
     private javax.swing.JPanel superBody;
     private javax.swing.JPanel tabCont;
     private javax.swing.JPanel tabRec;
     private javax.swing.JPanel titleChat;
     // End of variables declaration//GEN-END:variables
+
+
+
 }

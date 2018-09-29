@@ -45,10 +45,10 @@ public class ManagerReceiver extends Thread{
                         System.out.println(jsonResp.toJSONString());
                         ctrApp.getCtrDep().LeituraJson(jsonResp);
                         ctrApp.getmWin().addDeps();
-                    }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos
+                    }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos   
                         System.out.println(jsonResp.toJSONString());
-                        ctrApp.getListaConts().clear();
-                        ctrApp.LeituraJson(jsonResp, ctrApp.getDpReq());
+                        ctrApp.getListaConts().clear();                        
+                        ctrApp.toExpCellDepartsReq(jsonResp);
                     }
                 }
                 ctrApp.conBroke();//Notificando quebra na conexão
