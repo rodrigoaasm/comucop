@@ -49,6 +49,8 @@ public class ManagerReceiver extends Thread{
                         System.out.println(jsonResp.toJSONString());
                         ctrApp.getListaConts().clear();                        
                         ctrApp.toExpCellDepartsReq(jsonResp);
+                    }else if(type.compareTo("mensagem")==0){//Operação requisição de departamentos   
+                        System.out.println("MENSAGEM:"+jsonResp.toJSONString());                        
                     }
                 }
                 ctrApp.conBroke();//Notificando quebra na conexão
