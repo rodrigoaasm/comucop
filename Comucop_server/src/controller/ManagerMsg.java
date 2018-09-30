@@ -2,6 +2,8 @@ package controller;
 
 import com.mongodb.*;
 import controller.*;
+import model.*;
+import java.util.ArrayList;
 import org.json.simple.JSONObject;
 import java.util.Queue;
 import java.util.logging.Level;
@@ -30,6 +32,12 @@ public class ManagerMsg extends Thread{
             if(queueManMesage.isEmpty() == false){
                 ElemQueue eq = queueManMesage.poll();//recuperando elemento
                 JSONObject rec = eq.getJsonReq();
+                ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();
+                ClientConRecord client = eq.getClient();
+                if(vetCliente.contains(client)){
+                    ManagerSend manSend = new ManagerSend(objCtrPrincipal);
+                    manSend.sendJSON(client, rec);
+                }
                 System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
             }else{
                 try {
