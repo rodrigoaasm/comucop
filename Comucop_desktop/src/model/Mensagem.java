@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Kevin
  */
 public class Mensagem {
-    
+
     private Contato destinatario;
     private Contato remetente;
     private String conteudo;
@@ -56,7 +56,11 @@ public class Mensagem {
     public void setHorario(Date horario) {
         this.horario = horario;
     }
-    
-    
-    
+
+    public String getMsg() {
+        String msg = remetente.getNome() + " " + remetente.getSobrenome()
+                + " (" + horario + ") : " + conteudo;
+        return msg;
+    }
+
 }

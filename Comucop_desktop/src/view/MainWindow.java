@@ -478,7 +478,10 @@ public class MainWindow extends javax.swing.JFrame {
         TextArea.setEditable(false);
         ButtonEnviar.setVisible(true);
     }
-
+    
+    public void preencheChat(String msgs){
+        TextArea.setText(msgs);
+    }
     
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
         // TODO add your handling code here:
@@ -505,6 +508,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(!cxTextMsg.getText().isEmpty()){
             ctrApp.sendMsg(cxTextMsg.getText());
+            
         }
     }//GEN-LAST:event_ButtonEnviarActionPerformed
 
