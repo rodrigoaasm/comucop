@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ElemQueue;
 
-public class ManagerMsg extends Thread{
+public class ManagerMsg extends Thread {
 
     private Mongo mongo;
     private DB db;
@@ -20,26 +20,39 @@ public class ManagerMsg extends Thread{
     public ManagerMsg(Controller pController) {
 
         objCtrPrincipal = pController;
-       // mongo = new Mongo("localhost", 27017);
-       // db = mongo.getDB("comucop");
-       // table = db.getCollection("mesages");
+        // mongo = new Mongo("localhost", 27017);
+        // db = mongo.getDB("comucop");
+        // table = db.getCollection("mesages");
 
     }
-    
-    public void run(){
-        while (true) {            
+
+    public void run() {
+        int i;
+        while (true) {
             Queue<ElemQueue> queueManMesage = objCtrPrincipal.getQueueManMesage();
-            if(queueManMesage.isEmpty() == false){
+            if (queueManMesage.isEmpty() == false) {
                 ElemQueue eq = queueManMesage.poll();//recuperando elemento
                 JSONObject rec = eq.getJsonReq();
                 ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();
-                ClientConRecord client = eq.getClient();
-                if(vetCliente.contains(client)){
-                    ManagerSend manSend = new ManagerSend(objCtrPrincipal);
-                    manSend.sendJSON(client, rec);
+                ClientConRecord remetente = eq.getClient();
+                ClientConRecord destinatario = null;
+                
+                Object dest = eq.getJsonReq().get("dest");
+                int codDest = Integer.parseInt(dest.toString());
+
+                for (i = 0; i < vetCliente.size(); i++) {
+                    if (codDest == vetCliente.get(i).getClientCod()) {
+                        destinatario = vetCliente.get(i);
+                    }
                 }
+
+                if (destinatario != null) {
+                    ManagerSend manSend = new ManagerSend(objCtrPrincipal);
+                    manSend.sendJSON(destinatario, rec);
+                }
+
                 System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
-            }else{
+            } else {
                 try {
                     Thread.sleep(23);
                 } catch (InterruptedException ex) {
