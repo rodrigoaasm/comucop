@@ -235,20 +235,18 @@ public class Controller {
                     && c.getDestinatario().getCodigo() == codDest) {
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
                 ver++;
-               String msgs = "";
-                for(Mensagem m: selectionChat.getMensagens()){
-                    msgs += m.getMsg()+"\n";
-                }
+                String msgs = c.toString();
                 mWin.preencheChat(msgs);
+                mWin.updateChat();
             }
         }
         if (ver == 0) {
             Chat c = new Chat(f, cliente);
             c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
             listChats.add(c);
-        }
-        JOptionPane.showMessageDialog(null, "Voce recebeu uma mensagem de: " + nome+" "+sobrenome);
-        
+            mWin.preencheChat(c.toString());
+            mWin.updateChat();
+        }        
     }
 
     public ArrayList<Contato> getListaConts() {
@@ -262,12 +260,9 @@ public class Controller {
     public void selectContact(int funcCod) {
         for (Chat c : listChats) {//Verifica se o chat com esse destinatário já existe
             if (c.getDestinatario().getCodigo() == funcCod) {
-                selectionChat = c;//Se existir marac como chat selecionado
+                selectionChat = c;//Se existir marca como chat selecionado
                 mWin.openTextUI();
-                String msgs = "";
-                for(Mensagem m: c.getMensagens()){
-                    msgs += m.getMsg()+"\n";
-                }
+                String msgs = c.toString();
                 mWin.preencheChat(msgs);
                 return;
             }
@@ -277,9 +272,21 @@ public class Controller {
                 selectionChat = new Chat(cliente, cont);
                 listChats.add(selectionChat);
                 mWin.openTextUI();
+                mWin.updateChat();
             }
         }
 
+    } 
+    
+    public void updateUIChat(int posicChat) {
+        selectionChat = listChats.get(posicChat);
+        mWin.preencheChat(selectionChat.toString());
     }
+
+    public ArrayList<Chat> getListChats() {
+        return listChats;
+    }
+    
+    
 
 }

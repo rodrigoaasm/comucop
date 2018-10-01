@@ -35,6 +35,7 @@ public class MainWindow extends javax.swing.JFrame {
     private JFrame t = this;
     private Controller ctrApp;
     private ArrayList<CellDepart> listDeparts;
+    private ArrayList<CellChat> listChats;
     
 
     /**
@@ -46,6 +47,7 @@ public class MainWindow extends javax.swing.JFrame {
         TextArea.setVisible(false);
         ButtonEnviar.setVisible(false);
         this.ctrApp = actrApp;
+        listChats = new ArrayList<CellChat>();
     }
 
     public void initComponentsExtra() {
@@ -90,63 +92,29 @@ public class MainWindow extends javax.swing.JFrame {
             CellDepart cellDep = new CellDepart(ctrApp,dp.getNome(),dp.getSigla(),dp.getCodigo());
             listDeparts.add(cellDep);
             panelCont.add(cellDep);
-        }/*
-            JComboBox combo = new JComboBox(new String[]{dp.getSigla() + "-" + dp.getNome()});
-            combo.setSize(210, 50);
-            //Adiciona um mouse listener para cada um dos combobox
-            combo.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                //Quando o mouse passar por cima do combo ele solicitará para o servidor os funcinarios que estao la
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    //Se o combobox so tiver um membro que é o seu proprio nome adiconara os contatos
-                    if (combo.getItemCount() == 1) {
-                        //Atribui no controle o departamento que foi solicitado as requisicoes
-                        ctrApp.setDpReq(dp.getCodigo());
-                        ctrApp.expToContacts("" + dp.getCodigo());
-
-                        ArrayList<Contato> funcs = ctrApp.getListaConts();
-                        //Apos receber os contatos adiciona eles no combobox
-                        for (Contato f : funcs) {
-                            combo.addItem(f.getCodigo()+ "-"+ f.getNome() + " " + f.getSobrenome());
-                        }
-                    }
-                    tabCont.updateUI();                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-            });
-
-            combo.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (combo.getSelectedIndex() > 0) {
-                        combo.getSelectedItem();
-                        TextArea.setVisible(true);
-                        TextArea.setEditable(false);
-                        ButtonEnviar.setVisible(true);
-                    }
-                }
-
-            });
-            panelCont.add(combo);
-        }*/
+        }
         tabCont.updateUI();
+    }
+    
+    public void addChats(){
+        int i = 0;
+        
+        ArrayList<Chat> chats = ctrApp.getListChats();
+        for (Chat c : chats) {
+            Contato cont = c.getRemetente();
+            CellChat cellChat = new CellChat(ctrApp,(cont.getNome() + cont.getSobrenome()),
+                    cont.getPerfil(),c.getLastMsg(),c.countUnreadMsg(),i);
+            listChats.add(cellChat);
+            panelRec.add(cellChat);
+            i++;
+        }
+        tabRec.updateUI();        
+    }
+    
+    public void updateChat(){
+        panelRec.removeAll();
+        listChats.clear();
+        addChats();
     }
     
     public void expCellDeparts(int depart,ArrayList<Contato> listCont) {
@@ -304,10 +272,12 @@ public class MainWindow extends javax.swing.JFrame {
         managerTab.setToolTipText("");
 
         tabCont.setBackground(new java.awt.Color(204, 204, 204));
+        tabCont.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         scrolPaneCont.setMaximumSize(new java.awt.Dimension(225, 372));
         scrolPaneCont.setMinimumSize(new java.awt.Dimension(225, 372));
 
+        panelCont.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelCont.setLayout(new javax.swing.BoxLayout(panelCont, javax.swing.BoxLayout.Y_AXIS));
         scrolPaneCont.setViewportView(panelCont);
 
@@ -322,7 +292,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(scrolPaneCont, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
         );
 
-        managerTab.addTab("Contantos", tabCont);
+        managerTab.addTab("Contatos", tabCont);
 
         tabRec.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -340,7 +310,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(scrollPaneRec, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
         );
 
-        managerTab.addTab("Recentes", tabRec);
+        managerTab.addTab("Conversas", tabRec);
 
         javax.swing.GroupLayout painelChatsLayout = new javax.swing.GroupLayout(painelChats);
         painelChats.setLayout(painelChatsLayout);

@@ -15,6 +15,7 @@ public class Mensagem {
 
     private Contato destinatario;
     private Contato remetente;
+    private boolean statusRead;
     private String conteudo;
     private Date horario;
 
@@ -23,6 +24,7 @@ public class Mensagem {
         this.remetente = remetente;
         this.conteudo = conteudo;
         this.horario = horario;
+        this.statusRead = false;
     }
 
     public Contato getDestinatario() {
@@ -57,9 +59,23 @@ public class Mensagem {
         this.horario = horario;
     }
 
+    public boolean isStatusRead() {
+        return statusRead;
+    }   
+
+    public void setStatusRead(boolean statusRead) {
+        this.statusRead = statusRead;
+    }
+    
+    
+    
+    public String getContMsg(){
+        return conteudo;
+    }
+
     public String getMsg() {
         String msg = remetente.getNome() + " " + remetente.getSobrenome()
-                + " (" + horario + ") : " + conteudo;
+                + " (" + horario + ") : \n" + conteudo;
         return msg;
     }
 

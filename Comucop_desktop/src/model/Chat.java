@@ -26,7 +26,23 @@ public class Chat {
     public void addMsg(Mensagem pMsg){
         mensagens.add(pMsg);
     }
+    
+    public String getLastMsg(){
+        if(mensagens.isEmpty()){
+            return mensagens.get(mensagens.size()-1).getContMsg();
+        }else return "...";        
+    }
 
+    public int countUnreadMsg(){
+        int count = 0;
+        for(Mensagem m :mensagens){
+            if(!m.isStatusRead()){
+                count++;
+            }
+        }
+        return count;
+    }
+    
     public Contato getRemetente() {
         return remetente;
     }
@@ -49,6 +65,15 @@ public class Chat {
 
     public void setMensagens(ArrayList<Mensagem> mensagens) {
         this.mensagens = mensagens;
+    }
+    
+    public String toString(){
+        String msgs = "";
+        for(Mensagem m: mensagens){
+            msgs += m.getMsg()+"\n";
+            m.setStatusRead(true);
+        }
+        return msgs;
     }
     
     

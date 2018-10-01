@@ -102,6 +102,7 @@ public class CellDepart extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(51, 51, 255));
         jPanel1.setOpaque(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(208, 50));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setText("^");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -109,38 +110,14 @@ public class CellDepart extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 11, -1, -1));
 
         labelNome.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         labelNome.setText("Nome Departamento");
+        jPanel1.add(labelNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, 137, 17));
 
         labelSigla.setText("sigla");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(labelSigla, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(labelNome, javax.swing.GroupLayout.DEFAULT_SIZE, 17, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelSigla, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        jPanel1.add(labelSigla, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, 137, -1));
 
         add(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
