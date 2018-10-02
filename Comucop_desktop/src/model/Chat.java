@@ -28,7 +28,7 @@ public class Chat {
     }
     
     public String getLastMsg(){
-        if(mensagens.isEmpty()){
+        if(!mensagens.isEmpty()){
             return mensagens.get(mensagens.size()-1).getContMsg();
         }else return "...";        
     }

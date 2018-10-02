@@ -19,12 +19,21 @@ public class Mensagem {
     private String conteudo;
     private Date horario;
 
+    
     public Mensagem(Contato destinatario, Contato remetente, String conteudo, Date horario) {
         this.destinatario = destinatario;
         this.remetente = remetente;
         this.conteudo = conteudo;
         this.horario = horario;
         this.statusRead = false;
+    }
+    
+    public Mensagem(Contato destinatario, Contato remetente, String conteudo, Date horario,boolean statusRead) {
+        this.destinatario = destinatario;
+        this.remetente = remetente;
+        this.conteudo = conteudo;
+        this.horario = horario;
+        this.statusRead = statusRead;
     }
 
     public Contato getDestinatario() {

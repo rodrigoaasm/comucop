@@ -6,6 +6,7 @@
 package view;
 
 import controller.Controller;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
@@ -43,31 +44,34 @@ public class CellDepart extends javax.swing.JPanel {
 
     //Metodo responsavel pela atualização da celula de funcionarios
     public void expContacts(ArrayList<Contato> listContacts){
-        this.setPreferredSize(new Dimension(210,300));
-        this.setMaximumSize(new Dimension(210,300));
-        this.setMinimumSize(new Dimension(210,300));
-        this.setSize(new Dimension(210, 300));      
-        
-        
+        this.setMinimumSize(new Dimension(210,50));       //           
+                
         panelCont = new JPanel();//Gerar painel de contatos
-        panelCont.setLayout(new BoxLayout(panelCont, BoxLayout.Y_AXIS));         
-        panelCont.setPreferredSize(new Dimension(210,250));
-        panelCont.setMaximumSize(new Dimension(210,250));
-        panelCont.setMinimumSize(new Dimension(210,250));
-        panelCont.setSize(210,250);
-        
+        panelCont.setLayout(new BoxLayout(panelCont, BoxLayout.Y_AXIS));        
+         panelCont.setMaximumSize(new Dimension(210,250));
+      
+        //Carregar contatos na interface grafica
         cellContacts = new ArrayList<CellContact> ();
-        for(Contato c : listContacts){
-            System.out.println(c.getNome());
+        for(Contato c : listContacts){            
             CellContact cc = new CellContact(ctrApp,c.getNome(),
                     c.getSobrenome(),c.getPerfil(),c.getCodigo());
             cellContacts.add(cc);
             panelCont.add(cc);
         }      
         
-        scrollCont = new JScrollPane(panelCont);
-        scrollCont.setSize(210, 250); 
-
+        scrollCont = new JScrollPane(panelCont);        
+       //Decidindo altura da celula conforme numero de contatos
+        int height = 300;
+        if(listContacts.size()<5){            
+            height = (listContacts.size()*50);
+        }
+           
+        //aplicando altura
+        panelCont.setSize(210,height);            
+        scrollCont.setSize(210,height);           
+        this.setMaximumSize(new Dimension(210,50 + height));
+        this.setSize(new Dimension(210, 50 + height));        
+ 
         this.add(scrollCont);
         this.updateUI();
     }
@@ -87,51 +91,66 @@ public class CellDepart extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         labelNome = new javax.swing.JLabel();
         labelSigla = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(102, 102, 255));
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBackground(new java.awt.Color(153, 204, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(210, 50));
         setMinimumSize(new java.awt.Dimension(210, 50));
         setPreferredSize(new java.awt.Dimension(210, 50));
         setRequestFocusEnabled(false);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+        });
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 255));
+        jPanel1.setBackground(new java.awt.Color(51, 204, 255));
         jPanel1.setOpaque(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(208, 50));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("^");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 11, -1, -1));
-
-        labelNome.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
+        labelNome.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         labelNome.setText("Nome Departamento");
-        jPanel1.add(labelNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 2, 137, 17));
+        jPanel1.add(labelNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 190, 17));
 
         labelSigla.setText("sigla");
-        jPanel1.add(labelSigla, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, 137, -1));
+        jPanel1.add(labelSigla, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 137, -1));
 
         add(jPanel1);
+
+        getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
 
-    //Botão para fazer a requisição dos dados
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
         // TODO add your handling code here:
+        this.setBackground(new Color(0,51,255));
+        labelNome.setForeground(new Color(255,255,255));
+        labelSigla.setForeground(new Color(255,255,255));
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        // TODO add your handling code here:
+        this.setBackground(new Color(153,204,255));
+        labelNome.setForeground(new Color(0,0,0));
+        labelSigla.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_formMouseExited
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         ctrApp.expToContacts("" + codigoDep);
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelNome;
     private javax.swing.JLabel labelSigla;

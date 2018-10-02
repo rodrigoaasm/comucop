@@ -131,15 +131,17 @@ public class Controller {
         jsonMsg.put("type", "mensagem");
 
         selectionChat.addMsg(new Mensagem(selectionChat.getDestinatario(),
-                cliente,textMsg, d));//Guardando a mensagem 
+                cliente,textMsg, d,true));//Guardando a mensagem 
 
         mSend.sendJSON(jsonMsg.toJSONString());//Enviando
         //Atualiza o textarea com a msg enviada
         String msgs = "";
-                for(Mensagem m: selectionChat.getMensagens()){
-                    msgs += m.getMsg()+"\n";
-                }
-                mWin.preencheChat(msgs);
+        for(Mensagem m: selectionChat.getMensagens()){
+             msgs += m.getMsg()+"\n";
+        }
+        mWin.preencheChat(msgs);
+        mWin.updateChat();
+      
     }
 
     public ControllerDep getCtrDep() {

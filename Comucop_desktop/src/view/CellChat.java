@@ -22,7 +22,7 @@ public class CellChat extends javax.swing.JPanel {
         initComponents();
         labelNome.setText(nomeRem);
         labelPerfil.setText(perfilRem);
-        lastMsg.setText(nomeRem);
+        lastMsg.setText(lastMsgTxt);
         unreadCount.setText("" + unreadCountVal);
         this.ctrApp = aCtrApp;
         this.posicChat = posicChat;
@@ -54,6 +54,7 @@ public class CellChat extends javax.swing.JPanel {
         unreadCount = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(153, 204, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         setMaximumSize(new java.awt.Dimension(210, 50));
         setMinimumSize(new java.awt.Dimension(210, 50));
         setPreferredSize(new java.awt.Dimension(210, 50));
@@ -68,10 +69,10 @@ public class CellChat extends javax.swing.JPanel {
         labelNome.setText("Nome Contanto");
         add(labelNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 140, -1));
 
-        labelPerfil.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelPerfil.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         labelPerfil.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         labelPerfil.setText("Perfil");
-        add(labelPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 50, -1));
+        add(labelPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 60, -1));
 
         lastMsg.setText("ultima mensagem");
         add(lastMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 110, -1));

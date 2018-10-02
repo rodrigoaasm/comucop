@@ -101,7 +101,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         ArrayList<Chat> chats = ctrApp.getListChats();
         for (Chat c : chats) {
-            Contato cont = c.getRemetente();
+            Contato cont = c.getDestinatario();
             CellChat cellChat = new CellChat(ctrApp,(cont.getNome() + cont.getSobrenome()),
                     cont.getPerfil(),c.getLastMsg(),c.countUnreadMsg(),i);
             listChats.add(cellChat);
@@ -274,6 +274,9 @@ public class MainWindow extends javax.swing.JFrame {
         tabCont.setBackground(new java.awt.Color(204, 204, 204));
         tabCont.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        scrolPaneCont.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrolPaneCont.setToolTipText("");
+        scrolPaneCont.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrolPaneCont.setMaximumSize(new java.awt.Dimension(225, 372));
         scrolPaneCont.setMinimumSize(new java.awt.Dimension(225, 372));
 
@@ -295,6 +298,9 @@ public class MainWindow extends javax.swing.JFrame {
         managerTab.addTab("Contatos", tabCont);
 
         tabRec.setBackground(new java.awt.Color(204, 204, 204));
+
+        scrollPaneRec.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneRec.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         panelRec.setLayout(new javax.swing.BoxLayout(panelRec, javax.swing.BoxLayout.Y_AXIS));
         scrollPaneRec.setViewportView(panelRec);
