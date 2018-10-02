@@ -266,8 +266,10 @@ public class Controller {
         Contato f = new Contato(cod, perfil, nome, sobrenome);
         //Verifica se existe uma conversa com essa pessoa
         for (Chat c : listChats) {
-            if (c.getRemetente().getCodigo() == codDest
-                    && c.getDestinatario().getCodigo() == f.getCodigo()) {
+            if ((c.getRemetente().getCodigo() == codDest
+                    && c.getDestinatario().getCodigo() == f.getCodigo())
+                    ||(c.getRemetente().getCodigo() == f.getCodigo())
+                    && c.getDestinatario().getCodigo() ==codDest) {
                 listChats.remove(c);
                 listChats.add(0,c);
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
@@ -281,7 +283,7 @@ public class Controller {
             }
         }
         if (ver == 0) {
-            Chat c = new Chat(f, cliente);
+            Chat c = new Chat(cliente, f);
             c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
             listChats.add(0,c);         
             mWin.updateChat();           
@@ -328,8 +330,10 @@ public class Controller {
         selectionChat = listChats.get(posicChat);
         mWin.preencheChat(selectionChat.toString(),
                 selectionChat.getDestinatario().getNome() + " " + 
-                        selectionChat.getDestinatario().getSobrenome(),
+                selectionChat.getDestinatario().getSobrenome(),
                 selectionChat.getDestinatario().getPerfil());
+    
+
     }
 
     public ArrayList<Chat> getListChats() {
