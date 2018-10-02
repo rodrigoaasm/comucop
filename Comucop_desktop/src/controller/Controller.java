@@ -231,8 +231,8 @@ public class Controller {
         Contato f = new Contato(cod, perfil, nome, sobrenome);
         //Verifica se existe uma conversa com essa pessoa
         for (Chat c : listChats) {
-            if (c.getRemetente().getCodigo()==f.getCodigo()
-                    && c.getDestinatario().getCodigo() == codDest) {
+            if (c.getRemetente().getCodigo() == codDest
+                    && c.getDestinatario().getCodigo() == f.getCodigo()) {
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
                 ver++;
                 String msgs = c.toString();
