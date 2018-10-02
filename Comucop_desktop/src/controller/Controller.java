@@ -176,8 +176,7 @@ public class Controller {
     }
 
     void toExpCellDepartsReq(JSONObject jsonResp) {
-        leituraJson(jsonResp);
-        System.out.println("controller.Controller.toExpCellDepartsReq() -->" + jsonResp.get("id-depart"));
+        leituraJson(jsonResp);        
         int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
         mWin.expCellDeparts(depart, listaConts);
     }
@@ -238,7 +237,9 @@ public class Controller {
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
                 ver++;
                 String msgs = c.toString();
-                mWin.preencheChat(msgs);
+                if(selectionChat.equals(c)){
+                     mWin.preencheChat(msgs);
+                }
                 mWin.updateChat();
             }
         }
@@ -246,7 +247,7 @@ public class Controller {
             Chat c = new Chat(f, cliente);
             c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
             listChats.add(c);
-            mWin.preencheChat(c.toString());
+          //  mWin.preencheChat(c.toString());
             mWin.updateChat();
         }        
     }
@@ -263,9 +264,11 @@ public class Controller {
         for (Chat c : listChats) {//Verifica se o chat com esse destinatário já existe
             if (c.getDestinatario().getCodigo() == funcCod) {
                 selectionChat = c;//Se existir marca como chat selecionado
-                mWin.openTextUI();
+                mWin.openTextUI(c.getDestinatario().getNome() + " " + c.getDestinatario().getSobrenome()
+                        ,c.getDestinatario().getPerfil());
                 String msgs = c.toString();
                 mWin.preencheChat(msgs);
+                mWin.changeTabRec();
                 return;
             }
         }
@@ -273,8 +276,10 @@ public class Controller {
             if (funcCod == cont.getCodigo()) {
                 selectionChat = new Chat(cliente, cont);
                 listChats.add(selectionChat);
-                mWin.openTextUI();
+                mWin.openTextUI(selectionChat.getDestinatario().getNome() + " " + selectionChat.getDestinatario().getSobrenome()
+                        ,selectionChat.getDestinatario().getPerfil());
                 mWin.updateChat();
+                mWin.changeTabRec();
             }
         }
 
@@ -282,7 +287,10 @@ public class Controller {
     
     public void updateUIChat(int posicChat) {
         selectionChat = listChats.get(posicChat);
-        mWin.preencheChat(selectionChat.toString());
+        mWin.preencheChat(selectionChat.toString(),
+                selectionChat.getDestinatario().getNome() + " " + 
+                        selectionChat.getDestinatario().getSobrenome(),
+                selectionChat.getDestinatario().getPerfil());
     }
 
     public ArrayList<Chat> getListChats() {

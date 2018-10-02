@@ -6,6 +6,7 @@
 package view;
 
 import controller.*;
+import java.awt.Color;
 
 /**
  *
@@ -62,6 +63,12 @@ public class CellChat extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
         });
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -74,6 +81,7 @@ public class CellChat extends javax.swing.JPanel {
         labelPerfil.setText("Perfil");
         add(labelPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 60, -1));
 
+        lastMsg.setForeground(new java.awt.Color(255, 255, 255));
         lastMsg.setText("ultima mensagem");
         add(lastMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 110, -1));
 
@@ -87,6 +95,20 @@ public class CellChat extends javax.swing.JPanel {
         // TODO add your handling code here:
         ctrApp.updateUIChat(posicChat);
     }//GEN-LAST:event_formMouseClicked
+
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        // TODO add your handling code here:
+        this.setBackground(new Color(0,51,255));
+        labelNome.setForeground(new Color(255,255,255));
+        labelPerfil.setForeground(new Color(255,255,255));        
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        // TODO add your handling code here:
+        this.setBackground(new Color(153,204,255));
+        labelNome.setForeground(new Color(0,0,0));
+        labelPerfil.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_formMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

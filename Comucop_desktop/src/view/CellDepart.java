@@ -40,6 +40,8 @@ public class CellDepart extends javax.swing.JPanel {
         labelNome.setText(nomeDep);
         labelSigla.setText(siglaDep);        
         this.setVisible(true);
+                
+        cellContacts = new ArrayList<CellContact> ();
     }
 
     //Metodo responsavel pela atualização da celula de funcionarios
@@ -48,10 +50,9 @@ public class CellDepart extends javax.swing.JPanel {
                 
         panelCont = new JPanel();//Gerar painel de contatos
         panelCont.setLayout(new BoxLayout(panelCont, BoxLayout.Y_AXIS));        
-         panelCont.setMaximumSize(new Dimension(210,250));
+        panelCont.setMaximumSize(new Dimension(210,250));
       
-        //Carregar contatos na interface grafica
-        cellContacts = new ArrayList<CellContact> ();
+        //Carregar contatos na interface grafica        
         for(Contato c : listContacts){            
             CellContact cc = new CellContact(ctrApp,c.getNome(),
                     c.getSobrenome(),c.getPerfil(),c.getCodigo());
@@ -76,8 +77,28 @@ public class CellDepart extends javax.swing.JPanel {
         this.updateUI();
     }
 
+    void minContacts() {
+        
+        if(panelCont != null){
+            panelCont.removeAll();
+            panelCont = null;
+        }
+        
+        if(scrollCont != null){
+            this.remove(scrollCont);
+            scrollCont.removeAll();
+            scrollCont = null;
+        }
+        
+        cellContacts.clear(); 
+        this.setMaximumSize(new Dimension(210,50));
+        this.setSize(210,50);
+    }
+    
+    
     public int getCodigoDep() {
         return codigoDep;
+        
     }
     
     
@@ -155,4 +176,6 @@ public class CellDepart extends javax.swing.JPanel {
     private javax.swing.JLabel labelNome;
     private javax.swing.JLabel labelSigla;
     // End of variables declaration//GEN-END:variables
+
+   
 }

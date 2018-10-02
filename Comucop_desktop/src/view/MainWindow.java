@@ -44,8 +44,7 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow(Controller actrApp) {
         initComponents();
         initComponentsExtra();
-        TextArea.setVisible(false);
-        ButtonEnviar.setVisible(false);
+        
         this.ctrApp = actrApp;
         listChats = new ArrayList<CellChat>();
     }
@@ -69,11 +68,17 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         this.mainBar.setVisible(false);
+        superBody.setVisible(false);
+        bodyChat.setVisible(false);
+        ButtonEnviar.setVisible(false);
+        cxTextMsg.setVisible(false);
+        chatHead.setVisible(false);
     }
 
     public void loginOk() {
         this.censoredFrame.setVisible(false);
         this.mainBar.setVisible(true);
+        superBody.setVisible(true);
     }
 
     public void callMessage(String msg, String title, int typeMsg) {
@@ -120,8 +125,9 @@ public class MainWindow extends javax.swing.JFrame {
     public void expCellDeparts(int depart,ArrayList<Contato> listCont) {
         for(CellDepart cd : listDeparts){
             if(cd.getCodigoDep()==depart){
-                cd.expContacts(listCont);
-                break;
+                cd.expContacts(listCont);               
+            }else {
+                cd.minContacts();
             }
         }
     }
@@ -153,6 +159,11 @@ public class MainWindow extends javax.swing.JFrame {
         scrollPaneRec = new javax.swing.JScrollPane();
         panelRec = new javax.swing.JPanel();
         titleChat = new javax.swing.JPanel();
+        chatHead = new javax.swing.JPanel();
+        panelLetra = new javax.swing.JPanel();
+        primLetra = new javax.swing.JLabel();
+        nomeContato = new javax.swing.JLabel();
+        perfilContato = new javax.swing.JLabel();
         bodyChat = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextArea = new javax.swing.JTextArea();
@@ -182,6 +193,7 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Comucop 1.0");
         setBackground(new java.awt.Color(0, 0, 102));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -260,7 +272,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         censoredFrame.add(jPanel1);
 
-        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 420));
+        getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
         superBody.setBackground(new java.awt.Color(255, 255, 255));
         superBody.setForeground(new java.awt.Color(255, 255, 255));
@@ -334,17 +346,45 @@ public class MainWindow extends javax.swing.JFrame {
         superBody.add(painelChats, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 420));
 
         titleChat.setBackground(new java.awt.Color(0, 0, 153));
+        titleChat.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout titleChatLayout = new javax.swing.GroupLayout(titleChat);
-        titleChat.setLayout(titleChatLayout);
-        titleChatLayout.setHorizontalGroup(
-            titleChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+        chatHead.setBackground(new java.awt.Color(0, 0, 153));
+        chatHead.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelLetra.setBackground(new java.awt.Color(255, 255, 255));
+
+        primLetra.setBackground(new java.awt.Color(0, 0, 255));
+        primLetra.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        primLetra.setForeground(new java.awt.Color(0, 0, 153));
+        primLetra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        primLetra.setText("N");
+
+        javax.swing.GroupLayout panelLetraLayout = new javax.swing.GroupLayout(panelLetra);
+        panelLetra.setLayout(panelLetraLayout);
+        panelLetraLayout.setHorizontalGroup(
+            panelLetraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLetraLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(primLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        titleChatLayout.setVerticalGroup(
-            titleChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+        panelLetraLayout.setVerticalGroup(
+            panelLetraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(primLetra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        chatHead.add(panelLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 4, 32, 30));
+
+        nomeContato.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        nomeContato.setForeground(new java.awt.Color(255, 255, 255));
+        nomeContato.setText("Nome do contato");
+        chatHead.add(nomeContato, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 0, 426, -1));
+
+        perfilContato.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        perfilContato.setForeground(new java.awt.Color(255, 255, 255));
+        perfilContato.setText("perfil");
+        chatHead.add(perfilContato, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 19, 353, -1));
+
+        titleChat.add(chatHead, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 40));
 
         superBody.add(titleChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 590, 40));
 
@@ -363,7 +403,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
         bodyChatLayout.setVerticalGroup(
             bodyChatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         superBody.add(bodyChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 590, 310));
@@ -380,7 +420,7 @@ public class MainWindow extends javax.swing.JFrame {
                 ButtonEnviarActionPerformed(evt);
             }
         });
-        superBody.add(ButtonEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, -1, -1));
+        superBody.add(ButtonEnviar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, 80, 70));
 
         getContentPane().add(superBody, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
@@ -449,13 +489,27 @@ public class MainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    public void openTextUI() {
-        TextArea.setVisible(true);
-        TextArea.setEditable(false);
+    public void openTextUI(String nome, String perfil) {        
+        nomeContato.setText(nome);
+        perfilContato.setText(perfil);
+        primLetra.setText(nome.substring(0,1));
+        
+        bodyChat.setVisible(true);
+        cxTextMsg.setVisible(true);
+        TextArea.setText("");
         ButtonEnviar.setVisible(true);
+        chatHead.setVisible(true);
     }
     
-    public void preencheChat(String msgs){
+     public void preencheChat(String msgs){        
+        TextArea.setText(msgs);
+    }
+    
+    public void preencheChat(String msgs,String nome, String perfil){
+        nomeContato.setText(nome);
+        perfilContato.setText(perfil);
+        primLetra.setText(nome.substring(0,1));
+        
         TextArea.setText(msgs);
     }
     
@@ -484,7 +538,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(!cxTextMsg.getText().isEmpty()){
             ctrApp.sendMsg(cxTextMsg.getText());
-            
+            cxTextMsg.setText("");
         }
     }//GEN-LAST:event_ButtonEnviarActionPerformed
 
@@ -498,6 +552,10 @@ public class MainWindow extends javax.swing.JFrame {
         ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosing
 
+    public void changeTabRec() {
+        managerTab.setSelectedIndex(1);
+    }   
+    
     public JTextArea getTextArea() {
         return TextArea;
     }
@@ -515,6 +573,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem cadDep;
     private javax.swing.JMenuItem cadFunc;
     private javax.swing.JPanel censoredFrame;
+    private javax.swing.JPanel chatHead;
     private javax.swing.JMenuItem colDep;
     private javax.swing.JMenuItem colFunc;
     private javax.swing.JPasswordField cxPassword;
@@ -530,9 +589,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTabbedPane managerTab;
     private javax.swing.JMenu menuCons;
     private javax.swing.JMenu menuNovo;
+    private javax.swing.JLabel nomeContato;
     private javax.swing.JPanel painelChats;
     private javax.swing.JPanel panelCont;
+    private javax.swing.JPanel panelLetra;
     private javax.swing.JPanel panelRec;
+    private javax.swing.JLabel perfilContato;
+    private javax.swing.JLabel primLetra;
     private javax.swing.JScrollPane scrolPaneCont;
     private javax.swing.JScrollPane scrollPaneRec;
     private javax.swing.JScrollPane scrollTextMsg;
@@ -541,6 +604,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel tabRec;
     private javax.swing.JPanel titleChat;
     // End of variables declaration//GEN-END:variables
+
+   
 
 
 

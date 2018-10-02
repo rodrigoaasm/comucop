@@ -6,6 +6,7 @@
 package view;
 
 import controller.Controller;
+import java.awt.Color;
 
 /**
  *
@@ -48,6 +49,12 @@ public class CellContact extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
         });
 
         labelNome.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
@@ -88,6 +95,20 @@ public class CellContact extends javax.swing.JPanel {
             ctrApp.selectContact(funcCod);
         }
     }//GEN-LAST:event_formMouseClicked
+
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        // TODO add your handling code here:
+        this.setBackground(new Color(0,51,255));
+        labelNome.setForeground(new Color(255,255,255));
+        labelPerfil.setForeground(new Color(255,255,255));
+    }//GEN-LAST:event_formMouseEntered
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        // TODO add your handling code here:
+        this.setBackground(new Color(255,255,255));
+        labelNome.setForeground(new Color(0,0,0));
+        labelPerfil.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_formMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labelNome;
