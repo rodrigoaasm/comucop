@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -15,6 +16,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import model.Chat;
 import model.Contato;
@@ -40,7 +47,8 @@ public class Controller {
     private ArrayList<Contato> listaConts;
     private ArrayList<Chat> listChats;
     private Chat selectionChat;
-
+    private File soundFile;
+    
     //Sockets de conexão TCP
     private Socket server;
 
@@ -57,6 +65,12 @@ public class Controller {
         }
         listaConts = new ArrayList<>();
         listChats = new ArrayList<>();
+        
+        try {
+            soundFile = new File("notifSound.wav");    
+        } catch (Exception e) {
+            
+        }
     }
 
     void startReceiver() {
@@ -66,6 +80,22 @@ public class Controller {
         }
         mRec = new ManagerReceiver(this);
         mRec.start();
+    }
+    
+    public void notifyMsg(){        
+        try {  
+            AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
+            DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
+            Clip clip = (Clip) AudioSystem.getLine(info);
+            clip.open(sound);
+            clip.start();          
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedAudioFileException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 
     public void feedbackLogin(JSONObject jsonResp) {
@@ -132,10 +162,14 @@ public class Controller {
 
         selectionChat.addMsg(new Mensagem(selectionChat.getDestinatario(),
                 cliente,textMsg, d,true));//Guardando a mensagem 
-
+        //retira o chat da lista e coloca ele em primeiro
+        listChats.remove(selectionChat);
+        listChats.add(0,selectionChat);
+        //Envia mensagem
         mSend.sendJSON(jsonMsg.toJSONString());//Enviando
         //Atualiza o textarea com a msg enviada
-        String msgs = "";
+        String msgs = "";        
+        //Recebe mensagens 
         for(Mensagem m: selectionChat.getMensagens()){
              msgs += m.getMsg()+"\n";
         }
@@ -234,22 +268,25 @@ public class Controller {
         for (Chat c : listChats) {
             if (c.getRemetente().getCodigo() == codDest
                     && c.getDestinatario().getCodigo() == f.getCodigo()) {
+                listChats.remove(c);
+                listChats.add(0,c);
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
                 ver++;
                 String msgs = c.toString();
                 if(selectionChat.equals(c)){
                      mWin.preencheChat(msgs);
                 }
-                mWin.updateChat();
+                mWin.updateChat();                
+                break;
             }
         }
         if (ver == 0) {
             Chat c = new Chat(f, cliente);
             c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
-            listChats.add(c);
-          //  mWin.preencheChat(c.toString());
-            mWin.updateChat();
-        }        
+            listChats.add(0,c);         
+            mWin.updateChat();           
+        }      
+         notifyMsg();
     }
 
     public ArrayList<Contato> getListaConts() {
@@ -264,6 +301,8 @@ public class Controller {
         for (Chat c : listChats) {//Verifica se o chat com esse destinatário já existe
             if (c.getDestinatario().getCodigo() == funcCod) {
                 selectionChat = c;//Se existir marca como chat selecionado
+                listChats.remove(c);//Retira o chat da lista e coloca de volta em primeiro
+                listChats.add(0,c);
                 mWin.openTextUI(c.getDestinatario().getNome() + " " + c.getDestinatario().getSobrenome()
                         ,c.getDestinatario().getPerfil());
                 String msgs = c.toString();
@@ -275,7 +314,7 @@ public class Controller {
         for (Contato cont : listaConts) {//Se não existir cria o chat para conversa
             if (funcCod == cont.getCodigo()) {
                 selectionChat = new Chat(cliente, cont);
-                listChats.add(selectionChat);
+                listChats.add(0,selectionChat);
                 mWin.openTextUI(selectionChat.getDestinatario().getNome() + " " + selectionChat.getDestinatario().getSobrenome()
                         ,selectionChat.getDestinatario().getPerfil());
                 mWin.updateChat();

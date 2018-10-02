@@ -72,15 +72,18 @@ public class CellChat extends javax.swing.JPanel {
         });
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        labelNome.setBackground(new java.awt.Color(0, 0, 0));
         labelNome.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         labelNome.setText("Nome Contanto");
         add(labelNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 140, -1));
 
+        labelPerfil.setBackground(new java.awt.Color(0, 0, 0));
         labelPerfil.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         labelPerfil.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         labelPerfil.setText("Perfil");
         add(labelPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 60, -1));
 
+        lastMsg.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
         lastMsg.setForeground(new java.awt.Color(255, 255, 255));
         lastMsg.setText("ultima mensagem");
         add(lastMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 110, -1));
