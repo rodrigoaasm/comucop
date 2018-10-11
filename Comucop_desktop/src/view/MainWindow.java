@@ -506,11 +506,14 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void preencheChat(String msgs,String nome, String perfil){
-        nomeContato.setText(nome);
-        perfilContato.setText(perfil);
-        primLetra.setText(nome.substring(0,1));
-        
+        openTextUI(nome,perfil);         
         TextArea.setText(msgs);
+    }
+    
+    public void backLoginWin() {
+        this.mainBar.setVisible(false);
+        superBody.setVisible(false);
+        censoredFrame.setVisible(true);
     }
     
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
@@ -604,6 +607,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel tabRec;
     private javax.swing.JPanel titleChat;
     // End of variables declaration//GEN-END:variables
+
 
    
 

@@ -24,12 +24,13 @@ public class CellChat extends javax.swing.JPanel {
         labelNome.setText(nomeRem);
         labelPerfil.setText(perfilRem);
         lastMsg.setText(lastMsgTxt);
-        unreadCount.setText("" + unreadCountVal);
+        if(unreadCountVal > 0){
+            unreadCount.setText("" + unreadCountVal);
+            panelNotifyUnreadMsg.setVisible(true);
+        }
         this.ctrApp = aCtrApp;
         this.posicChat = posicChat;
     }
-
-
 
     public void setLastMsg(String msg){
         lastMsg.setText(msg);
@@ -52,6 +53,7 @@ public class CellChat extends javax.swing.JPanel {
         labelNome = new javax.swing.JLabel();
         labelPerfil = new javax.swing.JLabel();
         lastMsg = new javax.swing.JLabel();
+        panelNotifyUnreadMsg = new javax.swing.JPanel();
         unreadCount = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(153, 204, 255));
@@ -88,15 +90,24 @@ public class CellChat extends javax.swing.JPanel {
         lastMsg.setText("ultima mensagem");
         add(lastMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 110, -1));
 
-        unreadCount.setBackground(new java.awt.Color(51, 0, 255));
+        panelNotifyUnreadMsg.setBackground(new java.awt.Color(0, 51, 255));
+        panelNotifyUnreadMsg.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        panelNotifyUnreadMsg.setLayout(new java.awt.BorderLayout());
+
+        unreadCount.setBackground(new java.awt.Color(0, 0, 51));
+        unreadCount.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         unreadCount.setForeground(new java.awt.Color(255, 255, 255));
+        unreadCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         unreadCount.setText("1");
-        add(unreadCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 10, -1));
+        panelNotifyUnreadMsg.add(unreadCount, java.awt.BorderLayout.CENTER);
+
+        add(panelNotifyUnreadMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 15, 15));
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         // TODO add your handling code here:
         ctrApp.updateUIChat(posicChat);
+        panelNotifyUnreadMsg.setVisible(false);
     }//GEN-LAST:event_formMouseClicked
 
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
@@ -118,6 +129,7 @@ public class CellChat extends javax.swing.JPanel {
     private javax.swing.JLabel labelNome;
     private javax.swing.JLabel labelPerfil;
     private javax.swing.JLabel lastMsg;
+    private javax.swing.JPanel panelNotifyUnreadMsg;
     private javax.swing.JLabel unreadCount;
     // End of variables declaration//GEN-END:variables
 }

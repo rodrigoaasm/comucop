@@ -48,7 +48,7 @@ public class ManagerSend {
                         
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(ManagerSend.class.getName()).log(Level.SEVERE, null, ex);
+                    ctrApp.throwExp(ex.getMessage());
                 }
             }
         };
@@ -79,15 +79,15 @@ public class ManagerSend {
                 if(serverPer.isConnected()){                        
                     Socket serverNonPer;
                     try {
-                        serverNonPer = new Socket(ipServer, 4848);
-                   
+                        serverNonPer = new Socket(ipServer, 4848);                   
                         DataOutputStream out = new DataOutputStream(serverNonPer.getOutputStream());
                         out.writeUTF(json);
                         out.flush(); 
                         out.close();
                         serverNonPer.close();    
                     } catch (IOException ex) {
-                        Logger.getLogger(ManagerSend.class.getName()).log(Level.SEVERE, null, ex);
+                        ctrApp.throwExp(ex.getMessage());
+                        ctrApp.conBroke();
                     }
                 }else{
                     ctrApp.conBroke();

@@ -25,7 +25,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import model.Chat;
 import model.Contato;
-import model.Funcionario;
 import model.Mensagem;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,7 +36,6 @@ import view.MainWindow;
  */
 public class Controller {
 
-    //Controllers 
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
@@ -48,6 +46,7 @@ public class Controller {
     private ArrayList<Chat> listChats;
     private Chat selectionChat;
     private File soundFile;
+
     
     //Sockets de conexão TCP
     private Socket server;
@@ -100,7 +99,7 @@ public class Controller {
 
     public void feedbackLogin(JSONObject jsonResp) {
         int getSt = Integer.parseInt((String) jsonResp.get("status"));
-        System.out.println(jsonResp.get("status"));
+        
         if (getSt == 1) {
             this.reqDepart();
             mWin.loginOk();
@@ -119,7 +118,6 @@ public class Controller {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "req-depart");
         mSend.sendJSON(jsonreq.toJSONString());
-
     }
 
     public void expToContacts(String codDep) {
@@ -134,11 +132,15 @@ public class Controller {
     }
 
     public void finishCon() {
-        try {
-            mSend.finishCon();
-        } catch (IOException ex) {
-            mWin.callMessage("Erro ao fechar a conexão com servidor!",
-                    "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        if(server != null){
+            if(server.isConnected()){
+                try {
+                    mSend.finishCon();
+                } catch (IOException ex) {
+                    mWin.callMessage("Erro ao fechar a conexão com servidor!",
+                            "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 
@@ -234,7 +236,6 @@ public class Controller {
             Contato f = new Contato(cod, perfil, nome, sobrenome);
             listaConts.add(f);
         }
-
     }
     
     //Recebe a MSG
@@ -296,7 +297,8 @@ public class Controller {
     }
 
     void conBroke() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mWin.backLoginWin();
+        server = null;
     }
 
     public void selectContact(int funcCod) {
@@ -332,14 +334,18 @@ public class Controller {
                 selectionChat.getDestinatario().getNome() + " " + 
                 selectionChat.getDestinatario().getSobrenome(),
                 selectionChat.getDestinatario().getPerfil());
-    
-
     }
+    
+    
+    void throwExp(String message) {
+        mWin.callMessage(message, "Erro ao conectar com o servidor!", 
+                JOptionPane.ERROR_MESSAGE);
+    }    
 
     public ArrayList<Chat> getListChats() {
         return listChats;
     }
-    
+
     
 
 }
