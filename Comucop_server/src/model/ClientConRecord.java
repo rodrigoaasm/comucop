@@ -6,7 +6,9 @@
 package model;
 
 import cripth.MyRSAKey;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.security.PublicKey;
 
 /**
@@ -59,7 +61,7 @@ public class ClientConRecord {
         this.sockClient = sockClient;
     }
     
-    public boolean isSocketConnected(){
+    public boolean isSocketCon() throws SocketException{
         if(sockClient != null){
             return sockClient.isConnected();
         }else return false;
@@ -79,6 +81,10 @@ public class ClientConRecord {
 
     public void setKeysServer(MyRSAKey keysServer) {
         this.aKeysServer = keysServer;
+    }
+
+    public void close() throws IOException {
+        sockClient.close();
     }
     
     

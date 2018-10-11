@@ -25,7 +25,7 @@ public class Controller {
 
     private MainWindow mWin;
 
-    private volatile ArrayList<ClientConRecord> clientsConRec;
+    private ArrayList<ClientConRecord> clientsConRec;
     private volatile Queue<ElemQueue> queueManDB;
     private volatile Queue<ElemQueue> queueManMesage;
 

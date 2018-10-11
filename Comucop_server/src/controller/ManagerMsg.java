@@ -41,17 +41,16 @@ public class ManagerMsg extends Thread {
                 int codDest = Integer.parseInt(dest.toString());
 
                 for (i = 0; i < vetCliente.size(); i++) {
-                    if (codDest == vetCliente.get(i).getClientCod()) {
+                    if (codDest == vetCliente.get(i).getClientCod()) {                        
                         destinatario = vetCliente.get(i);
                     }
                 }
 
-                if (destinatario != null) {
-                    ManagerSend manSend = new ManagerSend(objCtrPrincipal);
-                    manSend.sendJSON(destinatario, rec);
+                if (destinatario != null) {                    
+                    objCtrPrincipal.getmSend().sendJSON(destinatario, rec);
+                    System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
                 }
-
-                System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
+                
             } else {
                 try {
                     Thread.sleep(23);

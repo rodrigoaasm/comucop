@@ -30,16 +30,18 @@ public class ManagerReceiver extends Thread {
     private ServerSocket sockServ;
     private ExecutorService threadListennerPool;
     
+    
     public ManagerReceiver(Controller ctrServer) throws IOException{
         this.ctrServer = ctrServer;
         sockServ = new ServerSocket(4848);
         threadListennerPool = Executors.newFixedThreadPool(20);     
     }
     
+    //Metódo responsável por ser a main da thread principal de recebimento
     @Override
     public void run(){
         Socket client = null;
-         ClientConRecord clientConRec;
+        ClientConRecord clientConRec;
         DataInputStream scan;
         JSONParser jsonParser = new JSONParser();
         
@@ -47,15 +49,18 @@ public class ManagerReceiver extends Thread {
             try {
                 client = sockServ.accept();//Aceitando conexão TCP de cliente
 
-                if((clientConRec = this.isEstablishedConWithClient(client)) != null){//Se o cliente já possui uma conexão persistente
-                    if(clientConRec.isSocketConnected()){//A conexão ainda existe
-                        System.out.println("controller.ManagerReceiver.run()--> o Cliente está conectado");
-                        scan = new DataInputStream(client.getInputStream());//Então lé a requisição JSON
+                if((clientConRec = this.isEstablishedConWithClient(client)) != null){//Se o cliente já possui uma conexão persistente                   
+                    System.out.println("Esse cliente está conectado.");
+                    if(clientConRec.isSocketCon()){//A conexão ainda existe  
+                        startTimer(client); //Chama thread que funcionará como cronometro                       
+                        scan = new DataInputStream(client.getInputStream());//Então lé a requisição JSON                       
                         JSONObject jsonreq = (JSONObject) jsonParser.parse(scan.readUTF());
                         routerWork(clientConRec, jsonreq);//Redirenciona ao serviço certo
                         scan.close();
                         client.close(); 
                     }else{//Tentando relogin
+                        System.out.println("Esse cliente está tentado um relogin.");
+                        ctrServer.getClients().remove(clientConRec);//removendo ele da lista de conexão
                         clientConRec = new ClientConRecord(client,MyRSAKey.newInstance());//Instaciando registro de conexão                    
                         ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
                     }
@@ -71,6 +76,7 @@ public class ManagerReceiver extends Thread {
         }
     }
     
+    //Metodo resposável por fazer a triagem das requisições
     public void routerWork(ClientConRecord clientConRec,JSONObject jsonreq) throws IOException{
                 
         String type = (String)jsonreq.get("type");//Analisa o tipo da operação
@@ -81,8 +87,7 @@ public class ManagerReceiver extends Thread {
         }else if(type.compareTo("logout")==0){//O cliente está tentando efetuar novamente o login          
             ctrServer.getClients().remove(clientConRec);//Removendo antigo registro de conexão da lista de clientes
             clientConRec.getSockClient().close();//Fecha conexão    
-            clientConRec = null;//excluir registro de cliente
-            System.out.println("controller.ManagerReceiver.routerWork() --> cliente fechou a conexão");
+            clientConRec = null;//excluir registro de cliente            
         }
     }
     
@@ -103,12 +108,11 @@ public class ManagerReceiver extends Thread {
         
         Runnable simpleListennerCon = new Runnable() { // Instaciando thread para escutar conexão
             @Override
-            public void run() {
+            public void run() {                
                //Escutando a conexão na espera de resposta                 
                 DataInputStream inputStream;                
-                try{                         
-                    inputStream = new DataInputStream(clientConRec.getSockClient().getInputStream());//Pegando serviço de entrada de stream do socket
-                                       
+                try{                           
+                    inputStream = new DataInputStream(clientConRec.getSockClient().getInputStream());//Pegando serviço de entrada de stream do socket                        
                     JSONParser parser = new JSONParser();//Instaciando o conversor JSON
                     JSONObject jsonReq = (JSONObject) parser.parse(inputStream.readUTF());//Lendo Json de requisição do cliente 
                     String type = (String)jsonReq.get("type");
@@ -125,5 +129,22 @@ public class ManagerReceiver extends Thread {
         threadListennerPool.submit(simpleListennerCon);//Colocando thread na fila de execução
         
     }
+
+    //Metodo responsável por instanciar a thread que fará a função de timer
+    private void startTimer(Socket client) {
+        threadListennerPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);//Dormi por 5s    
+                    if(!client.isClosed()) client.close();//fecha conexão se ainda estiver aberta
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                }                
+            }
+        });
+    } 
     
 }
