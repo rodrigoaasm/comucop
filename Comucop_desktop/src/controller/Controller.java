@@ -155,8 +155,11 @@ public class Controller {
         rem.put("nome", cliente.getNome());
         rem.put("sobrenome", cliente.getSobrenome());
         rem.put("perfil", cliente.getPerfil());
-
-        jsonMsg.put("rem", rem.toJSONString());//Contruindo json da mensagem
+        
+        JSONArray listRem = new JSONArray();
+        listRem.add(rem);        
+                
+        jsonMsg.put("rem", listRem);//Contruindo json da mensagem
         jsonMsg.put("dest", selectionChat.getDestinatario().getCodigo());
         jsonMsg.put("time", format.format(d));
         jsonMsg.put("cont", textMsg);
@@ -241,20 +244,7 @@ public class Controller {
     //Recebe a MSG
     public void leituraJsonMsg(JSONObject jsonObj) {
         //Declaração das variaveis para leitura da MSG
-        Integer ver = 0, codDest = 1;
-        String funcs = (String) jsonObj.get("rem");
-        funcs = funcs.replaceAll("[{]", "");
-        funcs = funcs.replaceAll("[}]", "");
-        funcs = funcs.replaceAll("\"", "");
-        String[] text = funcs.split(",");
-        String aux[] = text[0].split(":");
-        Integer cod = Integer.parseInt(aux[1]);
-        aux = text[1].split(":");
-        String nome = aux[1];
-        aux  = text[2].split(":");
-        String sobrenome = aux[1];
-        aux = text[3].split(":");
-        String perfil = aux[1];
+        Integer ver = 0, codDest = 1;   
         String data = (String) jsonObj.get("time");
         String msg = (String) jsonObj.get("cont");
         Long dest = (Long) jsonObj.get("dest");
@@ -264,32 +254,47 @@ public class Controller {
             e.setStackTrace(e.getStackTrace());
         }
         
-        Contato f = new Contato(cod, perfil, nome, sobrenome);
-        //Verifica se existe uma conversa com essa pessoa
-        for (Chat c : listChats) {
-            if ((c.getRemetente().getCodigo() == codDest
-                    && c.getDestinatario().getCodigo() == f.getCodigo())
-                    ||(c.getRemetente().getCodigo() == f.getCodigo())
-                    && c.getDestinatario().getCodigo() ==codDest) {
-                listChats.remove(c);
-                listChats.add(0,c);
-                c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
-                ver++;
-                String msgs = c.toString();
-                if(selectionChat.equals(c)){
-                     mWin.preencheChat(msgs);
+        JSONArray rem = (JSONArray) jsonObj.get("rem");
+        Iterator i = rem.iterator();
+        
+        while(i.hasNext()){   
+            JSONObject jsonrem = (JSONObject) i.next();
+            Integer cod = null;
+            
+            Long longcod = (Long)jsonrem.get("codigo");
+            try {cod = Integer.valueOf(longcod.toString());} catch (Exception e){}            
+            String perfil = (String) jsonrem.get("perfil");
+            String nome = (String) jsonrem.get("nome");
+            String sobrenome = (String) jsonrem.get("sobrenome");
+            
+            
+            Contato f = new Contato(cod, perfil, nome, sobrenome);
+            //Verifica se existe uma conversa com essa pessoa
+            for (Chat c : listChats) {
+                if ((c.getRemetente().getCodigo() == codDest
+                        && c.getDestinatario().getCodigo() == f.getCodigo())
+                        ||(c.getRemetente().getCodigo() == f.getCodigo())
+                        && c.getDestinatario().getCodigo() ==codDest) {
+                    listChats.remove(c);
+                    listChats.add(0,c);
+                    c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
+                    ver++;
+                    String msgs = c.toString();
+                    if(selectionChat.equals(c)){
+                         mWin.preencheChat(msgs);
+                    }
+                    mWin.updateChat();                
+                    break;
                 }
-                mWin.updateChat();                
-                break;
             }
+            if (ver == 0) {
+                Chat c = new Chat(cliente, f);
+                c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
+                listChats.add(0,c);         
+                mWin.updateChat();           
+            }      
+             notifyMsg();
         }
-        if (ver == 0) {
-            Chat c = new Chat(cliente, f);
-            c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
-            listChats.add(0,c);         
-            mWin.updateChat();           
-        }      
-         notifyMsg();
     }
 
     public ArrayList<Contato> getListaConts() {
