@@ -108,10 +108,9 @@ public class ManagerSend {
                     }
                     DataOutputStream outputStream = null;
                     indexClose.clear();
-                    for(ClientConRecord ccr : ctrServer.getClients()){
-                        System.out.println("Rodando..");
-                        try {
-                            outputStream = new DataOutputStream(ccr.getSockClient().getOutputStream()); //recebendo stream de saída
+                    for(ClientConRecord ccr : ctrServer.getClients()){                        
+                        try {                            
+                            outputStream = new DataOutputStream(ccr.getSockClient().getOutputStream()); //recebendo stream de saída                            
                             outputStream.writeUTF(jsonAlive.toJSONString());//Escreve na stream
                             outputStream.flush();//Envia stream para o client
                             outputStream = null;              

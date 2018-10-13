@@ -93,10 +93,11 @@ public class ManagerReceiver extends Thread {
     
     public ClientConRecord isEstablishedConWithClient(Socket client){
         
-        String addr  = new String(client.getInetAddress().getAddress());       
+        String addr  = client.getInetAddress().getHostAddress();       
+        System.out.println(addr);
         
         for(ClientConRecord c : ctrServer.getClients()){                
-            if(addr.contains(new String(c.getSockClient().getInetAddress().getAddress()))){
+            if(addr.contains(c.getSockClient().getInetAddress().getHostAddress())){
                 return c;
             } 
         }
