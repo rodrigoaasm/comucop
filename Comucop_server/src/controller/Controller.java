@@ -40,9 +40,9 @@ public class Controller {
         queueManDB = new LinkedList();
         queueManMesage = new LinkedList();
 
-        mSend = new ManagerSend(this);//Instaciando Gerenciador de recebimentos
+        mSend = new ManagerSend(this);//Instaciando Gerenciador de envios
         try {
-            mReceiver = new ManagerReceiver(this);//Instaciando gereciador de recebimento e iniciando thread
+            mReceiver = new ManagerReceiver(this);//Instaciando gereciador de recebimento e iniciando threads
             mReceiver.start();
             mDb = new ManagerDB(this);
             mDb.start();
@@ -53,35 +53,43 @@ public class Controller {
         }
     }
 
+    /*Método principal do servidor*/
     public static void main(String args[]) {
         Controller c = new Controller();
     }
 
+    /*Retorna lista de clientes online*/
     public ArrayList<ClientConRecord> getClients() {
         return clientsConRec;
     }
 
+    /*Retorna gerenciador de envios*/
     public ManagerSend getmSend() {
         return mSend;
     }
 
+    /*Retorna gerenciador de recebimentos*/
     public ManagerReceiver getmReceiver() {
         return mReceiver;
     }
 
+    /*Retorna fila de requisições de banco*/
     public Queue<ElemQueue> getQueueManDB() {
         return queueManDB;
     }
 
+    /*Adiciona requisições a fila do gerenciador de banco*/
     void addQueueDB(ElemQueue elemQueue) {
         queueManDB.add(elemQueue);
     }
     
-    public Queue<ElemQueue> getQueueManMesage() {
+    /*Retorna fila de mensagens a serem redirecionadas*/
+    public Queue<ElemQueue> getQueueManMessage() {
         return queueManMesage;
     }
 
-    void addQueueMesage(ElemQueue elemQueue){
+    /*Adiciona mensagens  na fila do gerenciador redirecionamento*/
+    void addQueueMessage(ElemQueue elemQueue){
         queueManMesage.add(elemQueue);
     }
 

@@ -36,8 +36,7 @@ public class ManagerSend {
         jsonAlive.put("type", "alive");
         startServiceAlive();
         serviceAlive = true;
-    }
-    
+    }    
     
     //* Método  responsável por criar e colocar na fila de execução as thread de envio de primeiro contanto*/
     public void first(ClientConRecord clientConRec ){    

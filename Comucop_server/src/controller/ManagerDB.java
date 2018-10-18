@@ -7,7 +7,6 @@ package controller;
 
 
 import hibernate.HibernateUtil;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
@@ -18,7 +17,6 @@ import model.Funcionario;
 import model.User;
 import model.dao.GeneralDAO;
 import model.dao.UserDAO;
-import net.sf.ehcache.transaction.DeadLockException;
 import org.hibernate.Session;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -33,7 +31,7 @@ public class ManagerDB extends Thread{
     private Session sessDb;
     
    
-
+    /*Contrutor inicia conexão hibernate com o mysql*/
     public ManagerDB(Controller ctrServ) {
         super();
         this.ctrServ = ctrServ;        
@@ -59,13 +57,14 @@ public class ManagerDB extends Thread{
         }
     }
     
+    /*Método responsável pela função de login*/
     public void login(ElemQueue eq,JSONObject jsonReq){//Operação de login
         JSONObject resp = new JSONObject();
         //Faz a pesquisa do usuário
         List l = (List)UserDAO.auth(sessDb,(String)jsonReq.get("login"),(String)jsonReq.get("password"));
         if(!l.isEmpty()){//Se encontrar algum usuario valido retorna as informações do usuario com a resposta de confirmação
             User us = (User) l.get(0); 
-            //Controi o JSON de resposta
+            //Constroi o JSON de resposta
             resp.put("type","login");
             resp.put("status","1");
             resp.put("codigo", ""+us.getFuncionario().getFuncCod());
@@ -85,6 +84,7 @@ public class ManagerDB extends Thread{
 
     }  
 
+    /*Método responsável por retorna a lista de departamentos*/
     private void reqDepart(ClientConRecord client) {
         JSONObject resp = new JSONObject();
         //Recebe do banco todos os departamentos
@@ -108,6 +108,7 @@ public class ManagerDB extends Thread{
         
     }
 
+    /*Método que retorna a lista de funcionários por departamento*/
     private void expToContacts(ElemQueue eq, JSONObject jsonReq) {
         JSONObject resp = new JSONObject();
         //Recebe do banco todos os departamentos
@@ -121,7 +122,7 @@ public class ManagerDB extends Thread{
         JSONArray lista = new JSONArray();//Instaciando sub-array json  
         while(iFunc.hasNext()){//Lendo os funcionários do departamento
             Funcionario f = (Funcionario) iFunc.next();
-            //Preechendo json d eum funcionario
+            //Preechendo json de um funcionario
             JSONObject jsonDep = new JSONObject();            
             jsonDep.put("Codigo", f.getFuncCod());
             jsonDep.put("Nome", f.getFuncNome());

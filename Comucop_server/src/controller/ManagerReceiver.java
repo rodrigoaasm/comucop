@@ -83,7 +83,7 @@ public class ManagerReceiver extends Thread {
         if(type.compareTo("req-depart") == 0 || type.compareTo("exp-to-contacts") == 0){//Operação de resgate de json
             ctrServer.addQueueDB(new ElemQueue(clientConRec, jsonreq));//Coloca na fila do Gerenciador de banco de dados
         }else if(type.compareTo("mensagem") == 0){//Operação de envio de mensagem
-            ctrServer.addQueueMesage(new ElemQueue(clientConRec, jsonreq));//Coloca na fila do Gerenciador de mensagem
+            ctrServer.addQueueMessage(new ElemQueue(clientConRec, jsonreq));//Coloca na fila do Gerenciador de mensagem
         }else if(type.compareTo("logout")==0){//O cliente está tentando efetuar novamente o login          
             ctrServer.getClients().remove(clientConRec);//Removendo antigo registro de conexão da lista de clientes
             clientConRec.getSockClient().close();//Fecha conexão    
@@ -91,12 +91,12 @@ public class ManagerReceiver extends Thread {
         }
     }
     
+    //Método responsável por encontrar um cliente online
     public ClientConRecord isEstablishedConWithClient(Socket client){
         
-        String addr  = client.getInetAddress().getHostAddress();       
-        System.out.println(addr);
-        
-        for(ClientConRecord c : ctrServer.getClients()){                
+        String addr  = client.getInetAddress().getHostAddress();      
+  
+        for(ClientConRecord c : ctrServer.getClients()){      //busca cliente na lista de onlines          
             if(addr.contains(c.getSockClient().getInetAddress().getHostAddress())){
                 return c;
             } 

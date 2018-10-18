@@ -26,33 +26,36 @@ public class ManagerMsg extends Thread {
 
     }
 
+    /*Método principal da thread, que faz o redirecionamento das mensagens*/
     public void run() {
         int i;
         while (true) {
-            Queue<ElemQueue> queueManMesage = objCtrPrincipal.getQueueManMesage();
+            Queue<ElemQueue> queueManMesage = objCtrPrincipal.getQueueManMessage();
             if (queueManMesage.isEmpty() == false) {
                 ElemQueue eq = queueManMesage.poll();//recuperando elemento
-                JSONObject rec = eq.getJsonReq();
-                ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();
-                ClientConRecord remetente = eq.getClient();
+                JSONObject rec = eq.getJsonReq(); //Recuperando json
+                ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();//recuperando lista de onlines
+                
+                ClientConRecord remetente = eq.getClient();//Recebendo remetente
                 ClientConRecord destinatario = null;
                 
                 Object dest = eq.getJsonReq().get("dest");
-                int codDest = Integer.parseInt(dest.toString());
+                int codDest = Integer.parseInt(dest.toString());//recebendo codigo do destinatário
 
-                for (i = 0; i < vetCliente.size(); i++) {
+                for (i = 0; i < vetCliente.size(); i++) {//Verificando se o destinatário está online
                     if (codDest == vetCliente.get(i).getClientCod()) {                        
                         destinatario = vetCliente.get(i);
                     }
                 }
 
-                if (destinatario != null) {                    
-                    objCtrPrincipal.getmSend().sendJSON(destinatario, rec);
-                    System.out.println("controller.ManagerMsg.run() --> " + rec.toJSONString());
+                if (destinatario != null) {  //Se for diferente de null está online, pois foi encontrado na lista              
+                    objCtrPrincipal.getmSend().sendJSON(destinatario, rec);                   
+                }else{//se não está off, pois não foi encontrado
+                    //Mongo aqui dentro
                 }
                 
             } else {
-                try {
+                try {//Dormi po 33ms se a fila estiver vazia
                     Thread.sleep(23);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ManagerMsg.class.getName()).log(Level.SEVERE, null, ex);
