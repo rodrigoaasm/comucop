@@ -56,8 +56,8 @@ public class ManagerReceiver extends Thread{
                 }
                 ctrApp.conBroke();//Notificando quebra na conexão
             }catch (IOException ex) {                
-                ctrApp.throwExp(ex.getMessage());  
-                ctrApp.conBroke();
+                ctrApp.throwExp(ex.getMessage());  //Apresentado erro para usuário
+                ctrApp.conBroke();//Notificando quebra na conexão
             }       
         }else{
             ctrApp.conBroke();//notificando quebra na conexão

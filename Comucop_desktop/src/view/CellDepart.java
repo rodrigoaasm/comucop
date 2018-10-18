@@ -26,6 +26,7 @@ public class CellDepart extends javax.swing.JPanel {
     private JScrollPane scrollCont;
     private JPanel panelCont;
     private ArrayList<CellContact> cellContacts;
+    private boolean extendedCell;
     
     /**
      * Creates new form CellDepart
@@ -40,6 +41,7 @@ public class CellDepart extends javax.swing.JPanel {
         labelNome.setText(nomeDep);
         labelSigla.setText(siglaDep);        
         this.setVisible(true);
+        extendedCell = false;
                 
         cellContacts = new ArrayList<CellContact> ();
     }
@@ -74,6 +76,7 @@ public class CellDepart extends javax.swing.JPanel {
         this.setSize(new Dimension(210, 50 + height));        
  
         this.add(scrollCont);
+        extendedCell = true;
         this.updateUI();
     }
 
@@ -93,6 +96,7 @@ public class CellDepart extends javax.swing.JPanel {
         cellContacts.clear(); 
         this.setMaximumSize(new Dimension(210,50));
         this.setSize(210,50);
+        extendedCell = false;
     }
     
     
@@ -167,7 +171,9 @@ public class CellDepart extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseExited
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        ctrApp.expToContacts("" + codigoDep);
+        if(!extendedCell){
+            ctrApp.expToContacts("" + codigoDep);
+        }
     }//GEN-LAST:event_formMouseClicked
 
 
