@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controller;
 
 import java.io.File;
@@ -30,12 +26,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import view.MainWindow;
 
-/**
- *
- * @author root
- */
-public class Controller {
 
+public class Controller {
+   
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
@@ -198,38 +191,6 @@ public class Controller {
       
     }
 
-    /*Retorna controle de departamento*/
-    public ControllerDep getCtrDep() {
-        return ctrDep;
-    }
-
-    /*Retorna controle de funcionario*/
-    public ControllerFuncionario getCtrFunc() {
-        return ctrFunc;
-    }
-
-    /*Retorna socket da conexão persistente com o servidor*/
-    public Socket getSocketServer() {
-        return server;
-    }
-
-    /*Define o socket da conexão persistente com o servidor*/ 
-    public void setSocketServer(Socket s) {
-        if (server != null) {
-            try {
-                server.close();//Garanti que o socket antigo esteja realmente fechado
-            } catch (IOException ex) {
-                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        server = s;
-    }
-
-    /*Retorna janela principal*/
-    public MainWindow getmWin() {
-        return mWin;
-    }
-
     /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem*/
     void toExpCellDepartsReq(JSONObject jsonResp) {
         leituraJson(jsonResp);        
@@ -251,7 +212,7 @@ public class Controller {
             String sobrenome = (String) objDep.get("Sobrenome");
             String perfil = (String) objDep.get("Perfil");
             Integer cod = 1;
-            try {
+            try {//codigo é recebido como um long, portanto é necessário sua conversão
                 cod = Integer.valueOf(codigo.toString());
             } catch (Exception e) {
                 System.out.println("Capacidade do Integer estourou.");
@@ -356,7 +317,7 @@ public class Controller {
                 return;
             }
         }
-        for (Contato cont : listaConts) {//Se não existir cria o chat para conversa
+        for (Contato cont : listaConts) {//Se não existir, cria o chat para conversa
             if (funcCod == cont.getCodigo()) {
                 selectionChat = new Chat(cliente, cont);
                 listChats.add(0,selectionChat);
@@ -369,7 +330,7 @@ public class Controller {
 
     } 
     
-    /*Metodo responsável por colocar na tela informações sobr eo contato*/
+    /*Metodo responsável por colocar na tela informações sobre o contato*/
     public void updateUIChat(int posicChat) {
         selectionChat = listChats.get(posicChat);
         mWin.preencheChat(selectionChat.toString(),
@@ -389,6 +350,38 @@ public class Controller {
         return listChats;
     }
 
+     /*Retorna controle de departamento*/
+    public ControllerDep getCtrDep() {
+        return ctrDep;
+    }
+
+    /*Retorna controle de funcionario*/
+    public ControllerFuncionario getCtrFunc() {
+        return ctrFunc;
+    }
+
+    /*Retorna socket da conexão persistente com o servidor*/
+    public Socket getSocketServer() {
+        return server;
+    }
+
+    /*Define o socket da conexão persistente com o servidor*/ 
+    public void setSocketServer(Socket s) {
+        if (server != null) {
+            try {
+                server.close();//Garanti que o socket antigo esteja realmente fechado
+            } catch (IOException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        server = s;
+    }
+
+    /*Retorna janela principal*/
+    public MainWindow getmWin() {
+        return mWin;
+    }
+    
     /*Método Principal da aplicação*/
     public static void main(String args[]) {
         Controller c = new Controller();

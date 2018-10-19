@@ -1,22 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package view;
 
 import controller.Controller;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -25,10 +16,6 @@ import model.Contato;
 import model.Departamento;
 
 
-/**
- *
- * @author Rodrigo Maia
- */
 public class MainWindow extends javax.swing.JFrame {
 
     private static Point point = new Point();
@@ -38,17 +25,17 @@ public class MainWindow extends javax.swing.JFrame {
     private ArrayList<CellChat> listChats;
     
 
-    /**
-     * Creates new form MainWindow
-     */
+    //Metodo construtor
     public MainWindow(Controller actrApp) {
+        //Inicializa os componentes da main window
         initComponents();
         initComponentsExtra();
-        
+        //Atribui o controle principal a ctrApp
         this.ctrApp = actrApp;
         listChats = new ArrayList<CellChat>();
     }
-
+    
+    //Componentes extras são listeners do mouse, e deixar certos campos não visiveis
     public void initComponentsExtra() {
 
         this.addMouseListener(new MouseAdapter() {
@@ -66,7 +53,7 @@ public class MainWindow extends javax.swing.JFrame {
                 t.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
             }
         });
-
+        //Deixa invisivel componentes relativos ao chat
         this.mainBar.setVisible(false);
         superBody.setVisible(false);
         bodyChat.setVisible(false);
@@ -74,41 +61,46 @@ public class MainWindow extends javax.swing.JFrame {
         cxTextMsg.setVisible(false);
         chatHead.setVisible(false);
     }
-
+    
+    //Caso o login esteja ok, deixará visivel o chat em si
     public void loginOk() {
         this.censoredFrame.setVisible(false);
         this.mainBar.setVisible(true);
         superBody.setVisible(true);
     }
-
+    
     public void callMessage(String msg, String title, int typeMsg) {
         JOptionPane.showMessageDialog(this, msg, title, typeMsg);
     }
 
-    //Adiciona departamentos
+    //Metodo responsável por adicionar departamentos na view
     public void addDeps() {
         //Recebe a lista de departamentos
         ArrayList<Departamento> listaDeps = ctrApp.getCtrDep().getListaDeps();
        
-       // int x = 0;
-        //Ira passar por todos os departamentos criando combobox, X é responsavel pela posição horizontal
+        //Ira passar por todos os departamentos adicionando os na listDeparts
         listDeparts = new ArrayList<CellDepart>();
         for (Departamento dp : listaDeps) {
+            //Aloca um departamento no formato de celulas separadas
             CellDepart cellDep = new CellDepart(ctrApp,dp.getNome(),dp.getSigla(),dp.getCodigo());
+            //Adiciona essa celula na lista de departamentos e no painel que mostra os dps
             listDeparts.add(cellDep);
             panelCont.add(cellDep);
         }
         tabCont.updateUI();
     }
     
+    //Metodo responsável por adicionar os chats na view
     public void addChats(){
         int i = 0;
-        
+        //Recebe os chats
         ArrayList<Chat> chats = ctrApp.getListChats();
+        //Para cada chat criará uma celula para colocar os dados do chat
         for (Chat c : chats) {
             Contato cont = c.getDestinatario();
             CellChat cellChat = new CellChat(ctrApp,(cont.getNome() + cont.getSobrenome()),
                     cont.getPerfil(),c.getLastMsg(),c.countUnreadMsg(),i);
+            //Adiciona a celula de chat tanto na listChats quanto no panel de conversas
             listChats.add(cellChat);
             panelRec.add(cellChat);
             i++;
@@ -116,13 +108,17 @@ public class MainWindow extends javax.swing.JFrame {
         tabRec.updateUI();        
     }
     
+    //Metodo responsavel por atualizar os chats
     public void updateChat(){
         panelRec.removeAll();
         listChats.clear();
         addChats();
     }
     
+    //Metodo responsavel por realizar o preenchimento dos contatos para um determinado dp
     public void expCellDeparts(int depart,ArrayList<Contato> listCont) {
+        //Percorrerá todos os departamentos, caso seja o departamento clicado preencherá,
+        //se não for irá minimizar os contatos de outros departamentos
         for(CellDepart cd : listDeparts){
             if(cd.getCodigoDep()==depart){
                 cd.expContacts(listCont);               
@@ -479,8 +475,9 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Listener do botao responsalve pelo login
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+ 
         try {
             ctrApp.tryEstablishCon(cxTxtLogin.getText(), cxPassword.getText());
         } catch (IOException ex) {
@@ -488,7 +485,8 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    //Metodo utilizado para deixar visivel o chat de uma conversa
     public void openTextUI(String nome, String perfil) {        
         nomeContato.setText(nome);
         perfilContato.setText(perfil);
@@ -501,15 +499,18 @@ public class MainWindow extends javax.swing.JFrame {
         chatHead.setVisible(true);
     }
     
-     public void preencheChat(String msgs){        
+    //Metodo utilizado para mostrar as msg da conversa
+    public void preencheChat(String msgs){        
         TextArea.setText(msgs);
     }
     
+     //Caso exista o chat entre os contatos, pode-se preencher com as msg e dados
     public void preencheChat(String msgs,String nome, String perfil){
         openTextUI(nome,perfil);         
         TextArea.setText(msgs);
     }
     
+    //Caso o login de certo mostrará o chat em si
     public void backLoginWin() {
         this.mainBar.setVisible(false);
         superBody.setVisible(false);
@@ -517,44 +518,48 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void cadDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadDepActionPerformed
-        // TODO add your handling code here:
+       
         ctrApp.getCtrDep().AbreJanela(1);
     }//GEN-LAST:event_cadDepActionPerformed
 
     private void colDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colDepActionPerformed
 
         ctrApp.getCtrDep().AbreJanela(3);
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_colDepActionPerformed
 
     private void cadFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadFuncActionPerformed
-        // TODO add your handling code here:
+        
         ctrApp.getCtrFunc().AbreJanela(1);
     }//GEN-LAST:event_cadFuncActionPerformed
 
     private void colFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colFuncActionPerformed
-        // TODO add your handling code here:
+        
         ctrApp.getCtrFunc().AbreJanela(3);
     }//GEN-LAST:event_colFuncActionPerformed
 
+    //Listener do botão utilizado para enviar msgs
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
-        // TODO add your handling code here:
+        // Se a msg não estiver vazia chamará os metos para envio
         if(!cxTextMsg.getText().isEmpty()){
             ctrApp.sendMsg(cxTextMsg.getText());
             cxTextMsg.setText("");
         }
     }//GEN-LAST:event_ButtonEnviarActionPerformed
-
+   
+    //Listener utilizado para quando se deseja fechar a janela, assim irá comunicar o servidor que se está saindo
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
+        
         ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosed
-
+    
+    //Listener utilizado para quando se deseja fechar a janela, assim irá comunicar o servidor que se está saindo
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
+        
         ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosing
 
+    //Alguns metodos get e set
     public void changeTabRec() {
         managerTab.setSelectedIndex(1);
     }   
