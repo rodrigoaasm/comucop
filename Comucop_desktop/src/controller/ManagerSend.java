@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import org.json.simple.JSONObject;
 
 /**
@@ -18,12 +19,18 @@ import org.json.simple.JSONObject;
  */
 public class ManagerSend {    
     private Controller ctrApp;
-    private InetAddress ipServer;     
+    private InetAddress ipServer;   
+    
     
     public ManagerSend(Controller ctrApp, InetAddress ipServer){
         this.ctrApp = ctrApp;
         this.ipServer = ipServer;
     }
+
+    public void setIpServer(String ipServer) throws UnknownHostException {
+        this.ipServer =  InetAddress.getByName(ipServer);
+    }  
+    
     
     /*Método responsavel por fazer a conexão com servidor*/
     public void establishCon(String user,String password){       

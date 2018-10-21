@@ -39,6 +39,7 @@ public class Controller {
     private ArrayList<Chat> listChats;
     private Chat selectionChat;
     private File soundFile;
+    private String serverIP;
 
     
     //Sockets de conexão TCP
@@ -51,13 +52,12 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-
+        this.serverIP = "127.0.0.1";       
         try {//Inicia o gerenciador de envios
-            mSend = new ManagerSend(this, InetAddress.getByName("RODRIGOPC"));
+            mSend = new ManagerSend(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
         //Instancia lista de chat e contatos
         listaConts = new ArrayList<>();
         listChats = new ArrayList<>();
@@ -385,6 +385,15 @@ public class Controller {
     /*Método Principal da aplicação*/
     public static void main(String args[]) {
         Controller c = new Controller();
+    }
+
+    public String getIPServer() {
+        return serverIP;
+    }
+
+    public void setIPServer(String ip) throws UnknownHostException {
+        serverIP = ip;
+        mSend.setIpServer(serverIP);
     }
 
 }

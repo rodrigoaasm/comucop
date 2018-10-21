@@ -7,7 +7,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -145,6 +148,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         cxPassword = new javax.swing.JPasswordField();
+        btn_conf = new javax.swing.JButton();
         superBody = new javax.swing.JPanel();
         painelChats = new javax.swing.JPanel();
         managerTab = new javax.swing.JTabbedPane();
@@ -201,6 +205,7 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         censoredFrame.setBackground(new java.awt.Color(51, 51, 51));
+        censoredFrame.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
@@ -242,13 +247,13 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cxPassword))
+                        .addGap(0, 353, Short.MAX_VALUE))
+                    .addComponent(cxPassword)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(142, 142, 142)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(123, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,12 +266,20 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cxPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(40, 40, 40))
+                .addGap(37, 37, 37))
         );
 
-        censoredFrame.add(jPanel1);
+        censoredFrame.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, -1, -1));
+
+        btn_conf.setText("jButton1");
+        btn_conf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_confActionPerformed(evt);
+            }
+        });
+        censoredFrame.add(btn_conf, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, 30, -1));
 
         getContentPane().add(censoredFrame, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 820, 420));
 
@@ -559,6 +572,23 @@ public class MainWindow extends javax.swing.JFrame {
         ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosing
 
+    //Botão para cnfiguração de IP
+    private void btn_confActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_confActionPerformed
+        String ret = JOptionPane.showInputDialog(this,"Digite o ip do servidor:",
+                ctrApp.getIPServer());
+        if(ret.matches("([\\d ]{0,3}\\.){3}[\\d ]{0,3}")){//Validando IP
+            try {            
+                ctrApp.setIPServer(ret);//Aplicando configuração
+            } catch (UnknownHostException ex) {//Mensagens de erro
+                JOptionPane.showMessageDialog(this,ex.getMessage(),
+                        "Erro ao aplicar configurações!!",JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this,"Valor de IP inválido!",
+                    "Valor inválido para IP",JOptionPane.WARNING_MESSAGE);
+        }                
+    }//GEN-LAST:event_btn_confActionPerformed
+
     //Alguns metodos get e set
     public void changeTabRec() {
         managerTab.setSelectedIndex(1);
@@ -578,6 +608,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton ButtonEnviar;
     private javax.swing.JTextArea TextArea;
     private javax.swing.JPanel bodyChat;
+    private javax.swing.JButton btn_conf;
     private javax.swing.JMenuItem cadDep;
     private javax.swing.JMenuItem cadFunc;
     private javax.swing.JPanel censoredFrame;
