@@ -130,6 +130,10 @@ public class ManagerMsg extends Thread {
             }
 
         }
+        
+        BasicDBObject query = new BasicDBObject();
+        query.append("dest", codUser);
+        table.remove(query);
 
         closeConection();//FECHA A CONEXÃO
 
