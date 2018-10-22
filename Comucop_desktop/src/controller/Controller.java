@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.io.File;
@@ -26,9 +25,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import view.MainWindow;
 
-
 public class Controller {
-   
+
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
@@ -41,7 +39,6 @@ public class Controller {
     private File soundFile;
     private String serverIP;
 
-    
     //Sockets de conexão TCP
     private Socket server;
 
@@ -52,25 +49,26 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        this.serverIP = "127.0.0.1";       
+        this.serverIP = "127.0.0.1";
         try {//Inicia o gerenciador de envios
             mSend = new ManagerSend(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
         //Instancia lista de chat e contatos
         listaConts = new ArrayList<>();
         listChats = new ArrayList<>();
-        
+
         try {//Instancia som de notificação
-            soundFile = new File("notifSound.wav");    
-        } catch (Exception e) {}
+            soundFile = new File("notifSound.wav");
+        } catch (Exception e) {
+        }
     }
 
     /*Responsável por inicia e reinicia o gerenciador de recebimentos*/
     void startReceiver() {
         //Garanti a exclusão e a parada do gerenciador de recebimento caso ele esteja aberto
-        if (mRec != null) { 
+        if (mRec != null) {
             mRec.interrupt();
             mRec = null;
         }
@@ -78,10 +76,10 @@ public class Controller {
         mRec = new ManagerReceiver(this);
         mRec.start();
     }
-    
+
     /*Método responsável pelo alerta sonoro*/
-    public void notifyMsg(){        
-        try {  
+    public void notifyMsg() {
+        try {
             //Lê arquivo do som e prepara a reprodução
             AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
             DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
@@ -94,21 +92,22 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedAudioFileException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
 
     /*Método responsável por retorna a situação da tentativa de login do usuario*/
     public void feedbackLogin(JSONObject jsonResp) {
         //retorna valor de status respondido pelo servidor. Status = 0, erro;Status = 1, sucesso.
         int getSt = Integer.parseInt((String) jsonResp.get("status"));
-        
+
         if (getSt == 1) {//Se ocorreu com sucesso o login 
             this.reqDepart();//Requisita departementos cadastrados
             mWin.loginOk();//Faz as devidas modificações na aplicação cquando logada
+            this.recBackup();
             //Guarda informações do usuário logado que foram respondidas pelo servidor*/
             cliente = new Contato(Integer.parseInt((String) jsonResp.get("codigo")),
                     (String) jsonResp.get("perfil"), (String) jsonResp.get("nome"), (String) jsonResp.get("sobrenome"));
-            
+
             mWin.callMessage("Seja bem-vindo " + jsonResp.get("nome") + " " + jsonResp.get("sobrenome") + "!",
                     "Login efetuado com sucesso", JOptionPane.INFORMATION_MESSAGE);//Mensagem de sucesso
         } else {//Se ocorreu erro na autenticação retorna uma mensagem pro usuário
@@ -137,10 +136,10 @@ public class Controller {
         mSend.establishCon(user, password);
     }
 
-    /*Método responsável por disparar a tentativa de desconexão*/ 
+    /*Método responsável por disparar a tentativa de desconexão*/
     public void finishCon() {
-        if(server != null){
-            if(server.isConnected()){//Avalia se ainda está conectado
+        if (server != null) {
+            if (server.isConnected()) {//Avalia se ainda está conectado
                 try {
                     mSend.finishCon();//Tenta finalizar
                 } catch (IOException ex) {//Informa erro se ocorrer
@@ -163,10 +162,10 @@ public class Controller {
         rem.put("nome", cliente.getNome());
         rem.put("sobrenome", cliente.getSobrenome());
         rem.put("perfil", cliente.getPerfil());
-        
+
         JSONArray listRem = new JSONArray();
-        listRem.add(rem);        
-                
+        listRem.add(rem);
+
         jsonMsg.put("rem", listRem);//Contruindo json da mensagem
         jsonMsg.put("dest", selectionChat.getDestinatario().getCodigo());
         jsonMsg.put("time", format.format(d));
@@ -174,26 +173,26 @@ public class Controller {
         jsonMsg.put("type", "mensagem");
 
         selectionChat.addMsg(new Mensagem(selectionChat.getDestinatario(),
-                cliente,textMsg, d,true));//Guardando a mensagem 
+                cliente, textMsg, d, true));//Guardando a mensagem 
         //retira o chat da lista e coloca ele em primeiro
         listChats.remove(selectionChat);
-        listChats.add(0,selectionChat);
+        listChats.add(0, selectionChat);
         //Envia mensagem
         mSend.sendJSON(jsonMsg.toJSONString());//Enviando
         //Atualiza o textarea com a msg enviada
-        String msgs = "";        
+        String msgs = "";
         //Recebe mensagens 
-        for(Mensagem m: selectionChat.getMensagens()){
-             msgs += m.getMsg()+"\n";
+        for (Mensagem m : selectionChat.getMensagens()) {
+            msgs += m.getMsg() + "\n";
         }
         mWin.preencheChat(msgs);
         mWin.updateChat();
-      
+
     }
 
     /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem*/
     void toExpCellDepartsReq(JSONObject jsonResp) {
-        leituraJson(jsonResp);        
+        leituraJson(jsonResp);
         int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
         mWin.expCellDeparts(depart, listaConts);
     }
@@ -217,63 +216,66 @@ public class Controller {
             } catch (Exception e) {
                 System.out.println("Capacidade do Integer estourou.");
             }
-            
+
             //Instancia contato e adiciona a lista de ocntatos
             Contato f = new Contato(cod, perfil, nome, sobrenome);
             listaConts.add(f);
         }
     }
-    
+
     //Método responsável por ler a mensagem recebida do servidor*/
     public void leituraJsonMsg(JSONObject jsonObj) {
         //Declaração das variaveis para leitura da MSG
-        Integer ver = 0, codDest = 1;   
+        Integer ver = 0, codDest = 1;
         String data = (String) jsonObj.get("time");
         String msg = (String) jsonObj.get("cont");
         Long dest = (Long) jsonObj.get("dest");
-        try{//Converte o valor do codigo do destinatário em inteiro
+        try {//Converte o valor do codigo do destinatário em inteiro
             codDest = Integer.valueOf(dest.toString());
-        }catch(Exception e){
+        } catch (Exception e) {
             e.setStackTrace(e.getStackTrace());
         }
-        
+
         //Recebe informações do remetente
         JSONArray rem = (JSONArray) jsonObj.get("rem");
         Iterator i = rem.iterator();
-        
+
         //Faz a leitura das informação do remetente
-        while(i.hasNext()){  
+        while (i.hasNext()) {
             //Variaveis
             JSONObject jsonrem = (JSONObject) i.next();
             Integer cod = null;
-            
+
             //Iniciado Valores
-            Long longcod = (Long)jsonrem.get("codigo");
-            try {cod = Integer.valueOf(longcod.toString());} catch (Exception e){}            
+            Long longcod = (Long) jsonrem.get("codigo");
+            try {
+                cod = Integer.valueOf(longcod.toString());
+            } catch (Exception e) {
+            }
             String perfil = (String) jsonrem.get("perfil");
             String nome = (String) jsonrem.get("nome");
             String sobrenome = (String) jsonrem.get("sobrenome");
-            
+
             //Controi o objeto contato coma s informações do remtente
             Contato f = new Contato(cod, perfil, nome, sobrenome);
             //Verifica se já existe uma conversa com esse contato 
             for (Chat c : listChats) {
                 if ((c.getRemetente().getCodigo() == codDest
                         && c.getDestinatario().getCodigo() == f.getCodigo())
-                        ||(c.getRemetente().getCodigo() == f.getCodigo())
-                        && c.getDestinatario().getCodigo() ==codDest) {//Se sim
-                   
+                        || (c.getRemetente().getCodigo() == f.getCodigo())
+                        && c.getDestinatario().getCodigo() == codDest) {//Se sim
+
                     //Coloca ele no inicio da lista
                     listChats.remove(c);
-                    listChats.add(0,c);
-                    
+                    listChats.add(0, c);
+
                     //Adiciona mensagem ao chat
                     c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
                     ver++;
                     String msgs = c.toString();
                     //Se o chat que recebeu a mensagem for o que estiver em foco na tela
-                    if(selectionChat.equals(c)){
-                         mWin.preencheChat(msgs);//Escrevi mensagem na tela
+                    if (selectionChat.equals(c)) {
+                        mWin.preencheChat(msgs);//Escrevi mensagem na tela
                     }
                     mWin.updateChat(); //Atualiza lista de chats na tela            
                     break;
@@ -283,10 +285,10 @@ public class Controller {
             if (ver == 0) {//Instancia o chat com novo remetente
                 Chat c = new Chat(cliente, f);
                 c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
-                listChats.add(0,c);         
-                mWin.updateChat();           
-            }      
-             notifyMsg();//Chama notificação
+                listChats.add(0, c);
+                mWin.updateChat();
+            }
+            notifyMsg();//Chama notificação
         }
     }
 
@@ -303,14 +305,14 @@ public class Controller {
 
     /*Método responsavel por redirencionar na tela, a conversa que o usuário deseja colocar em foco*/
     public void selectContact(int funcCod) {
-        
+
         for (Chat c : listChats) {//Verifica se o chat com esse destinatário já existe
             if (c.getDestinatario().getCodigo() == funcCod) {
                 selectionChat = c;//Se existir marca como chat selecionado
                 listChats.remove(c);//Retira o chat da lista e coloca de volta em primeiro
-                listChats.add(0,c);
-                mWin.openTextUI(c.getDestinatario().getNome() + " " + c.getDestinatario().getSobrenome()
-                        ,c.getDestinatario().getPerfil());
+                listChats.add(0, c);
+                mWin.openTextUI(c.getDestinatario().getNome() + " " + c.getDestinatario().getSobrenome(),
+                        c.getDestinatario().getPerfil());
                 String msgs = c.toString();
                 mWin.preencheChat(msgs);
                 mWin.changeTabRec();
@@ -320,37 +322,37 @@ public class Controller {
         for (Contato cont : listaConts) {//Se não existir, cria o chat para conversa
             if (funcCod == cont.getCodigo()) {
                 selectionChat = new Chat(cliente, cont);
-                listChats.add(0,selectionChat);
-                mWin.openTextUI(selectionChat.getDestinatario().getNome() + " " + selectionChat.getDestinatario().getSobrenome()
-                        ,selectionChat.getDestinatario().getPerfil());
+                listChats.add(0, selectionChat);
+                mWin.openTextUI(selectionChat.getDestinatario().getNome() + " " + selectionChat.getDestinatario().getSobrenome(),
+                        selectionChat.getDestinatario().getPerfil());
                 mWin.updateChat();
                 mWin.changeTabRec();//Muda aba
             }
         }
 
-    } 
-    
+    }
+
     /*Metodo responsável por colocar na tela informações sobre o contato*/
     public void updateUIChat(int posicChat) {
         selectionChat = listChats.get(posicChat);
         mWin.preencheChat(selectionChat.toString(),
-                selectionChat.getDestinatario().getNome() + " " + 
-                selectionChat.getDestinatario().getSobrenome(),
+                selectionChat.getDestinatario().getNome() + " "
+                + selectionChat.getDestinatario().getSobrenome(),
                 selectionChat.getDestinatario().getPerfil());
     }
-    
+
     /*Metodo responsável por notificar erros com servidor*/
     void throwExp(String message) {
-        mWin.callMessage(message, "Erro ao conectar com o servidor!", 
+        mWin.callMessage(message, "Erro ao conectar com o servidor!",
                 JOptionPane.ERROR_MESSAGE);
-    }    
+    }
 
     /*Retorna a lista de chats*/
     public ArrayList<Chat> getListChats() {
         return listChats;
     }
 
-     /*Retorna controle de departamento*/
+    /*Retorna controle de departamento*/
     public ControllerDep getCtrDep() {
         return ctrDep;
     }
@@ -365,7 +367,7 @@ public class Controller {
         return server;
     }
 
-    /*Define o socket da conexão persistente com o servidor*/ 
+    /*Define o socket da conexão persistente com o servidor*/
     public void setSocketServer(Socket s) {
         if (server != null) {
             try {
@@ -381,7 +383,7 @@ public class Controller {
     public MainWindow getmWin() {
         return mWin;
     }
-    
+
     /*Método Principal da aplicação*/
     public static void main(String args[]) {
         Controller c = new Controller();
@@ -394,6 +396,75 @@ public class Controller {
     public void setIPServer(String ip) throws UnknownHostException {
         serverIP = ip;
         mSend.setIpServer(serverIP);
+    }
+
+    private void recBackup() {
+        JSONObject jsonreq = new JSONObject();
+        jsonreq.put("type", "backup");//Monta json
+        mSend.sendJSON(jsonreq.toJSONString());//envia json
+    }
+
+    //Método responsável por ler a mensagem recebida do servidor*/
+    public void leituraJsonMsgOff(JSONObject jsonObj) {
+        //Declaração das variaveis para leitura da MSG
+        Integer ver = 0, codDest = 1;
+        String data = (String) jsonObj.get("time");
+        String msg = (String) jsonObj.get("cont");
+        JSONObject jsonDest = (JSONObject) jsonObj.get("dest");
+        codDest = Integer.parseInt((String) jsonDest.get("$numberLong"));
+
+        //Recebe informações do remetente
+        JSONArray rem = (JSONArray) jsonObj.get("rem");
+        Iterator i = rem.iterator();
+
+        //Faz a leitura das informação do remetente
+        while (i.hasNext()) {
+            //Variaveis
+            JSONObject jsonrem = (JSONObject) i.next();
+            Integer cod = null;
+
+            //Iniciado Valores
+            jsonDest = (JSONObject) jsonrem.get("codigo");
+
+            cod = Integer.parseInt((String) jsonDest.get("$numberLong"));
+            String perfil = (String) jsonrem.get("perfil");
+            String nome = (String) jsonrem.get("nome");
+            String sobrenome = (String) jsonrem.get("sobrenome");
+
+            //Controi o objeto contato coma s informações do remtente
+            Contato f = new Contato(cod, perfil, nome, sobrenome);
+            //Verifica se já existe uma conversa com esse contato 
+            for (Chat c : listChats) {
+                if ((c.getRemetente().getCodigo() == codDest
+                        && c.getDestinatario().getCodigo() == f.getCodigo())
+                        || (c.getRemetente().getCodigo() == f.getCodigo())
+                        && c.getDestinatario().getCodigo() == codDest) {//Se sim
+
+                    //Coloca ele no inicio da lista
+                    listChats.remove(c);
+                    listChats.add(0, c);
+
+                    //Adiciona mensagem ao chat
+                    c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
+                    ver++;
+                    String msgs = c.toString();
+                    //Se o chat que recebeu a mensagem for o que estiver em foco na tela
+                    if (selectionChat.equals(c)) {
+                        mWin.preencheChat(msgs);//Escrevi mensagem na tela
+                    }
+                    mWin.updateChat(); //Atualiza lista de chats na tela            
+                    break;
+                }
+            }
+            //Se não foi encotrado um chat já iniciado que correponda com remtente da mensagem
+            if (ver == 0) {//Instancia o chat com novo remetente
+                Chat c = new Chat(cliente, f);
+                c.addMsg(new Mensagem(cliente, f, msg, new Date(data)));
+                listChats.add(0, c);
+                mWin.updateChat();
+            }
+            notifyMsg();//Chama notificação
+        }
     }
 
 }

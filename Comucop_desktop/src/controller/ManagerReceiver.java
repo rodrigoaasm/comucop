@@ -48,6 +48,8 @@ public class ManagerReceiver extends Thread{
                             ctrApp.toExpCellDepartsReq(jsonResp);
                         }else if(type.compareTo("mensagem")==0){//Operação requisição de departamentos  
                              ctrApp.leituraJsonMsg(jsonResp);
+                        }else if(type.compareTo("backup")==0){
+                            ctrApp.leituraJsonMsgOff(jsonResp);
                         }
                     }catch (ParseException ex) {                        
                         ctrApp.throwExp(ex.getMessage());
