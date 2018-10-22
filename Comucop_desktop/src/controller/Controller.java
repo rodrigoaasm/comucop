@@ -49,7 +49,7 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        this.serverIP = "127.0.0.1";
+        this.serverIP = "200.235.86.1";
         try {//Inicia o gerenciador de envios
             mSend = new ManagerSend(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
@@ -449,8 +449,10 @@ public class Controller {
                     ver++;
                     String msgs = c.toString();
                     //Se o chat que recebeu a mensagem for o que estiver em foco na tela
-                    if (selectionChat.equals(c)) {
-                        mWin.preencheChat(msgs);//Escrevi mensagem na tela
+                    if (selectionChat != null) {
+                        if (selectionChat.equals(c)) {
+                            mWin.preencheChat(msgs);//Escrevi mensagem na tela
+                        }
                     }
                     mWin.updateChat(); //Atualiza lista de chats na tela            
                     break;
