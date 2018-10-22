@@ -88,6 +88,8 @@ public class ManagerReceiver extends Thread {
             ctrServer.getClients().remove(clientConRec);//Removendo antigo registro de conexão da lista de clientes
             clientConRec.getSockClient().close();//Fecha conexão    
             clientConRec = null;//excluir registro de cliente            
+        }else if(type.compareTo("backup") == 0){
+            ctrServer.addQueueMessage(new ElemQueue(clientConRec, jsonreq));
         }
     }
     
