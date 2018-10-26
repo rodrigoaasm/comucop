@@ -5,7 +5,7 @@
  */
 package model;
 
-import cripth.MyRSAKey;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,22 +19,14 @@ public class ClientConRecord {
     
     private Socket sockClient;
     private PublicKey publicKeyClient;
-    private MyRSAKey aKeysServer;
+  //  private MyRSAKey aKeysServer;
     private String client;
     private Integer clientCod;
 
-    public ClientConRecord(Socket sockClient, MyRSAKey keysServer) {
+    public ClientConRecord(Socket sockClient) {
         this.sockClient = sockClient;
 
-        aKeysServer = keysServer;
-    }
-
-    public MyRSAKey getaKeysServer() {
-        return aKeysServer;
-    }
-
-    public void setaKeysServer(MyRSAKey aKeysServer) {
-        this.aKeysServer = aKeysServer;
+      //  aKeysServer = keysServer;
     }
 
     public String getClient() {
@@ -75,17 +67,28 @@ public class ClientConRecord {
         this.publicKeyClient = publicKeyClient;
     }
 
-    public MyRSAKey getKeysServer() {
+
+
+    public void close() throws IOException {
+        sockClient.close();
+    }
+    
+      /*  public MyRSAKey getaKeysServer() {
+        return aKeysServer;
+    }
+
+    public void setaKeysServer(MyRSAKey aKeysServer) {
+        this.aKeysServer = aKeysServer;
+    }
+    
+        public MyRSAKey getKeysServer() {
         return aKeysServer;
     }
 
     public void setKeysServer(MyRSAKey keysServer) {
         this.aKeysServer = keysServer;
     }
-
-    public void close() throws IOException {
-        sockClient.close();
-    }
     
+    */
     
 }

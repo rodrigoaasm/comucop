@@ -47,7 +47,7 @@ public class ManagerSend {
             public void run(){
                 JSONObject jsonResp = new JSONObject();//Monta resposta em JSon
                 jsonResp.put("type","first");                
-                jsonResp.put("key", clientConRec.getKeysServer().getPublicKey().getEncoded());
+              //  jsonResp.put("key", clientConRec.getKeysServer().getPublicKey().getEncoded());
                 
                 DataOutputStream outputStream = null;
                 try {

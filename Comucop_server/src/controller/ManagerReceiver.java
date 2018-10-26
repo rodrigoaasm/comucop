@@ -5,7 +5,7 @@
  */
 package controller;
 
-import cripth.MyRSAKey;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -33,7 +33,7 @@ public class ManagerReceiver extends Thread {
     
     public ManagerReceiver(Controller ctrServer) throws IOException{
         this.ctrServer = ctrServer;
-        sockServ = new ServerSocket(4848);
+        sockServ = new ServerSocket(4848);     
         threadListennerPool = Executors.newFixedThreadPool(20);     
     }
     
@@ -61,11 +61,11 @@ public class ManagerReceiver extends Thread {
                     }else{//Tentando relogin
                         System.out.println("Esse cliente está tentado um relogin.");
                         ctrServer.getClients().remove(clientConRec);//removendo ele da lista de conexão
-                        clientConRec = new ClientConRecord(client,MyRSAKey.newInstance());//Instaciando registro de conexão                    
+                        clientConRec = new ClientConRecord(client);//Instaciando registro de conexão                    
                         ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
                     }
-                }else {//Se o cliente não possui uma conexão persistente inicia a autenticação
-                    clientConRec = new ClientConRecord(client,MyRSAKey.newInstance());//Instaciando registro de conexão                    
+                }else {//Se o cliente não possui uma conexão persistente inicia a autenticação                     
+                    clientConRec = new ClientConRecord(client);//Instaciando registro de conexão                    
                     ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
                 }
             } catch (IOException ex) {
