@@ -49,7 +49,7 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        this.serverIP = "192.168.0.3";
+        this.serverIP = "200.235.86.1";
         try {//Inicia o gerenciador de envios
             mSend = new ManagerSend(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
@@ -155,7 +155,7 @@ public class Controller {
         JSONObject jsonMsg = new JSONObject();
 
         Date d = new Date();//Pegando hora da mensagem
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss-MM/dd/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss-dd/MM/yyyy");
 
         JSONObject rem = new JSONObject();//Contruido json com as informações do remetente        
         rem.put("codigo", cliente.getCodigo());
