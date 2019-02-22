@@ -30,8 +30,7 @@ public class Controller {
     private MainWindow mWin;
     private ControllerDep ctrDep;
     private ControllerFuncionario ctrFunc;
-    private ManagerSend mSend;
-    private ManagerReceiver mRec;
+    private ManagerConnection mCon;
     private Contato cliente;
     private ArrayList<Contato> listaConts;
     private ArrayList<Chat> listChats;
@@ -49,9 +48,9 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        this.serverIP = "192.168.0.5";
+        this.serverIP = "127.0.0.1";
         try {//Inicia o gerenciador de envios
-            mSend = new ManagerSend(this, InetAddress.getByName(serverIP));
+            mCon = new ManagerConnection(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,18 +62,6 @@ public class Controller {
             soundFile = new File("notifSound.wav");
         } catch (Exception e) {
         }
-    }
-
-    /*Responsável por inicia e reinicia o gerenciador de recebimentos*/
-    void startReceiver() {
-        //Garanti a exclusão e a parada do gerenciador de recebimento caso ele esteja aberto
-        if (mRec != null) {
-            mRec.interrupt();
-            mRec = null;
-        }
-        //Instancia Thread e inicia a mesma
-        mRec = new ManagerReceiver(this);
-        mRec.start();
     }
 
     /*Método responsável pelo alerta sonoro*/
@@ -94,8 +81,13 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /*Método responsável por disparar a tentativa de uma conexão*/
+    public void tryEstablishCon(String user, String password) throws IOException {
+        mCon.establishCon(user, password);
+    }
 
-    /*Método responsável por retorna a situação da tentativa de login do usuario*/
+    /*Método responsável por retorna a situação da tentativa de login do usuario
     public void feedbackLogin(JSONObject jsonResp) {
         //retorna valor de status respondido pelo servidor. Status = 0, erro;Status = 1, sucesso.
         int getSt = Integer.parseInt((String) jsonResp.get("status"));
@@ -104,7 +96,7 @@ public class Controller {
             this.reqDepart();//Requisita departementos cadastrados
             mWin.loginOk();//Faz as devidas modificações na aplicação cquando logada
             this.recBackup();
-            //Guarda informações do usuário logado que foram respondidas pelo servidor*/
+            //Guarda informações do usuário logado que foram respondidas pelo servidor
             cliente = new Contato(Integer.parseInt((String) jsonResp.get("codigo")),
                     (String) jsonResp.get("perfil"), (String) jsonResp.get("nome"), (String) jsonResp.get("sobrenome"));
 
@@ -114,29 +106,26 @@ public class Controller {
             mWin.callMessage("Login e senha não correspondem a um usuário da aplicação! ",
                     "Falha Login", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 
-    /*Método responsável por montar a requisição de departamentos*/
+    /*Método responsável por montar a requisição de departamentos
     private void reqDepart() {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "req-depart");//Monta json
         mSend.sendJSON(jsonreq.toJSONString());//envia json
-    }
+    }*/
 
-    /*Método responsável por montar a requisição de contatos(funcionários) por departamento*/
+    /*Método responsável por montar a requisição de contatos(funcionários) por departamento
     public void expToContacts(String codDep) {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "exp-to-contacts");//Monta json
         jsonreq.put("id-depart", codDep);//Informa codigo do departamento
         mSend.sendJSON(jsonreq.toJSONString());//Envia json
-    }
+    }*/
 
-    /*Método responsável por disparar a tentativa de uma conexão*/
-    public void tryEstablishCon(String user, String password) throws IOException {
-        mSend.establishCon(user, password);
-    }
+   
 
-    /*Método responsável por disparar a tentativa de desconexão*/
+    /*Método responsável por disparar a tentativa de desconexão
     public void finishCon() {
         if (server != null) {
             if (server.isConnected()) {//Avalia se ainda está conectado
@@ -148,9 +137,9 @@ public class Controller {
                 }
             }
         }
-    }
+    }*/
 
-    /*Método responsavel por montar o json correpondente a uma mensagem do usuário a outro contato*/
+    /*Método responsavel por montar o json correpondente a uma mensagem do usuário a outro contato
     public void sendMsg(String textMsg) {
         JSONObject jsonMsg = new JSONObject();
 
@@ -190,19 +179,19 @@ public class Controller {
 
     }
 
-    /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem*/
+    /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem
     void toExpCellDepartsReq(JSONObject jsonResp) {
         leituraJson(jsonResp);
         int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
         mWin.expCellDeparts(depart, listaConts);
-    }
+    }*/
 
-    /*Método que faz a leitura dos contatos retornados pelo servidor*/
+    /*Método que faz a leitura dos contatos retornados pelo servidor
     public void leituraJson(JSONObject jsonObj) {
-        //Recebe a lista de contatos*/
+        //Recebe a lista de contatos
         JSONArray funcs = (JSONArray) jsonObj.get("Contatos");
         Iterator<JSONObject> ite = funcs.iterator();
-        /*Faz a leitura das informações idividuais de cada contato*/
+        /*Faz a leitura das informações idividuais de cada contato
         while (ite.hasNext()) {
             //leitura
             JSONObject objDep = (JSONObject) ite.next();
@@ -221,9 +210,9 @@ public class Controller {
             Contato f = new Contato(cod, perfil, nome, sobrenome);
             listaConts.add(f);
         }
-    }
+    }*/
 
-    //Método responsável por ler a mensagem recebida do servidor*/
+    /*Método responsável por ler a mensagem recebida do servidor
     public void leituraJsonMsg(JSONObject jsonObj) {
         //Declaração das variaveis para leitura da MSG
         Integer ver = 0, codDest = 1;
@@ -290,7 +279,7 @@ public class Controller {
             }
             notifyMsg();//Chama notificação
         }
-    }
+    }*/
 
     /*Retorna lista de contatos*/
     public ArrayList<Contato> getListaConts() {
@@ -395,16 +384,16 @@ public class Controller {
 
     public void setIPServer(String ip) throws UnknownHostException {
         serverIP = ip;
-        mSend.setIpServer(serverIP);
+        mCon.setIpServer(serverIP);
     }
 
-    private void recBackup() {
+ /*   private void recBackup() {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "backup");//Monta json
         mSend.sendJSON(jsonreq.toJSONString());//envia json
-    }
+    }*/
 
-    //Método responsável por ler a mensagem recebida do servidor*/
+    /*Método responsável por ler a mensagem recebida do servidor*
     public void leituraJsonMsgOff(JSONObject jsonObj) {
         //Declaração das variaveis para leitura da MSG
         Integer ver = 0, codDest = 1;
@@ -467,6 +456,6 @@ public class Controller {
             }
             notifyMsg();//Chama notificação
         }
-    }
+    }*/
 
 }

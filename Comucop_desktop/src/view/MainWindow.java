@@ -553,9 +553,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     //Listener do botão utilizado para enviar msgs
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
-        // Se a msg não estiver vazia chamará os metos para envio
+        // Se a msg não estiver vazia chamará os metodos para envio
         if(!cxTextMsg.getText().isEmpty()){
-            ctrApp.sendMsg(cxTextMsg.getText());
+           // ctrApp.sendMsg(cxTextMsg.getText());
             cxTextMsg.setText("");
         }
     }//GEN-LAST:event_ButtonEnviarActionPerformed
@@ -563,13 +563,13 @@ public class MainWindow extends javax.swing.JFrame {
     //Listener utilizado para quando se deseja fechar a janela, assim irá comunicar o servidor que se está saindo
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         
-        ctrApp.finishCon();
+       // ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosed
     
     //Listener utilizado para quando se deseja fechar a janela, assim irá comunicar o servidor que se está saindo
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
-        ctrApp.finishCon();
+       // ctrApp.finishCon();
     }//GEN-LAST:event_formWindowClosing
 
     //Botão para cnfiguração de IP
