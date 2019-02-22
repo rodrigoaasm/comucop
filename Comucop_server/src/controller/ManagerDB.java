@@ -25,7 +25,7 @@ import org.json.simple.JSONObject;
  *
  * @author Rodrigo Maia
  */
-public class ManagerDB extends Thread{
+public class ManagerDB{
     
     private Controller ctrServ;
     private Session sessDb;
@@ -33,16 +33,15 @@ public class ManagerDB extends Thread{
    
     /*Contrutor inicia conexão hibernate com o mysql*/
     public ManagerDB(Controller ctrServ) {
-        super();
         this.ctrServ = ctrServ;        
         sessDb = HibernateUtil.getSessionFactory().openSession();
     }
     
-    @Override
+  /*  @Override
     public void run(){
         while(true){       
-            Queue<ElemQueue> queueDb = ctrServ.getQueueManDB();
-            if(!queueDb.isEmpty()){ //Verificando se há elementos na fila            
+         //   Queue<ElemQueue> queueDb = ctrServ.getQueueManDB();
+        /*    if(!queueDb.isEmpty()){ //Verificando se há elementos na fila            
                 ElemQueue eq = queueDb.poll();//recuperando elemento 
                 JSONObject jsonReq = eq.getJsonReq();//recuperando requisição
                 
@@ -54,11 +53,11 @@ public class ManagerDB extends Thread{
                     this.expToContacts(eq,jsonReq);
                 }
             }
-        }
-    }
+        
+    }*/
     
     /*Método responsável pela função de login*/
-    public void login(ElemQueue eq,JSONObject jsonReq){//Operação de login
+    public void login(JSONObject jsonReq){//Operação de login
         JSONObject resp = new JSONObject();
         //Faz a pesquisa do usuário
         List l = (List)UserDAO.auth(sessDb,(String)jsonReq.get("login"),(String)jsonReq.get("password"));
@@ -72,14 +71,14 @@ public class ManagerDB extends Thread{
             resp.put("sobrenome",us.getFuncionario().getFuncSobrenome());
             resp.put("perfil",us.getFuncionario().getFuncPerfil());
             
-            ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia JSON
+           // ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia JSON
             eq.getClient().setClient(us.getUsLogin());//Carregando informações do usuário no registro de conexão
             eq.getClient().setClientCod(us.getFuncionario().getFuncCod());
-            ctrServ.getClients().add(eq.getClient());//adiciona conexão com o cliente
+          //  ctrServ.getClients().add(eq.getClient());//adiciona conexão com o cliente
         }else{// se não retorna o erro
             resp.put("type","login");
             resp.put("status", "0");  
-            ctrServ.getmSend().sendJSON(eq.getClient(), resp);    
+          //  ctrServ.getmSend().sendJSON(eq.getClient(), resp);    
          }   
 
     }  
@@ -104,7 +103,7 @@ public class ManagerDB extends Thread{
         resp.put("type","req-depart");
         
        
-        ctrServ.getmSend().sendJSON(client, resp);//Envia json
+      //  ctrServ.getmSend().sendJSON(client, resp);//Envia json
         
     }
 
@@ -134,6 +133,6 @@ public class ManagerDB extends Thread{
         resp.put("type","exp-to-contacts");
         resp.put("id-depart",s);
         
-        ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
+      //  ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
     }
 }

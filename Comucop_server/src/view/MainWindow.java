@@ -83,12 +83,12 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void updateClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateClientActionPerformed
         // TODO add your handling code here:
-        ArrayList<ClientConRecord> clients = ctrApp.getClients();        
+       // ArrayList<ClientConRecord> clients = ctrApp.getClients();        
         String text = "";
         
-        for(ClientConRecord c : clients ){
+       /* for(ClientConRecord c : clients ){
             text += c.getSockClient().getInetAddress().getHostAddress() + " => " +c.getClient()+"\n";
-        }
+        }*/
         console.setText(text);
     }//GEN-LAST:event_updateClientActionPerformed
 

@@ -28,8 +28,8 @@ public class ManagerMsg extends Thread {
         objCtrPrincipal = pController;
 
     }
-
-    /*Método principal da thread, que faz o redirecionamento das mensagens*/
+/*
+    Método principal da thread, que faz o redirecionamento das mensagens
     public void run() {
         int i;
         while (true) {
@@ -38,11 +38,10 @@ public class ManagerMsg extends Thread {
             if (queueManMesage.isEmpty() == false) {
                 ElemQueue eq = queueManMesage.poll();//recuperando elemento
                 JSONObject rec = eq.getJsonReq(); //Recuperando json
-                ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();//recuperando lista de onlines
+               ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();//recuperando lista de onlines
                 String type = (String) rec.get("type");
                 
                 if (type.compareTo("mensagem")==0) {
-
                     ClientConRecord remetente = eq.getClient();//Recebendo remetente
                     ClientConRecord destinatario = null;
 
@@ -56,7 +55,7 @@ public class ManagerMsg extends Thread {
                     }
 
                     if (destinatario != null) {  //Se for diferente de null está online, pois foi encontrado na lista              
-                        objCtrPrincipal.getmSend().sendJSON(destinatario, rec);
+                     //   objCtrPrincipal.getmSend().sendJSON(destinatario, rec);
                     } else {//se não está off, pois não foi encontrado
                         insertMongoDB(rec);
                     }
@@ -122,7 +121,7 @@ public class ManagerMsg extends Thread {
                 JSONObject mensage = new JSONObject();
                 try {
                     mensage = (JSONObject) parser.parse(msg.toJson());
-                                    objCtrPrincipal.getmSend().sendJSON(client,mensage);
+                                 //   objCtrPrincipal.getmSend().sendJSON(client,mensage);
                                     System.out.println(mensage.toJSONString());
                 } catch (ParseException ex) {
                     Logger.getLogger(ManagerMsg.class.getName()).log(Level.SEVERE, null, ex);
@@ -138,5 +137,5 @@ public class ManagerMsg extends Thread {
         closeConection();//FECHA A CONEXÃO
 
     }
-
+*/
 }

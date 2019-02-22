@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ClientConRecord;
+import model.ClientRegistration;
 import model.ElemQueue;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,14 +25,13 @@ import org.json.simple.parser.ParseException;
  *
  * @author root
  */
-public class ManagerReceiver extends Thread {
+public class ConnectionManager extends Thread {
     
     private Controller ctrServer;
     private ServerSocket sockServ;
     private ExecutorService threadListennerPool;
-    
-    
-    public ManagerReceiver(Controller ctrServer) throws IOException{
+        
+    public ConnectionManager(Controller ctrServer) throws IOException{
         this.ctrServer = ctrServer;
         sockServ = new ServerSocket(4848);     
         threadListennerPool = Executors.newFixedThreadPool(20);     
@@ -41,41 +41,30 @@ public class ManagerReceiver extends Thread {
     @Override
     public void run(){
         Socket client = null;
-        ClientConRecord clientConRec;
-        DataInputStream scan;
-        JSONParser jsonParser = new JSONParser();
-        
         while(true){
             try {
-                client = sockServ.accept();//Aceitando conexão TCP de cliente
-
-                if((clientConRec = this.isEstablishedConWithClient(client)) != null){//Se o cliente já possui uma conexão persistente                   
-                    System.out.println("Esse cliente está conectado.");
-                    if(clientConRec.isSocketCon()){//A conexão ainda existe  
-                        startTimer(client); //Chama thread que funcionará como cronometro                       
-                        scan = new DataInputStream(client.getInputStream());//Então lé a requisição JSON                       
-                        JSONObject jsonreq = (JSONObject) jsonParser.parse(scan.readUTF());
-                        routerWork(clientConRec, jsonreq);//Redirenciona ao serviço certo
-                        scan.close();
-                        client.close(); 
-                    }else{//Tentando relogin
-                        System.out.println("Esse cliente está tentado um relogin.");
-                        ctrServer.getClients().remove(clientConRec);//removendo ele da lista de conexão
-                        clientConRec = new ClientConRecord(client);//Instaciando registro de conexão                    
-                        ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
-                    }
-                }else {//Se o cliente não possui uma conexão persistente inicia a autenticação                     
-                    clientConRec = new ClientConRecord(client);//Instaciando registro de conexão                    
-                    ctrServer.getmSend().first(clientConRec);//Efetuando primeira comunicação para conexão.
-                }
+                client = sockServ.accept();//Aceitando conexão TCP de cliente        
+                
+                ConnectionListener listener = null;
+                if(ctrServer.getqSleepingListeners().isEmpty()){//Se a fila estiver vazia 
+                    listener = new ConnectionListener(ctrServer);//Cria listener que vai escutar a conexão
+                }else{//se tiver listener ocioso na fila recicla o mesmo
+                    System.err.println(ctrServer.getqSleepingListeners().size()+" --> Reciclando listener");
+                    listener = (ConnectionListener) ctrServer.getqSleepingListeners().pop();
+                    System.err.println(">" + ctrServer.getqSleepingListeners().size());
+                }                    
+                ClientRegistration cr = new ClientRegistration(client,listener);//criando registro
+                System.err.println("Aceitando conexão");
+                listener.wakeUp(cr);//Acordado listener 
+                ctrServer.addListClients(cr);//Registrando cliente no sistema.                
+                threadListennerPool.submit(listener);                
             } catch (IOException ex) {
-                Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
-            }  
+                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            }               
         }
     }
-    
+}
+   /* 
     //Metodo resposável por fazer a triagem das requisições
     public void routerWork(ClientConRecord clientConRec,JSONObject jsonreq) throws IOException{
                 
@@ -107,7 +96,7 @@ public class ManagerReceiver extends Thread {
     }
 
     //* Método  responsável por criar e colocar na fila de execução as threads que aguardaram o pacote de autenticação dos clientes*/
-    public void createListennerCon(ClientConRecord clientConRec) {
+  /*  public void createListennerCon(ClientConRecord clientConRec) {
         
         Runnable simpleListennerCon = new Runnable() { // Instaciando thread para escutar conexão
             @Override
@@ -123,16 +112,17 @@ public class ManagerReceiver extends Thread {
                         ctrServer.addQueueDB(new ElemQueue(clientConRec,jsonReq));
                     }      
                 } catch (IOException ex) {
-                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ParseException ex) {
-                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
                 }           
             }
         };   
         threadListennerPool.submit(simpleListennerCon);//Colocando thread na fila de execução
         
     }
-
+}
+/*
     //Metodo responsável por instanciar a thread que fará a função de timer
     private void startTimer(Socket client) {
         threadListennerPool.submit(new Runnable() {
@@ -142,12 +132,13 @@ public class ManagerReceiver extends Thread {
                     Thread.sleep(5000);//Dormi por 5s    
                     if(!client.isClosed()) client.close();//fecha conexão se ainda estiver aberta
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
-                    Logger.getLogger(ManagerReceiver.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
                 }                
             }
         });
     } 
     
 }
+*/
