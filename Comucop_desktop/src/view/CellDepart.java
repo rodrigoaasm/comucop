@@ -101,8 +101,7 @@ public class CellDepart extends javax.swing.JPanel {
     
     
     public int getCodigoDep() {
-        return codigoDep;
-        
+        return codigoDep;    
     }
     
     
@@ -172,7 +171,7 @@ public class CellDepart extends javax.swing.JPanel {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if(!extendedCell){
-            ctrApp.expToContacts("" + codigoDep);
+           ctrApp.expToContacts("" + codigoDep);
         }
     }//GEN-LAST:event_formMouseClicked
 

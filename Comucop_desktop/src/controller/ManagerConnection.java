@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Contato;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -49,14 +50,15 @@ public class ManagerConnection {
             public void run() {                                 
                 if(login(user,password)){
                     while(sockServer.isConnected()){
-                        System.err.println("Escutando");
+                  //      System.err.println("Escutando");
                         try {
                             if(inputStreamServ.available()>0){
-                                
+                                receiver();
                             }
                             if(!qPackSent.isEmpty()){
                                 JSONObject jsonReq = qPackSent.pop();
                                 outputStreamServ.writeUTF(jsonReq.toJSONString());
+                                System.err.println("Enviou: " + jsonReq.get("type"));
                                 outputStreamServ.flush();
                             }
                         } catch (IOException ex) {
@@ -70,6 +72,39 @@ public class ManagerConnection {
         listener.start();
         
     }
+    
+    public void sendJSON(JSONObject json){                   
+       qPackSent.add(json);
+    }
+    
+    public void receiver(){ 
+        JSONObject jsonResp= null;          
+        //Preparando stream de entrada e conversor json de resposta                       
+        JSONParser parser = new JSONParser();//Instaciando o conversor JSON
+        //Lendo Json de resposta do servidor 
+        try {
+            jsonResp = (JSONObject) parser.parse(inputStreamServ.readUTF());
+            //Analisa de qual operação é a resposta
+            String type = (String)jsonResp.get("type");
+            if(type.compareTo("req-depart")==0){//Operação requisição de departamentos
+                ctrApp.getCtrDep().LeituraJson(jsonResp);
+                ctrApp.getmWin().addDeps();
+            }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos    
+                ctrApp.getListaConts().clear();                        
+                          //  ctrApp.toExpCellDepartsReq(jsonResp);
+            }else if(type.compareTo("mensagem")==0){//Operação requisição de departamentos  
+                //ctrApp.leituraJsonMsg(jsonResp);
+            }else if(type.compareTo("backup")==0){
+                //ctrApp.leituraJsonMsgOff(jsonResp);
+            }
+        }catch (ParseException ex) {                        
+            ctrApp.throwExp(ex.getMessage());
+            ctrApp.conBroke();
+        } catch (IOException ex) { 
+            ctrApp.throwExp(ex.getMessage());
+        } 
+    }
+               
     
     public boolean login(String user,String password){
         try {
@@ -85,18 +120,24 @@ public class ManagerConnection {
 
             outputStreamServ.writeUTF(jsonReq.toJSONString());
             outputStreamServ.flush();
-
+            
             JSONObject jsonResp = (JSONObject) parser.parse(inputStreamServ.readUTF());
+              
             if(jsonResp.containsKey("status")){
-                if(Integer.parseInt((String)jsonResp.get("status"))== 0){
-                    System.err.println("Erro no login");
+                if(Integer.parseInt((String)jsonResp.get("status"))== 0){                    
+                    this.ctrApp.feedbackLogin(jsonResp,false); 
                     finishCon();
                     return false;
                 }
-            } else{ finishCon(); return false;}  
-            
+            } else{ 
+                this.ctrApp.feedbackLogin(jsonResp,false); 
+                finishCon(); 
+                return false;
+            }  
+              
+            this.ctrApp.feedbackLogin(jsonResp,true); 
             return true;            
-        } catch (Exception ex) {
+        } catch (Exception ex) {                     
             return false;
         }
     }
@@ -113,86 +154,12 @@ public class ManagerConnection {
                 sockServer.close();//Fecha ambas as conexões               
             }
         }
-    }
-        
-        
-        
-} 
-    
-  /*  @Override
-    public void run(){
-        DataInputStream dIStr = null;          
-        
-        if(ctrApp.getSocketServer().isConnected()){//Verifica se a conexão ainda existe           
-            JSONObject jsonResp= null;            
-            try{
-                //Preparando stream de entrada e conversor json de resposta
-                dIStr = new DataInputStream(ctrApp.getSocketServer().getInputStream());          
-                JSONParser parser = new JSONParser();//Instaciando o conversor JSON
-                while(ctrApp.getSocketServer().isConnected()){//Enquanto a conexão estiver viva, a escuta-a
-                    //Lendo Json de resposta do servidor 
-                    try {
-                        jsonResp = (JSONObject) parser.parse(dIStr.readUTF());
-                        //Analisa de qual operação é a resposta
-                        String type = (String)jsonResp.get("type");
-                        if(type.compareTo("login")==0){//Operação de login
-                            ctrApp.feedbackLogin(jsonResp);
-                        }else if(type.compareTo("req-depart")==0){//Operação requisição de departamentos
-                            ctrApp.getCtrDep().LeituraJson(jsonResp);
-                            ctrApp.getmWin().addDeps();
-                        }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos    
-                            ctrApp.getListaConts().clear();                        
-                            ctrApp.toExpCellDepartsReq(jsonResp);
-                        }else if(type.compareTo("mensagem")==0){//Operação requisição de departamentos  
-                             ctrApp.leituraJsonMsg(jsonResp);
-                        }else if(type.compareTo("backup")==0){
-                            ctrApp.leituraJsonMsgOff(jsonResp);
-                        }
-                    }catch (ParseException ex) {                        
-                        ctrApp.throwExp(ex.getMessage());
-                        ctrApp.conBroke();
-                    } 
-                }
-                ctrApp.conBroke();//Notificando quebra na conexão
-            }catch (IOException ex) {                
-                ctrApp.throwExp(ex.getMessage());  //Apresentado erro para usuário
-                ctrApp.conBroke();//Notificando quebra na conexão
-            }       
-        }else{
-            ctrApp.conBroke();//notificando quebra na conexão
-        }     
-    }
-    
-    
-   
+    }  
+}
 
  
     
-    public void sendJSON(String json){                   
-        Runnable threadCon = new Runnable() {
-            @Override
-            public void run() {
-                Socket serverPer  = ctrApp.getSocketServer();  //Recebe conexão persistente com servidor    
-                if(serverPer.isConnected()){  //Avalia se está autenticado                       
-                    Socket serverNonPer;
-                    try {
-                        serverNonPer = new Socket(ipServer, 4848);  //inicia conexão para requisição             
-                        DataOutputStream out = new DataOutputStream(serverNonPer.getOutputStream());
-                        out.writeUTF(json);//escreve json 
-                        out.flush(); 
-                        out.close();
-                        serverNonPer.close();   //Fecha conexão de requisição 
-                    } catch (IOException ex) {
-                        ctrApp.throwExp(ex.getMessage());
-                        ctrApp.conBroke();
-                    }
-                }else{
-                    ctrApp.conBroke();
-                }
-            }
-        };
-        new Thread(threadCon).start();//Inicia thread escrita acima
-    }*/
+    
 
 
     

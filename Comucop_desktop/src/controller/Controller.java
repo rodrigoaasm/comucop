@@ -86,16 +86,15 @@ public class Controller {
     public void tryEstablishCon(String user, String password) throws IOException {
         mCon.establishCon(user, password);
     }
+    
+    
 
-    /*Método responsável por retorna a situação da tentativa de login do usuario
-    public void feedbackLogin(JSONObject jsonResp) {
-        //retorna valor de status respondido pelo servidor. Status = 0, erro;Status = 1, sucesso.
-        int getSt = Integer.parseInt((String) jsonResp.get("status"));
-
-        if (getSt == 1) {//Se ocorreu com sucesso o login 
+    /*Método responsável por retorna a situação da tentativa de login do usuario*/
+    public void feedbackLogin(JSONObject jsonResp,boolean statusCon) {
+        if (statusCon) {//Se ocorreu com sucesso o login 
             this.reqDepart();//Requisita departementos cadastrados
             mWin.loginOk();//Faz as devidas modificações na aplicação cquando logada
-            this.recBackup();
+           // this.recBackup();
             //Guarda informações do usuário logado que foram respondidas pelo servidor
             cliente = new Contato(Integer.parseInt((String) jsonResp.get("codigo")),
                     (String) jsonResp.get("perfil"), (String) jsonResp.get("nome"), (String) jsonResp.get("sobrenome"));
@@ -104,24 +103,31 @@ public class Controller {
                     "Login efetuado com sucesso", JOptionPane.INFORMATION_MESSAGE);//Mensagem de sucesso
         } else {//Se ocorreu erro na autenticação retorna uma mensagem pro usuário
             mWin.callMessage("Login e senha não correspondem a um usuário da aplicação! ",
-                    "Falha Login", JOptionPane.ERROR_MESSAGE);
+                    "Falha Login", JOptionPane.ERROR_MESSAGE);           
         }
-    }*/
+    }
 
-    /*Método responsável por montar a requisição de departamentos
+    /*Método responsável por montar a requisição de departamentos*/
     private void reqDepart() {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "req-depart");//Monta json
-        mSend.sendJSON(jsonreq.toJSONString());//envia json
-    }*/
+        mCon.sendJSON(jsonreq);//envia json
+    }
 
-    /*Método responsável por montar a requisição de contatos(funcionários) por departamento
+    /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem*/
+   /* void toExpCellDepartsReq(JSONObject jsonResp) {
+        leituraJson(jsonResp);
+        int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
+        mWin.expCellDeparts(depart, listaConts);
+    }*/
+    
+    /*Método responsável por montar a requisição de contatos(funcionários) por departamento*/
     public void expToContacts(String codDep) {
         JSONObject jsonreq = new JSONObject();
         jsonreq.put("type", "exp-to-contacts");//Monta json
         jsonreq.put("id-depart", codDep);//Informa codigo do departamento
-        mSend.sendJSON(jsonreq.toJSONString());//Envia json
-    }*/
+        mCon.sendJSON(jsonreq);//Envia json
+    }
 
    
 
@@ -179,12 +185,7 @@ public class Controller {
 
     }
 
-    /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem
-    void toExpCellDepartsReq(JSONObject jsonResp) {
-        leituraJson(jsonResp);
-        int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
-        mWin.expCellDeparts(depart, listaConts);
-    }*/
+    
 
     /*Método que faz a leitura dos contatos retornados pelo servidor
     public void leituraJson(JSONObject jsonObj) {
@@ -385,6 +386,14 @@ public class Controller {
     public void setIPServer(String ip) throws UnknownHostException {
         serverIP = ip;
         mCon.setIpServer(serverIP);
+    }
+    
+    public void setClient(Contato client){
+        this.cliente = client;
+    }
+    
+    public Contato getClient(){
+        return cliente;
     }
 
  /*   private void recBackup() {
