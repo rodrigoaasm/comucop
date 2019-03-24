@@ -48,7 +48,7 @@ public class Controller {
         mWin.setVisible(true);
         ctrDep = new ControllerDep(this);
         ctrFunc = new ControllerFuncionario(this);
-        this.serverIP = "127.0.0.1";
+        this.serverIP = "comucopserver.centralus.cloudapp.azure.com";
         try {//Inicia o gerenciador de envios
             mCon = new ManagerConnection(this, InetAddress.getByName(serverIP));
         } catch (UnknownHostException ex) {
@@ -115,11 +115,11 @@ public class Controller {
     }
 
     /*Método responsavel por analisar para qual departamento os contatos recebidos do servidor pertencem*/
-   /* void toExpCellDepartsReq(JSONObject jsonResp) {
-        leituraJson(jsonResp);
+    void toExpCellDepartsReq(JSONObject jsonResp) {
+        readJsonFromContacts(jsonResp);
         int depart = Integer.parseInt((String) jsonResp.get("id-depart"));
         mWin.expCellDeparts(depart, listaConts);
-    }*/
+    }
     
     /*Método responsável por montar a requisição de contatos(funcionários) por departamento*/
     public void expToContacts(String codDep) {
@@ -145,7 +145,7 @@ public class Controller {
         }
     }*/
 
-    /*Método responsavel por montar o json correpondente a uma mensagem do usuário a outro contato
+    /*Método responsavel por montar o json correpondente a uma mensagem do usuário a outro contato*/
     public void sendMsg(String textMsg) {
         JSONObject jsonMsg = new JSONObject();
 
@@ -173,7 +173,7 @@ public class Controller {
         listChats.remove(selectionChat);
         listChats.add(0, selectionChat);
         //Envia mensagem
-        mSend.sendJSON(jsonMsg.toJSONString());//Enviando
+        mCon.sendJSON(jsonMsg);//Enviando
         //Atualiza o textarea com a msg enviada
         String msgs = "";
         //Recebe mensagens 
@@ -184,15 +184,13 @@ public class Controller {
         mWin.updateChat();
 
     }
-
-    
-
-    /*Método que faz a leitura dos contatos retornados pelo servidor
-    public void leituraJson(JSONObject jsonObj) {
+   
+    /*Método que faz a leitura dos contatos retornados pelo servidor*/
+    public void readJsonFromContacts(JSONObject jsonObj) {
         //Recebe a lista de contatos
         JSONArray funcs = (JSONArray) jsonObj.get("Contatos");
         Iterator<JSONObject> ite = funcs.iterator();
-        /*Faz a leitura das informações idividuais de cada contato
+        /*Faz a leitura das informações idividuais de cada contato*/
         while (ite.hasNext()) {
             //leitura
             JSONObject objDep = (JSONObject) ite.next();
@@ -211,10 +209,10 @@ public class Controller {
             Contato f = new Contato(cod, perfil, nome, sobrenome);
             listaConts.add(f);
         }
-    }*/
+    }
 
-    /*Método responsável por ler a mensagem recebida do servidor
-    public void leituraJsonMsg(JSONObject jsonObj) {
+    /*Método responsável por ler a mensagem recebida do servidor*/
+    public void readJsonMsg(JSONObject jsonObj) {
         //Declaração das variaveis para leitura da MSG
         Integer ver = 0, codDest = 1;
         String data = (String) jsonObj.get("time");
@@ -280,7 +278,7 @@ public class Controller {
             }
             notifyMsg();//Chama notificação
         }
-    }*/
+    }
 
     /*Retorna lista de contatos*/
     public ArrayList<Contato> getListaConts() {

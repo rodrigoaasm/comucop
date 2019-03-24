@@ -490,7 +490,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     //Listener do botao responsalve pelo login
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
- 
         try {
             ctrApp.tryEstablishCon(cxTxtLogin.getText(), cxPassword.getText());
         } catch (IOException ex) {
@@ -555,7 +554,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void ButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEnviarActionPerformed
         // Se a msg não estiver vazia chamará os metodos para envio
         if(!cxTextMsg.getText().isEmpty()){
-           // ctrApp.sendMsg(cxTextMsg.getText());
+            ctrApp.sendMsg(cxTextMsg.getText());
             cxTextMsg.setText("");
         }
     }//GEN-LAST:event_ButtonEnviarActionPerformed

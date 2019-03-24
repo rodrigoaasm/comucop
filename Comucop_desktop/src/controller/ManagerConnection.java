@@ -91,9 +91,9 @@ public class ManagerConnection {
                 ctrApp.getmWin().addDeps();
             }else if(type.compareTo("exp-to-contacts")==0){//Operação requisição de departamentos    
                 ctrApp.getListaConts().clear();                        
-                          //  ctrApp.toExpCellDepartsReq(jsonResp);
+                ctrApp.toExpCellDepartsReq(jsonResp);
             }else if(type.compareTo("mensagem")==0){//Operação requisição de departamentos  
-                //ctrApp.leituraJsonMsg(jsonResp);
+                ctrApp.readJsonMsg(jsonResp);
             }else if(type.compareTo("backup")==0){
                 //ctrApp.leituraJsonMsgOff(jsonResp);
             }
