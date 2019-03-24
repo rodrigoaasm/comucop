@@ -6,8 +6,7 @@
 package view;
 
 import controller.Controller;
-import java.util.ArrayList;
-import model.ClientConRecord;
+
 
 /**
  *

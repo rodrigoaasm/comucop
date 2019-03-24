@@ -9,10 +9,7 @@ package controller;
 import hibernate.HibernateUtil;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
-import model.ClientConRecord;
 import model.Departamento;
-import model.ElemQueue;
 import model.Funcionario;
 import model.User;
 import model.dao.GeneralDAO;
@@ -57,34 +54,29 @@ public class ManagerDB{
     }*/
     
     /*Método responsável pela função de login*/
-    public void login(JSONObject jsonReq){//Operação de login
+    public JSONObject login(JSONObject jsonReq){//Operação de login
         JSONObject resp = new JSONObject();
         //Faz a pesquisa do usuário
+        System.err.println("Consultado DB");
         List l = (List)UserDAO.auth(sessDb,(String)jsonReq.get("login"),(String)jsonReq.get("password"));
         if(!l.isEmpty()){//Se encontrar algum usuario valido retorna as informações do usuario com a resposta de confirmação
             User us = (User) l.get(0); 
             //Constroi o JSON de resposta
             resp.put("type","login");
             resp.put("status","1");
-            resp.put("codigo", ""+us.getFuncionario().getFuncCod());
+            resp.put("codigo","" + us.getFuncionario().getFuncCod());
             resp.put("nome",us.getFuncionario().getFuncNome());
             resp.put("sobrenome",us.getFuncionario().getFuncSobrenome());
-            resp.put("perfil",us.getFuncionario().getFuncPerfil());
-            
-           // ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia JSON
-            eq.getClient().setClient(us.getUsLogin());//Carregando informações do usuário no registro de conexão
-            eq.getClient().setClientCod(us.getFuncionario().getFuncCod());
-          //  ctrServ.getClients().add(eq.getClient());//adiciona conexão com o cliente
+            resp.put("perfil",us.getFuncionario().getFuncPerfil());         
         }else{// se não retorna o erro
             resp.put("type","login");
-            resp.put("status", "0");  
-          //  ctrServ.getmSend().sendJSON(eq.getClient(), resp);    
-         }   
-
+            resp.put("status", "0");    
+        }   
+        return resp;
     }  
 
     /*Método responsável por retorna a lista de departamentos*/
-    private void reqDepart(ClientConRecord client) {
+    public JSONObject reqDepart() {
         JSONObject resp = new JSONObject();
         //Recebe do banco todos os departamentos
         Iterator iDeps = GeneralDAO.all(sessDb, Departamento.class).iterator();        
@@ -101,18 +93,14 @@ public class ManagerDB{
         }
         resp.put("Departamentos", lista);//finaliza construção do json
         resp.put("type","req-depart");
-        
-       
-      //  ctrServ.getmSend().sendJSON(client, resp);//Envia json
-        
+        return resp;
     }
 
     /*Método que retorna a lista de funcionários por departamento*/
-    private void expToContacts(ElemQueue eq, JSONObject jsonReq) {
+    public JSONObject expToContacts(JSONObject jsonReq) {
         JSONObject resp = new JSONObject();
         //Recebe do banco todos os departamentos
-        String s = (String)jsonReq.get("id-depart");//recuperando codigo
-        System.out.println(s);
+        String s = (String)jsonReq.get("id-depart");//recuperando codigo        
         Departamento dep = (Departamento)GeneralDAO.load(sessDb,
                 Departamento.class, 
                 Integer.parseInt(s)); //Recuperando id e convertendo para int
@@ -133,6 +121,6 @@ public class ManagerDB{
         resp.put("type","exp-to-contacts");
         resp.put("id-depart",s);
         
-      //  ctrServ.getmSend().sendJSON(eq.getClient(), resp);//Envia json        
+        return resp;
     }
 }

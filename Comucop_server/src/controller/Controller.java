@@ -5,17 +5,16 @@
  */
 package controller;
 
+import network.ConnectionManager;
 import model.ClientRegistration;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.ClientConRecord;
-import model.ElemQueue;
-import view.MainWindow;
+import org.json.simple.JSONObject;
+
 
 /**
  *
@@ -23,28 +22,28 @@ import view.MainWindow;
  */
 public class Controller {
 
-    private MainWindow mWin;
+   // private MainWindow mWin;
     private ConnectionManager mReceiver; 
-    private volatile ArrayList<ClientRegistration> listClients;
+    private volatile HashMap<Integer,ClientRegistration> listClients;
     private volatile LinkedList<Runnable> qSleepingListeners; 
+    private volatile ManagerDB mDB;
+    private ManagerMsg mMsg;
+    private LinkedList<JSONObject> queueManMessage;
+    private ResourceMonitor rMonitor;
 
-    public Controller() {
-        this.mWin = new MainWindow(this);
-        mWin.setVisible(true);
-        
-        listClients = new ArrayList<ClientRegistration>();//instaciando lista de clientes
+    public Controller() {        
+        listClients = new HashMap<>();//instaciando lista de clientes
         qSleepingListeners = new LinkedList();//Instaciando fila de listeners ociosos
-        /*queueManMesage = new LinkedList();
+        mDB = new ManagerDB(this);
+        queueManMessage = new LinkedList();
 
-        mSend = new ConnectionListener(this);//Instaciando Gerenciador de envios
-        */
         try {
             mReceiver = new ConnectionManager(this);//Instaciando gereciador de recebimento e iniciando threads
             mReceiver.start();
-           /* mDb = new ManagerDB(this);
-            mDb.start();
             mMsg = new ManagerMsg(this);
-            mMsg.start();*/
+            mMsg.start();
+            rMonitor = new ResourceMonitor(this);
+            rMonitor.start();
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -54,13 +53,17 @@ public class Controller {
     public static void main(String args[]) {
         Controller c = new Controller();
     }
-    
-    public ArrayList<ClientRegistration> getListClients() {
+
+    public ConnectionManager getConnectionManager() {
+        return mReceiver;
+    }
+
+    public HashMap<Integer,ClientRegistration> getListClients() {
         return listClients;
     }
 
-    public void addListClients(ClientRegistration cr) {
-        this.listClients.add(cr);
+    public void addListClients(Integer cod,ClientRegistration cr) {
+        this.listClients.put(cod, cr);
     }
     
     public LinkedList<Runnable> getqSleepingListeners() {
@@ -72,44 +75,19 @@ public class Controller {
         this.qSleepingListeners.add(r);
     }
    
+    public ManagerDB getmDB() {
+        return mDB;
+    }
     
+    /*Retorna fila de mensagens a serem redirecionadas*/
+    public Queue<JSONObject> getQueueManMessage() {
+        return queueManMessage;
+    }
     
-
-    
-    /*Retorna gerenciador de envios
-    public ConnectionListener getmSend() {
-        return mSend;
-    }*/
-
-    /*Retorna gerenciador de recebimentos
-    public ConnectionManager getmReceiver() {
-        return mReceiver;
-    }*/
-
-    /*Retorna fila de requisições de banco
-    public Queue<ElemQueue> getQueueManDB() {
-        return queueManDB;
-    }*/
-
-    /*Adiciona requisições a fila do gerenciador de banco
-    void addQueueDB(ElemQueue elemQueue) {
-        queueManDB.add(elemQueue);
-    }*/
-    
-    /*Retorna fila de mensagens a serem redirecionadas
-    public Queue<ElemQueue> getQueueManMessage() {
-        return queueManMesage;
-    }*/
-
-    /*Adiciona mensagens  na fila do gerenciador redirecionamento
-    void addQueueMessage(ElemQueue elemQueue){
-        queueManMesage.add(elemQueue);
-    }*/
-
- 
-
-   
-
+    /*Adiciona requisições a fila do gerenciador de banco*/
+    public void getQueueManMessage(JSONObject json) {
+        queueManMessage.add(json);
+    }
 
 
 }

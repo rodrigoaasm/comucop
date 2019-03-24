@@ -1,70 +1,45 @@
 package controller;
 
-import com.mongodb.*;
+
 import controller.*;
 import model.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import org.json.simple.JSONObject;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.ElemQueue;
-import static org.hibernate.criterion.Restrictions.eq;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.json.simple.JSONArray;
 
 public class ManagerMsg extends Thread {
 
-    private Mongo mongo;
+  /*  private Mongo mongo;
     private DB db;
-    private DBCollection table;
+    private DBCollection table;*/
     private Controller objCtrPrincipal;
 
     public ManagerMsg(Controller pController) {
-
         objCtrPrincipal = pController;
-
     }
-/*
-    Método principal da thread, que faz o redirecionamento das mensagens
+
+   /* Método principal da thread, que faz o redirecionamento das mensagens*/
     public void run() {
         int i;
         while (true) {
-            Queue<ElemQueue> queueManMesage = objCtrPrincipal.getQueueManMessage();
+            Queue<JSONObject> queueManMesage = objCtrPrincipal.getQueueManMessage();
 
-            if (queueManMesage.isEmpty() == false) {
-                ElemQueue eq = queueManMesage.poll();//recuperando elemento
-                JSONObject rec = eq.getJsonReq(); //Recuperando json
-               ArrayList<ClientConRecord> vetCliente = objCtrPrincipal.getClients();//recuperando lista de onlines
+            if (queueManMesage.isEmpty() == false) {                
+                JSONObject rec = queueManMesage.poll();//recuperando elemento                
                 String type = (String) rec.get("type");
                 
-                if (type.compareTo("mensagem")==0) {
-                    ClientConRecord remetente = eq.getClient();//Recebendo remetente
-                    ClientConRecord destinatario = null;
-
-                    Object dest = eq.getJsonReq().get("dest");
-                    int codDest = Integer.parseInt(dest.toString());//recebendo codigo do destinatário
-
-                    for (i = 0; i < vetCliente.size(); i++) {//Verificando se o destinatário está online
-                        if (codDest == vetCliente.get(i).getClientCod()) {
-                            destinatario = vetCliente.get(i);
-                        }
-                    }
-
-                    if (destinatario != null) {  //Se for diferente de null está online, pois foi encontrado na lista              
-                     //   objCtrPrincipal.getmSend().sendJSON(destinatario, rec);
-                    } else {//se não está off, pois não foi encontrado
-                        insertMongoDB(rec);
-                    }
-                }else{
+                if (type.compareTo("mensagem")==0) {                    
+                    Object dest = rec.get("dest");
+                    ClientRegistration cr = objCtrPrincipal.getListClients().get(Integer.parseInt(dest.toString()));//recebendo codigo do destinatário
                     
-                    getMesagesOff(eq.getClient());
-                    
+                    if(cr != null){
+                        cr.addQPackToBeSent(rec);
+                        System.err.println("User Online");
+                    }                    
+                }else{                    
+                    //getMesagesOff(eq.getClient());                    
                 }
-
             } else {
                 try {//Dormi po 33ms se a fila estiver vazia
                     Thread.sleep(23);
@@ -74,7 +49,7 @@ public class ManagerMsg extends Thread {
             }
         }
     }
-
+/*
     public void closeConection() {
         mongo.close();
     }

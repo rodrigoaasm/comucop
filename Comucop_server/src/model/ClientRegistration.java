@@ -5,7 +5,10 @@
  */
 package model;
 
+import network.ConnectionListener;
 import java.net.Socket;
+import java.util.LinkedList;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -13,9 +16,10 @@ import java.net.Socket;
  */
 public class ClientRegistration {
     private Socket clientSock;
-    private Runnable clientListener;
+    private ConnectionListener clientListener;
+    private Integer codClient;    
 
-    public ClientRegistration(Socket clientSock, Runnable clientListener) {
+    public ClientRegistration(Socket clientSock, ConnectionListener clientListener) {
         this.clientSock = clientSock;
         this.clientListener = clientListener;
     }    
@@ -28,4 +32,19 @@ public class ClientRegistration {
         return clientListener;
     }
     
+    public void addQPackToBeSent(JSONObject jsonPkg){
+        clientListener.addQPackToBeSent(jsonPkg);
+    } 
+        
+    public Integer getCodClient() {
+        return codClient;
+    }
+
+    public void setCodClient(Integer codClient) {
+        this.codClient = codClient;
+    }
+
+    public void forseClose() {
+        clientListener.forcingListenerSleep();
+    }
 }
